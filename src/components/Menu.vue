@@ -1,5 +1,5 @@
 <template>
-        <v-div>
+        <div>
             <v-layout>
                 <v-flex xs12>
                     <div class="text-xs-center">
@@ -34,8 +34,14 @@
                         <!-- </a> -->
                 </v-flex>
             </v-layout>
-            <v-toolbar color="#ccc" fixed>
-                <v-layout>
+            <v-app-bar color="#ccc" sticky>
+                <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+                <v-spacer></v-spacer>
+                <v-flex xs2>
+                    <v-text-field outlined hide-details label="Pesquise Aqui..." ></v-text-field>
+                </v-flex>
+                
+                <!-- <v-layout>
                     <v-flex xs4 style="border:1px solid black">
                         <v-row >
                             <v-col>
@@ -55,22 +61,56 @@
                             </v-col>
                         </v-row>
                     </v-flex>
-                    <v-spacer></v-spacer>
-                    <v-flex xs2>
-                        <v-text-field outlined hide-details label="Pesquise Aqui..." ></v-text-field>
-                    </v-flex>
-                </v-layout>
-            </v-toolbar>
-        </v-div>
+                </v-layout> -->
+                
+            </v-app-bar>
+            <v-navigation-drawer v-model="drawer" absolute temporary >
+                <v-list nav dense >
+                    <v-list-item-group color="grey">
+                        <v-subheader>Páginas</v-subheader>
+                        <v-list-item v-for="(item, i) in items" :key="i">
+                            <v-list-item-icon>
+                                <v-icon v-text="item.img"></v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content>
+                                <v-list-item-title v-text="item.name"></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                        <v-divider></v-divider>
+                        <v-subheader>Categorias</v-subheader>
+                        <v-list-item v-for="(item, i) in items_cat" :key="i">
+                            <v-list-item-icon>
+                                <v-icon v-text="item.img"></v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-content>
+                                <v-list-item-title v-text="item.name"></v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list-item-group>
+                </v-list>
+            </v-navigation-drawer>
+        </div>
 </template>
 
 <script>
 export default {
-    data(){
-        return{
-            size: 30,
-        }
-    }
+    data: () => ({
+        size: 30,
+        drawer: false,
+        items: [
+            { name: "Tela Inicial", img: "mdi-home" },
+            { name: "Conta", img: "account_circle" },
+            { name: "Cupons", img: "mdi-percent" },
+            { name: "Carrinho", img: "shopping_cart" },
+        ],
+        items_cat: [
+            { name: "Masculino", img: "man" },
+            { name: "Feminino", img: "woman" },
+            { name: "Personalizadas", img: "handyman" },
+            { name: "Carbono", img: "widgets" },
+            { name: "Documento", img: "folder_special" },
+        ],
+    })
 }
 </script>
 <style scoped>
