@@ -34,8 +34,8 @@
                         <!-- </a> -->
                 </v-flex>
             </v-layout>
-            <v-app-bar elevation="10" dense color="#ccc">
-                <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+            <v-app-bar elevation="10" dense color="#111">
+                <v-app-bar-nav-icon color="white" @click="drawer = true"></v-app-bar-nav-icon>
                 <v-spacer></v-spacer>
                 <v-flex xs3>
                     <v-text-field background-color="white" dense outlined hide-details placeholder="Pesquise Aqui..." append-icon="search"></v-text-field>
