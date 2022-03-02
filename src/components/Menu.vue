@@ -34,35 +34,12 @@
                         <!-- </a> -->
                 </v-flex>
             </v-layout>
-            <v-app-bar color="#ccc" sticky>
+            <v-app-bar elevation="10" dense color="#ccc">
                 <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
                 <v-spacer></v-spacer>
-                <v-flex xs2>
-                    <v-text-field outlined hide-details label="Pesquise Aqui..." ></v-text-field>
+                <v-flex xs3>
+                    <v-text-field background-color="white" dense outlined hide-details placeholder="Pesquise Aqui..." append-icon="search"></v-text-field>
                 </v-flex>
-                
-                <!-- <v-layout>
-                    <v-flex xs4 style="border:1px solid black">
-                        <v-row >
-                            <v-col>
-                                Masculino
-                            </v-col>
-                            <v-col>
-                                Feminino
-                            </v-col>
-                            <v-col>
-                                Personalizadas
-                            </v-col>
-                            <v-col>
-                                Carbono
-                            </v-col>
-                            <v-col>
-                                Documento
-                            </v-col>
-                        </v-row>
-                    </v-flex>
-                </v-layout> -->
-                
             </v-app-bar>
             <v-navigation-drawer v-model="drawer" absolute temporary >
                 <v-list nav dense >
@@ -89,6 +66,7 @@
                     </v-list-item-group>
                 </v-list>
             </v-navigation-drawer>
+            </div>
         </div>
 </template>
 
