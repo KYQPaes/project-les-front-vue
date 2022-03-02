@@ -34,7 +34,7 @@
                         <!-- </a> -->
                 </v-flex>
             </v-layout>
-            <v-toolbar>
+            <v-toolbar color="#ccc" fixed>
                 <v-layout>
                     <v-flex xs4 style="border:1px solid black">
                         <v-row >
