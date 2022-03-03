@@ -4,6 +4,8 @@ import Home from "../views/Home.vue";
 import Cliente from "../views/Cliente.vue";
 import Login from "../views/Login.vue";
 import Cadastro from "../views/Cadastro.vue";
+import cadastro_cartao from "../views/Cartao_Cadastro.vue";
+import endereco_cadastro from "../views/Endereco_Cadastro.vue";
 
 Vue.use(VueRouter);
 
@@ -28,6 +30,17 @@ const routes = [
 		name: "cadastro",
 		component: Cadastro,
 	},
+	{
+		path: "/cartao_cadastro",
+		name: "cadastro_cartao",
+		component: cadastro_cartao,
+	},
+	{
+		path: "/Endereco_cadastro",
+		name: "Endereco_cadastro",
+		component: endereco_cadastro,
+	},
+	
 ];
 
 const router = new VueRouter({

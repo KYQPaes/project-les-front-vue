@@ -1,0 +1,132 @@
+<template>
+  <div>
+    <Menu />
+    <v-app>
+      <v-main class="d-flex justify-center align-center">
+        <v-col cols="10" lg="4" class="mx-auto">
+          <v-card class="pa-4" elevation="24">
+            <div class="text-center">
+              <v-icon size="80px" color="black"> home </v-icon>
+              <h2 class="blue--text">Endereços</h2>
+            </div>
+            <v-form>
+              <v-card-text>
+                <v-layout>
+                  <v-flex xs6>
+                    <v-select :items="TipoResidencia" label="Tipo de residência"></v-select>
+                  </v-flex>
+                  <v-flex xs6>
+                    <v-select :items="TipoLogradouro" label="Tipo de Logradouro"></v-select>
+                  </v-flex>
+                </v-layout>
+
+                <v-layout>
+                  <v-flex xs10>
+                    <v-text-field type="Logradouro" label="Logradouro" placeholder="Logradouro" />
+                  </v-flex>
+                </v-layout>
+
+                <v-layout>
+                  <v-flex xs4>
+                    <v-text-field type="Numero" label="Numero" placeholder="Numero" />
+                  </v-flex>
+                  <v-flex xs8>
+                    <v-text-field type="Bairro" label="Bairro" placeholder="Bairro" />
+                  </v-flex>
+                </v-layout>
+
+                <v-layout>
+                  <v-flex xs4>
+                    <v-text-field type="CEP" label="CEP" placeholder="CEP" />
+                  </v-flex>
+                  <v-flex xs6>
+                    <v-text-field type="Cidade" label="Cidade" placeholder="Cidade" />
+                  </v-flex>
+                </v-layout>
+
+                <v-layout>
+                  <v-flex xs3>
+                    <v-text-field type="Estado" label="Estado" placeholder="Estado" />
+                  </v-flex>
+                  <v-flex xs5>
+                    <v-text-field type="Pais" label="Pais" placeholder="Pais" />
+                  </v-flex>
+                </v-layout>
+              </v-card-text>
+              <v-container fluid>
+                <v-checkbox v-model="checkbox">
+                  <template v-slot:label>
+                    <div>
+                      Eu concordo com os
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                          <a target="_blank" href="https://vuetifyjs.com" @click.stop v-on="on"> Termos de Uso e Privacidade </a>
+                        </template>
+                        Abrir Termos de Uso e Privacidade
+                      </v-tooltip>
+                      do e-commerce Hotline Wallet
+                    </div>
+                  </template>
+                </v-checkbox>
+              </v-container>
+
+              <v-card-actions class="justify-center">
+                <v-btn color="black">
+                  <span class="white--text px-8">Efetuar Cadastro</span>
+                </v-btn>
+              </v-card-actions>
+            </v-form>
+          </v-card>
+        </v-col>
+      </v-main>
+    </v-app>
+    <Footer />
+  </div>
+</template>
+
+<script>
+import Menu from "../components/Menu.vue";
+import Footer from "../components/Footer.vue";
+import VCreditCard from "v-credit-card";
+import "v-credit-card/dist/VCreditCard.css";
+
+const translations = {
+  name: {
+    label: "Nome no cartão",
+    placeholder: "Nome no cartão",
+  },
+  card: {
+    label: "Numero do cartão",
+    placeholder: "Numero do cartão",
+  },
+  expiration: {
+    label: "Validade",
+  },
+  security: {
+    label: "Código de segurança",
+    placeholder: "CVV",
+  },
+};
+
+export default {
+  data: (vm) => ({
+    TipoResidencia: ["Casa", "Apartamento", "Condomínio", "Trabalho", "Comercio", "Outro"],
+    TipoLogradouro: ["Privado", "Publico"],
+    Estado: ["Privado", "Publico"],
+
+    translations,
+  }),
+
+  components: {
+    Menu,
+    Footer,
+    VCreditCard,
+  },
+};
+</script>
+
+<style scoped>
+.v-text-field {
+  padding: 10px;
+}
+</style>

@@ -1,7 +1,6 @@
 <template>
   <div>
     <Menu />
-    <Footer />
 
     <!-- style=";display: flex;flex-direction: column;align-items: center;" -->
 
@@ -24,34 +23,34 @@
         </v-layout>
       </div>
     </v-card>
+    <Footer />
   </div>
 </template>
 
 <script>
-import Menu from '../components/Menu.vue'
-import Footer from '../components/Footer.vue'
+import Menu from "../components/Menu.vue";
+import Footer from "../components/Footer.vue";
 export default {
   name: "HomeView",
   data: () => ({
-      items: [
-        {
-          src: "https://supercarteira.com.br/img/wallets/maro01/carteira-de-papel-tyvek-mar-oriental-frente.jpg",
-        },
-        {
-          src: "https://supercarteira.com.br/img/wallets/astr01/carteira-de-papel-tyvek-astronauta-frente.jpg",
-        },
-        {
-          src: "https://supercarteira.com.br/img/wallets/univ01/carteira-de-papel-tyvek-universo-frente.jpg",
-        },
-        {
-          src: "https://supercarteira.com.br/img/wallets/juli01/carteira-de-papel-tyvek-julius-frente.jpg",
-        },
-      ],
+    items: [
+      {
+        src: "https://supercarteira.com.br/img/wallets/maro01/carteira-de-papel-tyvek-mar-oriental-frente.jpg",
+      },
+      {
+        src: "https://supercarteira.com.br/img/wallets/astr01/carteira-de-papel-tyvek-astronauta-frente.jpg",
+      },
+      {
+        src: "https://supercarteira.com.br/img/wallets/univ01/carteira-de-papel-tyvek-universo-frente.jpg",
+      },
+      {
+        src: "https://supercarteira.com.br/img/wallets/juli01/carteira-de-papel-tyvek-julius-frente.jpg",
+      },
+    ],
   }),
   components: {
     Menu,
-    Footer
-  }
-
+    Footer,
+  },
 };
 </script>
