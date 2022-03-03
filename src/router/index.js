@@ -6,6 +6,7 @@ import Login from "../views/Login.vue";
 import Cadastro from "../views/Cadastro.vue";
 import cadastro_cartao from "../views/Cartao_Cadastro.vue";
 import endereco_cadastro from "../views/Endereco_Cadastro.vue";
+import senha_editar from "../views/Senha_Editar.vue";
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,11 @@ const routes = [
 		path: "/Endereco_cadastro",
 		name: "Endereco_cadastro",
 		component: endereco_cadastro,
+	},
+	{
+		path: "/Senha_editar",
+		name: "Senha_editar",
+		component: senha_editar,
 	},
 	
 ];

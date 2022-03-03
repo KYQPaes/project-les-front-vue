@@ -3,7 +3,7 @@
     <v-card :style="{ backgroundImage: 'url(https://images.hdqwalls.com/download/8-bit-pixel-art-city-2o-1920x1080.jpg)', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', display: 'flex', height: '100%', backgroundPosition: 'center', backgroundSize: 'cover' }">
       <v-main class="d-flex justify-center align-center">
         <v-col cols="10" lg="4" class="mx-auto">
-          <v-card class="pa-4">
+          <v-card class="pa-4" elevation="24">
             <div class="text-center">
               <v-img class="mx-auto" src="../images/logo.png" width="250" height="250"></v-img>
               <h2 class="blue--text">Login</h2>

@@ -71,40 +71,17 @@
 <script>
 import Menu from "../components/Menu.vue";
 import Footer from "../components/Footer.vue";
-import VCreditCard from "v-credit-card";
-import "v-credit-card/dist/VCreditCard.css";
-
-const translations = {
-  name: {
-    label: "Nome no cartão",
-    placeholder: "Nome no cartão",
-  },
-  card: {
-    label: "Numero do cartão",
-    placeholder: "Numero do cartão",
-  },
-  expiration: {
-    label: "Validade",
-  },
-  security: {
-    label: "Código de segurança",
-    placeholder: "CVV",
-  },
-};
 
 export default {
   data: (vm) => ({
     TipoResidencia: ["Casa", "Apartamento", "Condomínio", "Trabalho", "Comercio", "Outro"],
     TipoLogradouro: ["Privado", "Publico"],
     Estado: ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"],
-
-    translations,
   }),
 
   components: {
     Menu,
     Footer,
-    VCreditCard,
   },
 };
 </script>
