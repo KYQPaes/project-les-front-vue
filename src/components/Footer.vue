@@ -41,6 +41,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.sub_div {
+  position: absolute;
+  bottom: 0px;
+}
 </style>
