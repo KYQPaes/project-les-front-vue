@@ -46,29 +46,13 @@
 
                 <v-layout>
                   <v-flex xs3>
-                    <v-text-field type="Estado" label="Estado" placeholder="Estado" />
+                    <v-select :items="Estado" label="Estado"></v-select>
                   </v-flex>
                   <v-flex xs5>
                     <v-text-field type="Pais" label="Pais" placeholder="Pais" />
                   </v-flex>
                 </v-layout>
               </v-card-text>
-              <v-container fluid>
-                <v-checkbox v-model="checkbox">
-                  <template v-slot:label>
-                    <div>
-                      Eu concordo com os
-                      <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                          <a target="_blank" href="https://vuetifyjs.com" @click.stop v-on="on"> Termos de Uso e Privacidade </a>
-                        </template>
-                        Abrir Termos de Uso e Privacidade
-                      </v-tooltip>
-                      do e-commerce Hotline Wallet
-                    </div>
-                  </template>
-                </v-checkbox>
-              </v-container>
 
               <v-card-actions class="justify-center">
                 <v-btn color="black">
@@ -112,7 +96,7 @@ export default {
   data: (vm) => ({
     TipoResidencia: ["Casa", "Apartamento", "Condomínio", "Trabalho", "Comercio", "Outro"],
     TipoLogradouro: ["Privado", "Publico"],
-    Estado: ["Privado", "Publico"],
+    Estado: ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"],
 
     translations,
   }),
