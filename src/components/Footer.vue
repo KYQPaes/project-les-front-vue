@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Colocar um voltar à página principal aqui -->
     <v-footer dark padless >
       <v-card flat tile class="black lighten-1 white--text text-center">
         <v-card-text>
