@@ -3,10 +3,8 @@ import App from "./App.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
-import { VueMaskDirective } from 'v-mask'
-Vue.directive('mask', VueMaskDirective);
-
-
+// import { VueMaskDirective } from 'v-mask'
+// Vue.directive('mask', VueMaskDirective);
 
 Vue.config.productionTip = false;
 
