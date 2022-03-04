@@ -67,7 +67,7 @@ export default {
   padding: 10px;
 }
 
-.v-application--wrap {
+.v-app {
   min-height: 63vh;
 }
 </style>

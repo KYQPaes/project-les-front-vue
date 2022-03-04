@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-card :style="{ backgroundImage: 'url(https://images.hdqwalls.com/download/8-bit-pixel-art-city-2o-1920x1080.jpg)', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', display: 'flex', height: '100%', backgroundPosition: 'center', backgroundSize: 'cover' }">
+    <v-card :style="{ backgroundImage: 'url(https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/fabaa169848551.5b8f9bb8332c8.gif)', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', display: 'flex', height: '100%', backgroundPosition: 'center', backgroundSize: 'cover' }">
       <v-main class="d-flex justify-center align-center">
         <v-col cols="10" lg="4" class="mx-auto">
           <v-card class="pa-4" elevation="24">
@@ -47,6 +47,11 @@
 export default {
   data: () => ({
     passwordShow: false,
+
+    password: "",
+    passwordRules: [(v) => !!v || "Senha Obrigatória is required", (v) => (v && v.length >= 6) || "Senha deve ser maior que 6 dígitos"],
+    email: "",
+    emailRules: [(v) => !!v || "E-mail is required", (v) => /.+@.+\..+/.test(v) || "E-mail must be valid"],
   }),
 };
 </script>
