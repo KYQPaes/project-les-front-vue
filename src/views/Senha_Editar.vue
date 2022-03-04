@@ -62,11 +62,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .v-text-field {
   padding: 10px;
 }
-
 .v-application--wrap {
   min-height: 63vh;
 }
