@@ -52,8 +52,6 @@ const translations = {
 
 export default {
   data: (vm) => ({
-    Bandeira: ["Visa", "MasterCard", "Elo", "Maestro", "HiperCard"],
-
     translations,
   }),
 

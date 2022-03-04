@@ -19,13 +19,13 @@
 
                 <v-layout>
                   <v-flex xs12>
-                    <v-text-field :type="passwordShow2 ? 'text' : 'password'" label="Senha" placeholder="Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow2 = !passwordShow2" />
+                    <v-text-field :type="passwordShow2 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow2 = !passwordShow2" />
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
                   <v-flex xs12>
-                    <v-text-field :type="passwordShow3 ? 'text' : 'password'" label="Senha" placeholder="Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow3 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow3 = !passwordShow3" />
+                    <v-text-field :type="passwordShow3 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow3 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow3 = !passwordShow3" />
                   </v-flex>
                 </v-layout>
               </v-card-text>
@@ -65,5 +65,9 @@ export default {
 <style scoped>
 .v-text-field {
   padding: 10px;
+}
+
+.v-application--wrap {
+  min-height: 63vh;
 }
 </style>

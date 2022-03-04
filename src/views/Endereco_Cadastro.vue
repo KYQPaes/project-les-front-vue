@@ -45,12 +45,16 @@
                 </v-layout>
 
                 <v-layout>
+                  <v-flex xs6>
+                    <v-text-field type="Pais" label="Pais" placeholder="Pais" />
+                  </v-flex>
                   <v-flex xs3>
                     <v-select :items="Estado" label="Estado"></v-select>
                   </v-flex>
-                  <v-flex xs5>
-                    <v-text-field type="Pais" label="Pais" placeholder="Pais" />
-                  </v-flex>
+                </v-layout>
+
+                <v-layout>
+                  <vueCountriesCities @country="selectedCountry = $event" @city="selectedCity = $event" />
                 </v-layout>
               </v-card-text>
 
@@ -71,6 +75,7 @@
 <script>
 import Menu from "../components/Menu.vue";
 import Footer from "../components/Footer.vue";
+import vueCountriesCities from "vue-countries-cities";
 
 export default {
   data: (vm) => ({
@@ -82,6 +87,7 @@ export default {
   components: {
     Menu,
     Footer,
+    vueCountriesCities,
   },
 };
 </script>

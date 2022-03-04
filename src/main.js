@@ -3,14 +3,15 @@ import App from "./App.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
-import VCreditCard from 'v-credit-card';
- 
-Vue.component('v-credit-card', VCreditCard);
+import VCreditCard from "v-credit-card";
+import vueCountriesCities from "vue-countries-cities";
+
+Vue.component("v-credit-card", VCreditCard);
 
 Vue.config.productionTip = false;
 
 new Vue({
-	router,
-	vuetify,
-	render: (h) => h(App),
+  router,
+  vuetify,
+  render: (h) => h(App),
 }).$mount("#app");
