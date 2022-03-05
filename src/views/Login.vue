@@ -30,9 +30,11 @@
               <div class="text-center">
                 <h3 class="indigo--text">Não possui uma conta?</h3>
                 <v-card-actions class="justify-center">
-                  <v-btn color="black">
-                    <span class="white--text px-8">Inscreva-se</span>
-                  </v-btn>
+                  <router-link to="/cadastro" style="text-decoration: none; color: inherit">
+                    <v-btn color="black">
+                      <span class="white--text px-8">Inscreva-se</span>
+                    </v-btn>
+                  </router-link>
                 </v-card-actions>
               </div>
             </v-form>
@@ -53,7 +55,7 @@ export default {
     passwordShow: false,
 
     password: "",
-    passwordRules: [(v) => !!v || "Senha Obrigatória", (v) => (v && v.length >= 6) || "Senha deve ser maior que 6 dígitos"],
+    passwordRules: [(v) => !!v || "Senha Obrigatória", (v) => (v && v.length >= 8) || "Senha deve ser maior que 8 dígitos"],
     email: "",
     emailRules: [(v) => !!v || "E-mail", (v) => /.+@.+\..+/.test(v) || "E-mail Inválido"],
   }),
@@ -65,6 +67,7 @@ export default {
         setTimeout(() => {
           this.loading = false;
           this.snackbar = true;
+          this.$router.push({ path: "/" });
         }, 2000);
       }
     },

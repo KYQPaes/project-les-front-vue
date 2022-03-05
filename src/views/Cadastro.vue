@@ -177,6 +177,7 @@ export default {
         setTimeout(() => {
           this.loading = false;
           this.snackbar = true;
+          this.$router.push({ path: "/login" });
         }, 2000);
       }
     },

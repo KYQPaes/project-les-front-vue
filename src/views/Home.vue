@@ -1,7 +1,9 @@
 <template>
   <div>
-    <!-- style=";display: flex;flex-direction: column;align-items: center;" -->
     <Menu />
+
+    <!-- style=";display: flex;flex-direction: column;align-items: center;" -->
+
     <v-card :style="{ backgroundImage: 'url(https://wallpaperscute.com/wp-content/uploads/2018/07/Graffiti-Wall-Desktop-Backgrounds-HD.jpg)', backgroundSize: 'cover', display: 'flex', flexDirection: 'column', alignItems: 'center' }">
       <div style="background-color: white; width: 50%; display: flex; flex-direction: column; align-items: center">
         <v-layout class="text-xs-center">
