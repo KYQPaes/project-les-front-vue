@@ -12,13 +12,13 @@
               <v-card-text>
                 <v-layout>
                   <v-flex xs12>
-                    <v-text-field v-model="email" :rules="emailRules" type="email" label="Email" placeholder="Email" prepend-inner-icon="mdi-account" />
+                    <v-text-field v-model="cliente.email" :rules="emailRules" type="email" label="Email" placeholder="Email" prepend-inner-icon="mdi-account" />
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
                   <v-flex xs12>
-                    <v-text-field v-model="password" :rules="passwordRules" :type="passwordShow ? 'text' : 'password'" label="Senha" placeholder="Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow" />
+                    <v-text-field v-model="cliente.password" :rules="passwordRules" :type="passwordShow ? 'text' : 'password'" label="Senha" placeholder="Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow" />
                   </v-flex>
                 </v-layout>
               </v-card-text>
@@ -41,34 +41,53 @@
           </v-card>
         </v-col>
       </v-main>
-      <v-snackbar top color="green" v-model="snackbar"> Login Efetuado com sucesso </v-snackbar>
+      <v-snackbar top :color="error == true ? 'error':'green'" v-model="snackbar">
+        <span v-if="error==false">
+          Login efetuado com sucesso
+        </span>
+        <span v-else>
+          Login ou senha incorreto
+        </span>
+      </v-snackbar>
     </v-card>
   </v-app>
 </template>
 
 <script>
+import clienteService from '@/service/clientes';
 export default {
   data: () => ({
     loading: false,
     snackbar: false,
-
     passwordShow: false,
-
-    password: "",
+    cliente: {
+      email:"",
+      password: "",
+    },
+    error: false,
     passwordRules: [(v) => !!v || "Senha Obrigatória", (v) => (v && v.length >= 8) || "Senha deve ser maior que 8 dígitos"],
-    email: "",
     emailRules: [(v) => !!v || "E-mail", (v) => /.+@.+\..+/.test(v) || "E-mail Inválido"],
   }),
 
   methods: {
     submitHandler() {
+      this.error = false;
       if (this.$refs.form.validate()) {
         this.loading = true;
-        setTimeout(() => {
-          this.loading = false;
-          this.snackbar = true;
-          this.$router.push({ path: "/" });
-        }, 2000);
+        this.loading = false;
+        clienteService.login(this.cliente.email, this.cliente.password).then((response) => {
+          if(response.data.length>0){
+            this.error = false;
+            this.snackbar = true;
+            setTimeout(() => {
+              localStorage.setItem('cliente', JSON.stringify(response.data))
+              this.$router.push({ path: "/" });
+            }, 1500);
+          }else{
+            this.error = true;
+            this.snackbar = true;
+          }
+        });
       }
     },
   },
