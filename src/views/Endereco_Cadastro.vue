@@ -1,7 +1,7 @@
 <template>
   <div>
     <Menu />
-    <v-app>
+    <v-app style="margin-bottom: 60px; margin-top: 60px">
       <v-layout>
         <v-main class="d-flex justify-center align-center">
           <v-col cols="10" lg="4" class="mx-auto">
@@ -97,7 +97,7 @@ export default {
   padding: 10px;
 }
 
-.v-app {
-  min-height: 63vh;
+::v-deep .v-application--wrap {
+  min-height: 63vh !important;
 }
 </style>
