@@ -11,21 +11,31 @@
       <v-spacer> </v-spacer>
       <v-flex xs1>
         <!-- <a class="otherPage" href="http://localhost:8080/deus-1.0-SNAPSHOT/cupons.jsp" draggable="false">   -->
-        <router-link to="/" style="text-decoration: none; color: inherit;">
+        <router-link to="/" style="text-decoration: none; color: inherit">
           <v-btn id="button" fab small text>
             <v-icon :size="size" color="black"> mdi-percent </v-icon>
           </v-btn>
         </router-link>
         <!-- </a> -->
         <!-- <a class="otherPage" href="http://localhost:8080/deus-1.0-SNAPSHOT/login.xhtml" draggable="false">   -->
-        <router-link to="/login" style="text-decoration: none; color: inherit;">
-          <v-btn id="button" fab small text>
-            <v-icon :size="size" color="black"> account_circle </v-icon>
-          </v-btn>
-        </router-link>
+
+        <v-btn
+          id="button"
+          fab
+          small
+          text
+          @click="
+            () => {
+              this.$router.push({ path: '/senha_editar' });
+            }
+          "
+        >
+          <v-icon :size="size" color="black"> account_circle </v-icon>
+        </v-btn>
+
         <!-- </a> -->
         <!-- <a class="otherPage" href="http://localhost:8080/deus-1.0-SNAPSHOT/carrinho.jsp" draggable="false">   -->
-        <router-link to="/" style="text-decoration: none; color: inherit;">
+        <router-link to="/" style="text-decoration: none; color: inherit">
           <v-btn id="button" fab small text>
             <v-icon :size="size" color="black"> shopping_cart </v-icon>
           </v-btn>
@@ -44,24 +54,24 @@
       <v-list nav dense>
         <v-list-item-group color="grey">
           <v-subheader>Páginas</v-subheader>
-          <v-list-item v-for="(item, i) in items" :key="i">
-            <router-link :to="item.router" style="text-decoration: none; color: inherit;">
-              <v-list-item-icon>
-                  <v-icon v-text="item.img"></v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.name"></v-list-item-title>
-              </v-list-item-content>
-            </router-link>
+
+          <v-list-item v-for="(item, i) in items" :key="i" @click="$router.push({ path: items.router })">
+            <v-list-item-icon>
+              <v-icon v-text="item.img"></v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.name"></v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
+
         <v-list-item-group color="grey">
           <v-divider></v-divider>
           <v-subheader>Categorias</v-subheader>
           <v-list-item v-for="(item, i) in items_cat" :key="i">
-            <router-link :to="item.router" style="text-decoration: none; color: inherit;">
+            <router-link :to="item.router" style="text-decoration: none; color: inherit">
               <v-list-item-icon>
-                  <v-icon v-text="item.img"></v-icon>
+                <v-icon v-text="item.img"></v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title v-text="item.name"></v-list-item-title>
@@ -80,17 +90,17 @@ export default {
     size: 30,
     drawer: false,
     items: [
-      { name: "Tela Inicial", img: "mdi-home", router: "/"},
-      { name: "Conta", img: "account_circle", router:"/login" },
-      { name: "Cupons", img: "mdi-percent", router:"/" },
-      { name: "Carrinho", img: "shopping_cart", router:"/" },
+      { name: "Tela Inicial", img: "mdi-home", router: "/" },
+      { name: "Conta", img: "account_circle", router: "/login" },
+      { name: "Cupons", img: "mdi-percent", router: "/" },
+      { name: "Carrinho", img: "shopping_cart", router: "/" },
     ],
     items_cat: [
-      { name: "Masculino", img: "man", router:"/" },
-      { name: "Feminino", img: "woman", router:"/" },
-      { name: "Personalizadas", img: "handyman", router:"/" },
-      { name: "Carbono", img: "widgets", router:"/" },
-      { name: "Documento", img: "folder_special", router:"/" },
+      { name: "Masculino", img: "man", router: "/" },
+      { name: "Feminino", img: "woman", router: "/" },
+      { name: "Personalizadas", img: "handyman", router: "/" },
+      { name: "Carbono", img: "widgets", router: "/" },
+      { name: "Documento", img: "folder_special", router: "/" },
     ],
   }),
 };

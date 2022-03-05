@@ -5,7 +5,7 @@
       <v-main class="d-flex justify-center align-center">
         <v-col cols="10" lg="4" class="mx-auto">
           <v-card class="pa-4" elevation="24">
-            <v-form>
+            <v-form @submit.prevent="submitHandler" ref="form">
               <div class="text-center">
                 <h2 class="blue--text">Cartão de Crédito</h2>
               </div>
@@ -13,7 +13,7 @@
               <VCreditCard :trans="translations" />
 
               <v-card-actions class="justify-center">
-                <v-btn color="black">
+                <v-btn :loading="loading" type="submit" color="blue">
                   <span class="white--text px-8">Cadastrar Cartão</span>
                 </v-btn>
               </v-card-actions>
@@ -21,6 +21,7 @@
           </v-card>
         </v-col>
       </v-main>
+      <v-snackbar top color="green" v-model="snackbar">Cartão cadastrado com sucesso </v-snackbar>
     </v-app>
     <Footer />
   </div>
@@ -53,12 +54,26 @@ const translations = {
 export default {
   data: (vm) => ({
     translations,
+    loading: false,
+    snackbar: false,
   }),
 
   components: {
     Menu,
     Footer,
     VCreditCard,
+  },
+
+  methods: {
+    submitHandler() {
+      if (this.$refs.form.validate()) {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.snackbar = true;
+        }, 2000);
+      }
+    },
   },
 };
 </script>

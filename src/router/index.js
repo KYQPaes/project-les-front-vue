@@ -9,6 +9,7 @@ import endereco_cadastro from "../views/Endereco_Cadastro.vue";
 import senha_editar from "../views/Senha_Editar.vue";
 import teste from "../views/teste.vue";
 
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -52,6 +53,7 @@ const routes = [
 		name: "teste",
 		component: teste,
 	},
+	
 	
 ];
 
