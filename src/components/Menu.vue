@@ -103,6 +103,9 @@ export default {
       { name: "Documento", img: "folder_special", router: "/" },
     ],
   }),
+  mounted(){
+    console.log(JSON.parse(localStorage.getItem('cliente')));
+  }
 };
 </script>
 <style scoped>
