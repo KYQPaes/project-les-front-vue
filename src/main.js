@@ -4,7 +4,6 @@ import router from "./router";
 import vuetify from "./plugins/vuetify";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 import VCreditCard from "v-credit-card";
-import vueCountriesCities from "vue-countries-cities";
 
 Vue.component("v-credit-card", VCreditCard);
 
