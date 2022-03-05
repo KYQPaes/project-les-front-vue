@@ -9,38 +9,29 @@
     </v-layout>
     <v-layout style="margin-bottom: 10px">
       <v-spacer> </v-spacer>
-      <v-flex xs1>
-        <!-- <a class="otherPage" href="http://localhost:8080/deus-1.0-SNAPSHOT/cupons.jsp" draggable="false">   -->
+      <v-flex xs2>
         <router-link to="/" style="text-decoration: none; color: inherit">
-          <v-btn id="button" fab small text>
+          <v-btn class="button" fab small text>
             <v-icon :size="size" color="black"> mdi-percent </v-icon>
           </v-btn>
         </router-link>
-        <!-- </a> -->
-        <!-- <a class="otherPage" href="http://localhost:8080/deus-1.0-SNAPSHOT/login.xhtml" draggable="false">   -->
 
-        <v-btn
-          id="button"
-          fab
-          small
-          text
-          @click="
-            () => {
-              this.$router.push({ path: '/login' });
-            }
-          "
-        >
+        <v-btn v-if="cliente" class="button" fab small text @click="() => { this.$router.push({ path: '/cliente' }); }">
+          <v-icon :size="size" color="black"> account_circle </v-icon>
+        </v-btn>
+        <v-btn v-else class="button" fab small text @click="() => { this.$router.push({ path: '/login' }); }">
           <v-icon :size="size" color="black"> account_circle </v-icon>
         </v-btn>
 
-        <!-- </a> -->
-        <!-- <a class="otherPage" href="http://localhost:8080/deus-1.0-SNAPSHOT/carrinho.jsp" draggable="false">   -->
         <router-link to="/" style="text-decoration: none; color: inherit">
-          <v-btn id="button" fab small text>
+          <v-btn class="button" fab small text>
             <v-icon :size="size" color="black"> shopping_cart </v-icon>
           </v-btn>
         </router-link>
-        <!-- </a> -->
+        
+        <v-btn class="button" v-if="cliente" @click="logout" fab small text>
+            <v-icon :size="size" color="black"> logout </v-icon>
+        </v-btn>
       </v-flex>
     </v-layout>
     <v-app-bar elevation="10" dense color="#111">
@@ -83,6 +74,12 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
+      <template v-if="cliente" v-slot:prepend>
+          <v-btn block @click="logout" color="error" outlined>
+            <v-icon :size="size" color="error"> logout </v-icon>
+            Logout
+          </v-btn>
+      </template>
     </v-navigation-drawer>
   </div>
 </template>
@@ -105,15 +102,23 @@ export default {
       { name: "Carbono", img: "widgets", router: "/" },
       { name: "Documento", img: "folder_special", router: "/" },
     ],
+    cliente: {},
   }),
   mounted(){
-    console.log(JSON.parse(localStorage.getItem('cliente')));
+    this.cliente = JSON.parse(localStorage.getItem('cliente'));
+    if(this.cliente) this.items[1].router = '/cliente';
+    else this.items[1].router = '/login';
   },
 
   methods: {
     methodName() {
       return this.$router.push("/");
     },
+    logout(){
+      localStorage.removeItem("cliente");
+      this.$router.push("/");
+      this.$router.go();
+    }
   },
 };
 </script>
@@ -121,7 +126,7 @@ export default {
 .v-input__control {
   max-height: 30px !important;
 }
-.vbutton {
+.button {
   margin-right: 10px;
   margin-bottom: 5px;
 }
