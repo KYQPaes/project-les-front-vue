@@ -12,19 +12,19 @@
               <v-card-text>
                 <v-layout>
                   <v-flex xs10>
-                    <v-text-field v-model="nome" :rules="nomeRules" type="NomeCompleto" label="Nome Completo" placeholder="NomeCompleto" />
+                    <v-text-field v-model="nome" :rules="emptyRules" type="NomeCompleto" label="Nome Completo" placeholder="NomeCompleto" />
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
                   <v-flex xs6>
-                    <v-select :items="items" label="Gênero"></v-select>
+                    <v-select :items="items" label="Gênero" v-model="genero" :rules="emptyRules"></v-select>
                   </v-flex>
 
                   <v-flex xs6>
                     <v-menu ref="menu1" v-model="menu1" :close-on-content-click="false" transition="scale-transition" offset-y max-width="290px" min-width="auto">
                       <template v-slot:activator="{ on, attrs }">
-                        <v-text-field v-model="dateFormatted" label="Data de Nascimento" persistent-hint prepend-icon="mdi-calendar" v-bind="attrs" @blur="date = parseDate(dateFormatted)" v-on="on"></v-text-field>
+                        <v-text-field v-model="dateFormatted" :rules="emptyRules" label="Data de Nascimento" persistent-hint prepend-icon="mdi-calendar" v-bind="attrs" @blur="date = parseDate(dateFormatted)" v-on="on"></v-text-field>
                       </template>
                       <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
                     </v-menu>
@@ -33,10 +33,10 @@
 
                 <v-layout>
                   <v-flex xs4>
-                    <v-text-field v-mask="'###.###.###.##'" type="CPF" label="CPF" placeholder="CPF" v-model="CPF" />
+                    <v-text-field v-mask="'###.###.###.##'" type="CPF" label="CPF" placeholder="CPF" v-model="CPF" :rules="emptyRules" />
                   </v-flex>
                   <v-flex xs8>
-                    <v-text-field type="Endereço Residencial" label="Endereço Residencial" placeholder="Endereço Residencial" />
+                    <v-text-field v-model="End" :rules="emptyRules" type="Endereço Residencial" label="Endereço Residencial" placeholder="Endereço Residencial" />
                   </v-flex>
                 </v-layout>
 
@@ -45,33 +45,33 @@
                     <v-select :items="TipoTelefone" label="Tipo de Telefone" v-model="TipoDeTelefone"></v-select>
                   </v-flex>
                   <v-flex xs2>
-                    <v-text-field v-mask="'##'" v-model="DDD" type="DDD" label="DDD" placeholder="DDD" />
+                    <v-text-field v-mask="'##'" v-model="DDD" :rules="emptyRules" type="DDD" label="DDD" placeholder="DDD" />
                   </v-flex>
                   <v-flex xs5>
-                    <v-text-field v-mask="TipoDeTelefone == 'Residencial' ? '####-####' : '9####-####'" v-model="Telefone" type="Numero de Telefone" label="Numero de Telefone" placeholder="Numero de Telefone" />
+                    <v-text-field v-mask="TipoDeTelefone == 'Residencial' ? '####-####' : '9####-####'" v-model="Telefone" :rules="emptyRules" type="Numero de Telefone" label="Numero de Telefone" placeholder="Numero de Telefone" />
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
                   <v-flex xs6>
-                    <v-text-field type="email" label="Email" placeholder="Email" />
+                    <v-text-field v-model="email" :rules="emptyRules" type="email" label="Email" placeholder="Email" />
                   </v-flex>
                   <v-flex xs6>
-                    <v-text-field type="Confirmar Email" label="Confirmar Email" placeholder="Confirmar Email" />
+                    <v-text-field v-model="ConfirmarEmail" :rules="[this.email === this.ConfirmarEmail || 'campos diferentes', (v) => !!v || 'Campo Obrigatório']" type="Confirmar Email" label="Confirmar Email" placeholder="Confirmar Email" />
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
                   <v-flex xs6>
-                    <v-text-field class="pass" :type="passwordShow ? 'text' : 'password'" label="Senha" placeholder="Senha" :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow" />
+                    <v-text-field v-model="password" :rules="emptyRules" class="pass" :type="passwordShow ? 'text' : 'password'" label="Senha" placeholder="Senha" :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow" />
                   </v-flex>
                   <v-flex xs6>
-                    <v-text-field :type="passwordShow2 ? 'text' : 'password'" label="Confirmar Senha" placeholder="Senha" :append-icon="passwordShow2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow2 = !passwordShow2" />
+                    <v-text-field v-model="ConfirmarPassword" :rules="[this.password === this.ConfirmarPassword || 'campos diferentes', (v) => !!v || 'Campo Obrigatório']" :type="passwordShow2 ? 'text' : 'password'" label="Confirmar Senha" placeholder="Senha" :append-icon="passwordShow2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow2 = !passwordShow2" />
                   </v-flex>
                 </v-layout>
               </v-card-text>
               <v-container fluid>
-                <v-checkbox v-model="checkbox">
+                <v-checkbox v-model="checkbox" :rules="emptyRules">
                   <template v-slot:label>
                     <div>
                       Eu concordo com os
@@ -88,7 +88,7 @@
               </v-container>
 
               <v-card-actions class="justify-center">
-                <v-btn color="black">
+                <v-btn :loading="loading" type="submit" color="blue">
                   <span class="white--text px-8">Efetuar Cadastro</span>
                 </v-btn>
               </v-card-actions>
@@ -96,6 +96,7 @@
           </v-card>
         </v-col>
       </v-main>
+      <v-snackbar top color="green" v-model="snackbar"> Cadastro Efetuado com sucesso </v-snackbar>
     </v-card>
   </v-app>
 </template>
@@ -105,20 +106,35 @@ export default {
   data: (vm) => ({
     passwordShow: false,
     passwordShow2: false,
+    loading: false,
+    snackbar: false,
+    menu1: false,
+    menu2: false,
+
     items: ["Masculino", "Feminino"],
     TipoTelefone: ["Residencial", "Móvel"],
 
     date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
     dateFormatted: vm.formatDate(new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)),
-    menu1: false,
-    menu2: false,
     CPF: "",
     DDD: "",
     TipoDeTelefone: "Residencial",
     Telefone: "",
-
+    dateFormatted: "",
+    email: "",
+    password: "",
+    ConfirmarEmail: "",
+    ConfirmarPassword: "",
+    DDD: "",
+    Telefone: "",
+    End: "",
+    CPF: "",
+    dateFormatted: "",
     nome: "",
-    nomeRules: [(v) => !!v || "Campo Obrigatório"],
+    genero: "",
+    checkbox: "",
+
+    emptyRules: [(v) => !!v || "Campo Obrigatório"],
   }),
 
   computed: {
@@ -145,6 +161,16 @@ export default {
 
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    },
+
+    submitHandler() {
+      if (this.$refs.form.validate()) {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.snackbar = true;
+        }, 2000);
+      }
     },
   },
 };

@@ -9,29 +9,29 @@
               <v-icon size="80px" color="black"> lock </v-icon>
               <h2 class="blue--text">Editar Senha</h2>
             </div>
-            <v-form>
+            <v-form @submit.prevent="submitHandler" ref="form">
               <v-card-text>
                 <v-layout>
                   <v-flex xs12>
-                    <v-text-field :type="passwordShow ? 'text' : 'password'" label="Senha Atual" placeholder="Senha Atual" prepend-inner-icon="mdi-lock" :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow" />
+                    <v-text-field v-model="oldPassword" :rules="emptyRules" :type="passwordShow ? 'text' : 'password'" label="Senha Atual" placeholder="Senha Atual" prepend-inner-icon="mdi-lock" :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow" />
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
                   <v-flex xs12>
-                    <v-text-field :type="passwordShow2 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow2 = !passwordShow2" />
+                    <v-text-field v-model="newPassword" :rules="[this.newPassword !== this.oldPassword || 'Nova senha não pode ser igual a senha atual', (v) => !!v || 'Campo Obrigatório']" :type="passwordShow2 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow2 = !passwordShow2" />
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
                   <v-flex xs12>
-                    <v-text-field :type="passwordShow3 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow3 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow3 = !passwordShow3" />
+                    <v-text-field v-model="confirmarNewPassword" :rules="[this.newPassword === this.confirmarNewPassword || 'campos diferentes', (v) => !!v || 'Campo Obrigatório']" :type="passwordShow3 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow3 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow3 = !passwordShow3" />
                   </v-flex>
                 </v-layout>
               </v-card-text>
 
               <v-card-actions class="justify-center">
-                <v-btn color="black">
+                <v-btn :loading="loading" type="submit" color="blue">
                   <span class="white--text px-8">Alterar Senha</span>
                 </v-btn>
               </v-card-actions>
@@ -39,6 +39,7 @@
           </v-card>
         </v-col>
       </v-main>
+      <v-snackbar top color="green" v-model="snackbar"> Senha Alterada com sucesso </v-snackbar>
     </v-app>
     <Footer />
   </div>
@@ -53,11 +54,31 @@ export default {
     passwordShow: false,
     passwordShow2: false,
     passwordShow3: false,
+    loading: false,
+    snackbar: false,
+
+    oldPassword: "",
+    newPassword: "",
+    confirmarNewPassword: "",
+
+    emptyRules: [(v) => !!v || "Campo Obrigatório"],
   }),
 
   components: {
     Menu,
     Footer,
+  },
+
+  methods: {
+    submitHandler() {
+      if (this.$refs.form.validate()) {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.snackbar = true;
+        }, 2000);
+      }
+    },
   },
 };
 </script>
