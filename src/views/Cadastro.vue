@@ -63,7 +63,7 @@
 
                 <v-layout>
                   <v-flex xs6>
-                    <v-text-field v-model="password" :rules="emptyRules" class="pass" :type="passwordShow ? 'text' : 'password'" label="Senha" placeholder="Senha" :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow" />
+                    <v-text-field validate-on-blur v-model="password" :rules="[rules.password]" class="pass" :type="passwordShow ? 'text' : 'password'" label="Senha" placeholder="Senha" :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow" />
                   </v-flex>
                   <v-flex xs6>
                     <v-text-field v-model="ConfirmarPassword" :rules="[this.password === this.ConfirmarPassword || 'campos diferentes', (v) => !!v || 'Campo Obrigatório']" :type="passwordShow2 ? 'text' : 'password'" label="Confirmar Senha" placeholder="Senha" :append-icon="passwordShow2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow2 = !passwordShow2" />
@@ -135,6 +135,14 @@ export default {
     checkbox: "",
 
     emptyRules: [(v) => !!v || "Campo Obrigatório"],
+
+    rules: {
+      required: (value) => !!value || "Required.",
+      password: (value) => {
+        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+        return pattern.test(value) || "Mínimo de 8 caracteres com pelo menos uma letra maiúscula, um número e um caractere especial.";
+      },
+    },
   }),
 
   computed: {

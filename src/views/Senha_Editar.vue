@@ -19,7 +19,7 @@
 
                 <v-layout>
                   <v-flex xs12>
-                    <v-text-field v-model="newPassword" :rules="[this.newPassword !== this.oldPassword || 'Nova senha não pode ser igual a senha atual', (v) => !!v || 'Campo Obrigatório']" :type="passwordShow2 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow2 = !passwordShow2" />
+                    <v-text-field v-model="newPassword" :rules="[this.newPassword !== this.oldPassword || 'Nova senha não pode ser igual a senha atual', (v) => !!v || 'Campo Obrigatório', rules.password]" :type="passwordShow2 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow2 = !passwordShow2" />
                   </v-flex>
                 </v-layout>
 
@@ -62,6 +62,14 @@ export default {
     confirmarNewPassword: "",
 
     emptyRules: [(v) => !!v || "Campo Obrigatório"],
+
+    rules: {
+      required: (value) => !!value || "Required.",
+      password: (value) => {
+        const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+        return pattern.test(value) || "Mínimo de 8 caracteres com pelo menos uma letra maiúscula, um número e um caractere especial.";
+      },
+    },
   }),
 
   components: {
