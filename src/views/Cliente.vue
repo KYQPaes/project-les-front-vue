@@ -98,6 +98,22 @@
               <v-icon> home </v-icon>
             </v-btn>
           </v-layout>
+          <v-layout style="margin-top: 200px">
+            <v-dialog v-model="inativar" persistent max-width="350">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn rounded color="red" dark v-bind="attrs" v-on="on"> Inativar Conta <v-icon> report_problem </v-icon> </v-btn>
+              </template>
+              <v-card>
+                <v-card-title class="text-h5"> Confirmação </v-card-title>
+                <v-card-text>Esteja ciente que ao confirmar com a seguinte opção, sua conta sera inativada. Você não será mais capaz de realizar pedidos e ver seu histórico de compras.</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="green darken-1" text @click="inativar = false"> Discordo </v-btn>
+                  <v-btn color="green darken-1" text @click="inativar = false"> Concordo </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-layout>
         </v-flex>
       </v-layout>
     </div>
@@ -181,7 +197,9 @@ export default {
     menu1: false,
     menu2: false,
 
+    inativar: false,
     altSenha: false,
+
     title: "",
     open: [],
     active: [],

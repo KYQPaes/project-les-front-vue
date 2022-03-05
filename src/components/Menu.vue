@@ -3,7 +3,7 @@
     <v-layout>
       <v-flex xs12>
         <div class="text-xs-center">
-          <v-img class="mx-auto" src="../images/logo.png" width="250" height="250"></v-img>
+          <v-img class="mx-auto" src="../images/logo.png" width="250" height="250" @click="methodName"></v-img>
         </div>
       </v-flex>
     </v-layout>
@@ -26,7 +26,7 @@
           text
           @click="
             () => {
-              this.$router.push({ path: '/senha_editar' });
+              this.$router.push({ path: '/login' });
             }
           "
         >
@@ -55,28 +55,31 @@
         <v-list-item-group color="grey">
           <v-subheader>Páginas</v-subheader>
 
-          <v-list-item v-for="(item, i) in items" :key="i" @click="$router.push({ path: items.router })">
-            <v-list-item-icon>
-              <v-icon v-text="item.img"></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.name"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-
-        <v-list-item-group color="grey">
-          <v-divider></v-divider>
-          <v-subheader>Categorias</v-subheader>
-          <v-list-item v-for="(item, i) in items_cat" :key="i">
-            <router-link :to="item.router" style="text-decoration: none; color: inherit">
+          <v-list-item v-for="(item, i) in items" :key="i">
+            <v-layout @click="$router.push({ path: item.router })">
               <v-list-item-icon>
                 <v-icon v-text="item.img"></v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title v-text="item.name"></v-list-item-title>
               </v-list-item-content>
-            </router-link>
+            </v-layout>
+          </v-list-item>
+        </v-list-item-group>
+
+        <v-divider></v-divider>
+        <v-list-item-group color="grey">
+          <v-subheader>Categorias</v-subheader>
+
+          <v-list-item v-for="(item, i) in items_cat" :key="i">
+            <v-layout @click="$router.push({ path: item.router })">
+              <v-list-item-icon>
+                <v-icon v-text="item.img"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.name"></v-list-item-title>
+              </v-list-item-content>
+            </v-layout>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -106,6 +109,12 @@ export default {
   mounted(){
     console.log(JSON.parse(localStorage.getItem('cliente')));
   }
+
+  methods: {
+    methodName() {
+      return this.$router.push("/");
+    },
+  },
 };
 </script>
 <style scoped>
