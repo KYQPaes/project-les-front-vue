@@ -77,12 +77,70 @@
       </v-layout>
     </div>
 
-    <v-dialog width="500" v-model="dialog">
+    <v-dialog width="1000" v-model="dialog">
       <v-card>
-        <v-card-title>
+        <v-card-title class="black white--text text-h5">
           {{ title }}
         </v-card-title>
-        <v-card-text> </v-card-text>
+        <v-row class="pa-4" justify="space-between">
+            <v-col cols="5">
+                <v-treeview :load-children="fetchUsers" key="id" :active.sync="active" :open.sync="open" activatable :items="items" color="black" open-on-click transition>
+                    <template v-slot:prepend="{ item }">
+                        <v-icon v-if="!item.children">
+                            credit_card
+                        </v-icon>
+                    </template>
+                </v-treeview>
+            </v-col>
+            <v-divider vertical></v-divider>
+            <v-col class="d-flex text-center">
+                <v-scroll-y-transition mode="out-in">
+                    <div v-if="!selected" class="text-h6 grey--text text--lighten-1 font-weight-light" style="align-self: center;" >
+                        Escolha um Cartão
+                    </div>
+                    <v-card v-else :key="selected.id" class="pt-6 mx-auto" flat max-width="400" >
+                        <v-card-text>
+                            <v-avatar v-if="avatar" size="88" >
+                                <v-img :src="`https://avataaars.io/${avatar}`" class="mb-6" ></v-img>
+                            </v-avatar>
+                            <h3 class="text-h5 mb-2">
+                                <!-- {{ selected.name }} -->
+                            </h3>
+                            <div class="blue--text mb-2">
+                                <!-- {{ selected.email }} -->
+                            </div>
+                            <div class="blue--text subheading font-weight-bold">
+                                <!-- {{ selected.username }} -->
+                            </div>
+                        </v-card-text>
+                        <v-divider></v-divider>
+                        <v-row class="text-left" tag="v-card-text">
+                            <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
+                                Company:
+                            </v-col>
+                            <v-col>
+                                <!-- {{ selected.company.name }} -->
+                            </v-col>
+                            <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
+                                Website:
+                            </v-col>
+                            <v-col>
+                                <!-- <a :href="`//${selected.website}`" target="_blank">
+                                    {{ selected.website }}
+                                </a> -->
+                            </v-col>
+                            <v-col class="text-right mr-4 mb-2" tag="strong" cols="5">
+                                Phone:
+                            </v-col>
+                            <v-col>
+                                <!-- {{ selected.phone }} -->
+                            </v-col>
+                        </v-row>
+                    </v-card>
+                </v-scroll-y-transition>
+            </v-col>
+        </v-row>
+
         <v-card-actions>
           <v-spacer> </v-spacer>
           <v-btn text color="error"> Fechar </v-btn>
@@ -110,6 +168,35 @@ export default {
 
     dialog: false,
     title: "",
+    open: [],
+    active: [],
+    select: {},
+    items: [
+            {
+                id: 1,
+                name: 'Cartão1',
+            },
+            {
+                id: 2,
+                name: 'Cartão2',
+            },
+            {
+                id: 3,
+                name: 'Cartão3',
+            },
+            {
+                id: 4,
+                name: 'Cartão4',
+            },
+            {
+                id: 5,
+                name: 'Cartão5',
+            },
+            {
+                id: 6,
+                name: 'Cartão6',
+            },
+    ]
   }),
   components: {
     Menu,
@@ -118,6 +205,13 @@ export default {
   computed: {
     computedDateFormatted() {
       return this.formatDate(this.date);
+    },
+    selected () {
+        if (!this.active.length) return undefined
+
+        const id = this.active[0]
+
+        return this.users.find(user => user.id === id)
     },
   },
 
@@ -158,6 +252,14 @@ export default {
     openEnd() {
       this.dialog = true;
       this.title = "Endereços";
+    },
+    fetchUsers(item) {
+        this.select = ({
+            id: "teste",
+            cvv: "455",
+            cartao: "412442134121",
+
+        })
     },
   },
 };
