@@ -46,6 +46,8 @@
               <v-list-item-title v-text="item.name"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+        </v-list-item-group>
+        <v-list-item-group color="grey">
           <v-divider></v-divider>
           <v-subheader>Categorias</v-subheader>
           <v-list-item v-for="(item, i) in items_cat" :key="i">
