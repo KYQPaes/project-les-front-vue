@@ -1,7 +1,7 @@
 <template>
   <div>
     <Menu />
-    <v-app>
+    <v-app style="min-height: 63vh">
       <v-main class="d-flex justify-center align-center">
         <v-col cols="10" lg="4" class="mx-auto">
           <v-card class="pa-4" elevation="24">
@@ -62,12 +62,8 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .v-text-field {
   padding: 10px;
-}
-
-.v-app {
-  min-height: 63vh;
 }
 </style>
