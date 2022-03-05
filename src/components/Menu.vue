@@ -108,7 +108,7 @@ export default {
   }),
   mounted(){
     console.log(JSON.parse(localStorage.getItem('cliente')));
-  }
+  },
 
   methods: {
     methodName() {
