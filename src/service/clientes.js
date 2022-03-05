@@ -8,4 +8,8 @@ export default {
 	login: (email, senha) => {
 		return http.get(`clientes/log?email=${email}&senha=${senha}`);
 	},
+
+	create: (cliente) => {
+		return http.post("clientes", cliente);
+	},
 };
