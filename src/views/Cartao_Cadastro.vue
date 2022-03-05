@@ -67,4 +67,8 @@ export default {
 .v-text-field {
   padding: 10px;
 }
+
+::v-deep .v-application--wrap {
+  min-height: 90vh !important;
+}
 </style>

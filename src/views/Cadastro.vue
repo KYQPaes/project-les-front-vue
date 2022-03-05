@@ -8,11 +8,11 @@
               <v-img class="mx-auto" src="../images/logo.png" width="250" height="250"></v-img>
               <h2 class="blue--text">Criação de conta</h2>
             </div>
-            <v-form>
+            <v-form @submit.prevent="submitHandler" ref="form">
               <v-card-text>
                 <v-layout>
                   <v-flex xs10>
-                    <v-text-field type="NomeCompleto" label="Nome Completo" placeholder="NomeCompleto" />
+                    <v-text-field v-model="nome" :rules="nomeRules" type="NomeCompleto" label="Nome Completo" placeholder="NomeCompleto" />
                   </v-flex>
                 </v-layout>
 
@@ -33,7 +33,7 @@
 
                 <v-layout>
                   <v-flex xs4>
-                    <v-text-field type="CPF" label="CPF" placeholder="CPF" />
+                    <v-text-field v-mask="'###.###.###.##'" type="CPF" label="CPF" placeholder="CPF" v-model="CPF" />
                   </v-flex>
                   <v-flex xs8>
                     <v-text-field type="Endereço Residencial" label="Endereço Residencial" placeholder="Endereço Residencial" />
@@ -42,13 +42,13 @@
 
                 <v-layout>
                   <v-flex xs4>
-                    <v-select :items="TipoTelefone" label="Tipo de Telefone"></v-select>
+                    <v-select :items="TipoTelefone" label="Tipo de Telefone" v-model="TipoDeTelefone"></v-select>
                   </v-flex>
                   <v-flex xs2>
-                    <v-text-field type="DDD" label="DDD" placeholder="DDD" />
+                    <v-text-field v-mask="'##'" v-model="DDD" type="DDD" label="DDD" placeholder="DDD" />
                   </v-flex>
-                  <v-flex xs6>
-                    <v-text-field type="Numero de Telefone" label="Numero de Telefone" placeholder="Numero de Telefone" />
+                  <v-flex xs5>
+                    <v-text-field v-mask="TipoDeTelefone == 'Residencial' ? '####-####' : '9####-####'" v-model="Telefone" type="Numero de Telefone" label="Numero de Telefone" placeholder="Numero de Telefone" />
                   </v-flex>
                 </v-layout>
 
@@ -112,6 +112,13 @@ export default {
     dateFormatted: vm.formatDate(new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)),
     menu1: false,
     menu2: false,
+    CPF: "",
+    DDD: "",
+    TipoDeTelefone: "Residencial",
+    Telefone: "",
+
+    nome: "",
+    nomeRules: [(v) => !!v || "Campo Obrigatório"],
   }),
 
   computed: {
