@@ -291,10 +291,10 @@
                   </v-col>
                 </v-row>
                 <v-card-actions class="justify-center">
-                  <v-btn fab outlined @click="EditarItem(selectedEnd)">
+                  <v-btn fab outlined @click="EditarItemEnd(selectedEnd)">
                     <v-icon> edit </v-icon>
                   </v-btn>
-                  <v-btn fab outlined color="error">
+                  <v-btn fab outlined @click="DeleteItemEnd(selectedEnd)" color="error">
                     <v-icon> delete </v-icon>
                   </v-btn>
                 </v-card-actions>
@@ -410,6 +410,16 @@ export default {
   },
 
   methods: {
+
+    DeleteItemEnd(item){
+      enderecoService.delete(item.id).then(() => {
+        let index = this.enderecos.indexOf(item);
+        this.enderecos.splice(index, 1);
+        this.error = false;
+        this.snackbar = true;
+      }).catch()
+    },
+
     inatCliente() {
       this.cliente.inativar = true;
       clienteService
@@ -446,7 +456,7 @@ export default {
       this.$router.push({ path: "/endereco_cadastro" });
     },
 
-    EditarItem(item) {
+    EditarItemEnd(item) {
       localStorage.setItem("endereco", JSON.stringify(item));
       this.$router.push({ path: "/endereco_cadastro" });
     },
