@@ -183,7 +183,7 @@
 
         <v-card-actions>
           <v-spacer> </v-spacer>
-          <v-btn @click="dialogCard == false" text color="error"> Fechar </v-btn>
+          <v-btn @click="dialogCard = false" text color="error"> Fechar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
