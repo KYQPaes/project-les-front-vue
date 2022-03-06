@@ -124,7 +124,7 @@
         </v-card-title>
         <v-row class="pa-4" justify="space-between">
           <v-col cols="5">
-            <v-treeview :load-children="fetchUsers" key="id" :active.sync="active" :open.sync="open" activatable :items="itemsCard" color="black" open-on-click transition>
+            <v-treeview key="id" :active.sync="active" item-text="nome" activatable :items="cartoes" color="black" open-on-click transition>
               <template v-slot:prepend="{ item }">
                 <v-icon v-if="!item.children"> credit_card </v-icon>
               </template>
@@ -136,34 +136,25 @@
               <div v-if="!selected" class="text-h6 grey--text text--lighten-1 font-weight-light" style="align-self: center">Escolha um Cartão</div>
               <v-card v-else :key="selected.id" class="pt-6 mx-auto" flat max-width="400">
                 <v-card-text>
-                  <v-avatar v-if="avatar" size="88">
-                    <v-img :src="`https://avataaars.io/${avatar}`" class="mb-6"></v-img>
-                  </v-avatar>
                   <h3 class="text-h5 mb-2">
-                    <!-- {{ selected.name }} -->
+                    {{ selected.nome }}
                   </h3>
                   <div class="blue--text mb-2">
-                    <!-- {{ selected.email }} -->
+                    {{ selected.numero }}
                   </div>
                   <div class="blue--text subheading font-weight-bold">
-                    <!-- {{ selected.username }} -->
+                    {{ selected.validade }}
                   </div>
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-row class="text-left" tag="v-card-text">
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Company: </v-col>
+                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> CVV: </v-col>
                   <v-col>
-                    <!-- {{ selected.company.name }} -->
+                    {{ selected.cvv }}
                   </v-col>
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Website: </v-col>
+                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> CPF: </v-col>
                   <v-col>
-                    <!-- <a :href="`//${selected.website}`" target="_blank">
-                                    {{ selected.website }}
-                                </a> -->
-                  </v-col>
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Phone: </v-col>
-                  <v-col>
-                    <!-- {{ selected.phone }} -->
+                    {{ selected.cpf }}
                   </v-col>
                 </v-row>
               </v-card>
@@ -178,127 +169,6 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog width="1000" v-model="dialogEnd">
-      <v-card>
-        <v-card-title class="black white--text text-h5">
-          {{ title }}
-        </v-card-title>
-        <v-row class="pa-4" justify="space-between">
-          <v-col cols="5">
-            <v-treeview :load-children="fetchUsers" key="id" :active.sync="active" :open.sync="open" activatable :items="itemsCard" color="black" open-on-click transition>
-              <template v-slot:prepend="{ item }">
-                <v-icon v-if="!item.children"> credit_card </v-icon>
-              </template>
-            </v-treeview>
-          </v-col>
-          <v-divider vertical></v-divider>
-          <v-col class="d-flex text-center">
-            <v-scroll-y-transition mode="out-in">
-              <div v-if="!selected" class="text-h6 grey--text text--lighten-1 font-weight-light" style="align-self: center">Escolha um Cartão</div>
-              <v-card v-else :key="selected.id" class="pt-6 mx-auto" flat max-width="400">
-                <v-card-text>
-                  <v-avatar v-if="avatar" size="88">
-                    <v-img :src="`https://avataaars.io/${avatar}`" class="mb-6"></v-img>
-                  </v-avatar>
-                  <h3 class="text-h5 mb-2">
-                    <!-- {{ selected.name }} -->
-                  </h3>
-                  <div class="blue--text mb-2">
-                    <!-- {{ selected.email }} -->
-                  </div>
-                  <div class="blue--text subheading font-weight-bold">
-                    <!-- {{ selected.username }} -->
-                  </div>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-row class="text-left" tag="v-card-text">
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Company: </v-col>
-                  <v-col>
-                    <!-- {{ selected.company.name }} -->
-                  </v-col>
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Website: </v-col>
-                  <v-col>
-                    <!-- <a :href="`//${selected.website}`" target="_blank">
-                                    {{ selected.website }}
-                                </a> -->
-                  </v-col>
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Phone: </v-col>
-                  <v-col>
-                    <!-- {{ selected.phone }} -->
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-scroll-y-transition>
-          </v-col>
-        </v-row>
-
-        <v-card-actions>
-          <v-spacer> </v-spacer>
-          <v-btn @click="dialogEnd = false" text color="error"> Fechar </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    
-    <v-dialog width="1000" v-model="dialogPed">
-      <v-card>
-        <v-card-title class="black white--text text-h5">
-          {{ title }}
-        </v-card-title>
-        <v-row class="pa-4" justify="space-between">
-          <v-col cols="5">
-            <v-treeview :load-children="fetchUsers" key="id" :active.sync="active" :open.sync="open" activatable :items="itemsCard" color="black" open-on-click transition>
-              <template v-slot:prepend="{ item }">
-                <v-icon v-if="!item.children"> credit_card </v-icon>
-              </template>
-            </v-treeview>
-          </v-col>
-          <v-divider vertical></v-divider>
-          <v-col class="d-flex text-center">
-            <v-scroll-y-transition mode="out-in">
-              <div v-if="!selected" class="text-h6 grey--text text--lighten-1 font-weight-light" style="align-self: center">Escolha um Cartão</div>
-              <v-card v-else :key="selected.id" class="pt-6 mx-auto" flat max-width="400">
-                <v-card-text>
-                  <v-avatar v-if="avatar" size="88">
-                    <v-img :src="`https://avataaars.io/${avatar}`" class="mb-6"></v-img>
-                  </v-avatar>
-                  <h3 class="text-h5 mb-2">
-                    <!-- {{ selected.name }} -->
-                  </h3>
-                  <div class="blue--text mb-2">
-                    <!-- {{ selected.email }} -->
-                  </div>
-                  <div class="blue--text subheading font-weight-bold">
-                    <!-- {{ selected.username }} -->
-                  </div>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-row class="text-left" tag="v-card-text">
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Company: </v-col>
-                  <v-col>
-                    <!-- {{ selected.company.name }} -->
-                  </v-col>
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Website: </v-col>
-                  <v-col>
-                    <!-- <a :href="`//${selected.website}`" target="_blank">
-                                    {{ selected.website }}
-                                </a> -->
-                  </v-col>
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Phone: </v-col>
-                  <v-col>
-                    <!-- {{ selected.phone }} -->
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-scroll-y-transition>
-          </v-col>
-        </v-row>
-
-        <v-card-actions>
-          <v-spacer> </v-spacer>
-          <v-btn @click="dialogProd = false" text color="error"> Fechar </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
 
     <v-snackbar top :color="error == true ? 'error':'green'" v-model="snackbar">
       <span v-if="error==false">
@@ -316,12 +186,14 @@
 import Menu from "../components/Menu.vue";
 import Footer from "../components/Footer.vue";
 import clienteService from '@/service/clientes';
+import cartaoService from '@/service/cartoes';
 
 export default {
   name: "Cliente",
   data: (vm) => ({
     items: ["Masculino", "Feminino"],
     TipoTelefone: ["Residencial", "Móvel"],
+    active:[],
     menu1: false,
     menu2: false,
     dialogCard: false,
@@ -331,6 +203,7 @@ export default {
     inativar: false,
     altSenha: false,
 
+    cartoes: [],
     snackbar: false,
     error: false,
     cliente:{},
@@ -373,13 +246,14 @@ export default {
   mounted(){
     this.cliente = JSON.parse(localStorage.getItem('cliente'));
   },
+  created(){
+    this.cartaoList();
+  },
   computed: {
     selected() {
       if (!this.active.length) return undefined;
-
       const id = this.active[0];
-
-      return this.users.find((user) => user.id === id);
+      return this.cartoes.find((cartao) => cartao.id === id);
     },
   },
 
@@ -393,6 +267,12 @@ export default {
   },
 
   methods: {
+    cartaoList(){
+      cartaoService.listClienteId((JSON.parse(localStorage.getItem('cliente'))).id).then((response)=>{
+        this.cartoes = response.data;
+        console.log(this.cartoes)
+      })
+    },
     update(){
       this.error = false;
       if (this.$refs.form.validate()) {
@@ -426,18 +306,14 @@ export default {
       this.dialogEnd = true;
       this.title = "Endereços";
     },
-    fetchUsers(item) {
-      this.select = {
-        id: "teste",
-        cvv: "455",
-        cartao: "412442134121",
-      };
-    },
   },
 };
 </script>
 <style scoped>
 .v-text-field {
   padding: 10px;
+}
+.row{
+  margin: 0;
 }
 </style>
