@@ -162,10 +162,10 @@
                   </v-col>
                 </v-row>
                 <v-card-actions class="justify-center">
-                  <v-btn fab outlined>
+                  <v-btn fab outlined @click="EditarItemCart(selected)">
                     <v-icon> edit </v-icon>
                   </v-btn>
-                  <v-btn fab outlined color="error">
+                  <v-btn fab outlined @click="DeleteItemCart(selected)" color="error">
                     <v-icon> delete </v-icon>
                   </v-btn>
                 </v-card-actions>
@@ -410,6 +410,15 @@ export default {
   },
 
   methods: {
+
+    DeleteItemCart(item){
+      cartaoService.delete(item.id).then(() => {
+        let index = this.cartoes.indexOf(item);
+        this.cartoes.splice(index, 1);
+        this.error = false;
+        this.snackbar = true;
+      }).catch()
+    },
 
     DeleteItemEnd(item){
       enderecoService.delete(item.id).then(() => {
