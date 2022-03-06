@@ -121,6 +121,13 @@
       <v-card>
         <v-card-title class="black white--text text-h5">
           {{ title }}
+          <v-spacer>
+          </v-spacer>
+          <v-btn fab color="white">
+            <v-icon color="black">
+              add
+            </v-icon>
+          </v-btn>
         </v-card-title>
         <v-row class="pa-4" justify="space-between">
           <v-col cols="5">
@@ -157,6 +164,18 @@
                     {{ selected.cpf }}
                   </v-col>
                 </v-row>
+                <v-card-actions class="justify-center">
+                  <v-btn fab outlined>
+                    <v-icon>
+                      edit
+                    </v-icon>
+                  </v-btn>
+                  <v-btn fab outlined color="error">
+                    <v-icon>
+                      delete
+                    </v-icon>
+                  </v-btn>
+                </v-card-actions>
               </v-card>
             </v-scroll-y-transition>
           </v-col>
