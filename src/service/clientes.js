@@ -2,14 +2,14 @@ import { http } from "./config.js";
 
 export default {
 	list: () => {
-		return http.get("clientes");
+		return http.get("api/clientes");
 	},
 
 	login: (email, senha) => {
-		return http.get(`clientes/log?email=${email}&senha=${senha}`);
+		return http.get(`api/clientes/log?email=${email}&senha=${senha}`);
 	},
 
 	create: (cliente) => {
-		return http.post("clientes", cliente);
+		return http.post("api/clientes", cliente);
 	},
 };
