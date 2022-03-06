@@ -10,7 +10,7 @@
                 <h2 class="blue--text">Cartão de Crédito</h2>
               </div>
 
-              <VCreditCard :trans="translations" />
+              <VCreditCard @change="inputInfo" :trans="translations" />
 
               <v-card-actions class="justify-center">
                 <v-btn :loading="loading" type="submit" color="blue">
@@ -65,6 +65,9 @@ export default {
   },
 
   methods: {
+    inputInfo(values){
+      console.log(values);
+    },
     submitHandler() {
       if (this.$refs.form.validate()) {
         this.loading = true;
