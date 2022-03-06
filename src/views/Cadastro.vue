@@ -121,15 +121,15 @@ export default {
 
     cliente: {
       nome: "",
+      senha: "",
+      email: "",
       genero: "",
-      data_nasc: "",
       cpf: "",
       endereco: "",
       tptelefone: "Residencial",
       ddd: "",
+      data_nasc: "",
       telefone: "",
-      senha: "",
-      email: "",
     },
 
     emptyRules: [(v) => !!v || "Campo Obrigatório"],
@@ -149,19 +149,21 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true;
         this.loading = false;
-        clienteService.create(this.cliente).then((response) => {
-          if (response.data.length > 0) {
-            this.error = false;
-            this.snackbar = true;
-            setTimeout(() => {
-              localStorage.setItem("cliente", JSON.stringify(response.data));
-              this.$router.push({ path: "/" });
-            }, 1500);
-          } else {
+        clienteService
+          .create(this.cliente)
+          .then((response) => {
+            if (response.data) {
+              this.error = false;
+              this.snackbar = true;
+              setTimeout(() => {
+                this.$router.push({ path: "/login" });
+              }, 1500);
+            }
+          })
+          .catch(() => {
             this.error = true;
             this.snackbar = true;
-          }
-        });
+          });
       }
     },
   },
