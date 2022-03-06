@@ -122,7 +122,7 @@
         <v-card-title class="black white--text text-h5">
           {{ title }}
           <v-spacer> </v-spacer>
-          <v-btn @click="$router.push({ path: '/cartao_cadastro' })" fab color="white">
+          <v-btn @click="novoCartao" fab color="white">
             <v-icon color="black"> add </v-icon>
           </v-btn>
         </v-card-title>
@@ -137,32 +137,36 @@
           <v-divider vertical></v-divider>
           <v-col class="d-flex text-center">
             <v-scroll-y-transition mode="out-in">
-              <div v-if="!selected" class="text-h6 grey--text text--lighten-1 font-weight-light" style="align-self: center">Escolha um Cartão</div>
-              <v-card v-else :key="selected.id" class="pt-6 mx-auto" flat max-width="400">
+              <div v-if="!selectedCard" class="text-h6 grey--text text--lighten-1 font-weight-light" style="align-self: center">Escolha um Cartão</div>
+              <v-card v-else :key="selectedCard.id" class="pt-6 mx-auto" flat max-width="400">
                 <v-card-text>
                   <h3 class="text-h5 mb-2">
-                    {{ selected.nome }}
+                    {{ selectedCard.nome }}
                   </h3>
                   <div class="blue--text mb-2">
-                    {{ selected.numero }}
+                    {{ selectedCard.numero }}
                   </div>
                   <div class="blue--text subheading font-weight-bold">
-                    {{ selected.validade }}
+                    {{ selectedCard.validade }}
                   </div>
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-row class="text-left" tag="v-card-text">
                   <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> CVV: </v-col>
                   <v-col>
-                    {{ selected.cvv }}
+                    {{ selectedCard.cvv }}
                   </v-col>
                   <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> CPF: </v-col>
                   <v-col>
-                    {{ selected.cpf }}
+                    {{ selectedCard.cpf }}
+                  </v-col>
+                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Bandeira: </v-col>
+                  <v-col>
+                    {{ selectedCard.bandeira }}
                   </v-col>
                 </v-row>
                 <v-card-actions class="justify-center">
-                  <v-btn fab outlined>
+                  <v-btn fab outlined @click="EditarCard(selectedCard)">
                     <v-icon> edit </v-icon>
                   </v-btn>
                   <v-btn fab outlined color="error">
@@ -398,6 +402,12 @@ export default {
       const id = this.active[0];
       return this.enderecos.find((endereco) => endereco.id === id);
     },
+
+    selectedCard() {
+      if (!this.active.length) return undefined;
+      const id = this.active[0];
+      return this.cartoes.find((cartao) => cartao.id === id);
+    },
   },
 
   watch: {
@@ -447,9 +457,20 @@ export default {
       this.$router.push({ path: "/endereco_cadastro" });
     },
 
+    novoCartao() {
+      localStorage.removeItem("cartao");
+      this.$router.push({ path: "/cartao_cadastro" });
+    },
+
     EditarItem(item) {
       localStorage.setItem("endereco", JSON.stringify(item));
       this.$router.push({ path: "/endereco_cadastro" });
+    },
+
+    EditarCard(item) {
+      localStorage.removeItem("cartao");
+      localStorage.setItem("cartao", JSON.stringify(item));
+      this.$router.push({ path: "/cartao_cadastro" });
     },
 
     update() {

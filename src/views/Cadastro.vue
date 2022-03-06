@@ -149,8 +149,8 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true;
         this.loading = false;
-        this.cliente.cpf = this.cliente.cpf.replace(/[^a-zA-Z0-9]/g, '');
-        this.cliente.telefone = this.cliente.telefone.replace(/[^a-zA-Z0-9]/g, '');
+        this.cliente.cpf = this.cliente.cpf.replace(/[^a-zA-Z0-9]/g, "");
+        this.cliente.telefone = this.cliente.telefone.replace(/[^a-zA-Z0-9]/g, "");
         clienteService
           .create(this.cliente)
           .then((response) => {

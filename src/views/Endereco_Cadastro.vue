@@ -94,8 +94,6 @@ export default {
     snackbar: false,
     error: false,
 
-    endereco: {},
-
     endereco: {
       tipo_residencia: "",
       tipo_logradouro: "",

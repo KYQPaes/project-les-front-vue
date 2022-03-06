@@ -9,5 +9,19 @@ export default {
 		return http.get(`api/cartoes/${id}`);
 	},
 
+	create: (cartao) => {
+		return http.post("api/cartoes", cartao);
+	},	
+
+	update: (cartao) => {
+		return http.put("api/cartoes", cartao);
+	},
+
 };
+
+
+
+
+
+
 
