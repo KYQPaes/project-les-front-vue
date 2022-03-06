@@ -239,7 +239,7 @@
         </v-card-title>
         <v-row class="pa-4" justify="space-between">
           <v-col cols="5">
-            <v-treeview key="id" :active.sync="active" item-text="tipo_residencia" activatable :items="enderecos" color="black" open-on-click transition>
+            <v-treeview key="id" :active.sync="activeEnd" item-text="tipo_residencia" activatable :items="enderecos" color="black" open-on-click transition>
               <template v-slot:prepend="{ item }">
                 <v-icon v-if="!item.children"> home </v-icon>
               </template>
@@ -331,7 +331,6 @@ export default {
   data: (vm) => ({
     items: ["Masculino", "Feminino"],
     TipoTelefone: ["Residencial", "Móvel"],
-    active: [],
     menu1: false,
     menu2: false,
     dialogCard: false,
@@ -349,6 +348,7 @@ export default {
     title: "",
     open: [],
     active: [],
+    activeEnd: [],
     select: {},
     rules: [(v) => !!v || "Campo Obrigatório"],
 
@@ -394,8 +394,8 @@ export default {
     },
 
     selectedEnd() {
-      if (!this.active.length) return undefined;
-      const id = this.active[0];
+      if (!this.activeEnd.length) return undefined;
+      const id = this.activeEnd[0];
       return this.enderecos.find((endereco) => endereco.id === id);
     },
   },
