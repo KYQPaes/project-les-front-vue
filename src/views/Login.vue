@@ -80,7 +80,7 @@ export default {
             this.error = false;
             this.snackbar = true;
             setTimeout(() => {
-              localStorage.setItem('cliente', JSON.stringify(response.data))
+              localStorage.setItem('cliente', JSON.stringify(response.data[0]))
               this.$router.push({ path: "/" });
             }, 1500);
           }else{
