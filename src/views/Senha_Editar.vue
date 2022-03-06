@@ -13,25 +13,25 @@
               <v-card-text>
                 <v-layout>
                   <v-flex xs12>
-                    <v-text-field v-model="oldPassword" :rules="emptyRules" :type="passwordShow ? 'text' : 'password'" label="Senha Atual" placeholder="Senha Atual" prepend-inner-icon="mdi-lock" :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow" />
+                    <v-text-field v-model="password.oldPassword" :rules="emptyRules" :type="passwordShow ? 'text' : 'password'" label="Senha Atual" placeholder="Senha Atual" prepend-inner-icon="mdi-lock" :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow = !passwordShow" />
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
                   <v-flex xs12>
-                    <v-text-field v-model="newPassword" :rules="[this.newPassword !== this.oldPassword || 'Nova senha não pode ser igual a senha atual', (v) => !!v || 'Campo Obrigatório', rules.password]" :type="passwordShow2 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow2 = !passwordShow2" />
+                    <v-text-field v-model="password.newPassword" :rules="[this.password.newPassword !== this.password.oldPassword || 'Nova senha não pode ser igual a senha atual', (v) => !!v || 'Campo Obrigatório', rules.password]" :type="passwordShow2 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow2 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow2 = !passwordShow2" />
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
                   <v-flex xs12>
-                    <v-text-field v-model="confirmarNewPassword" :rules="[this.newPassword === this.confirmarNewPassword || 'campos diferentes', (v) => !!v || 'Campo Obrigatório']" :type="passwordShow3 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow3 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow3 = !passwordShow3" />
+                    <v-text-field v-model="password.confirmarNewPassword" :rules="[this.password.newPassword === this.password.confirmarNewPassword || 'campos diferentes', (v) => !!v || 'Campo Obrigatório']" :type="passwordShow3 ? 'text' : 'password'" label="Nova Senha" placeholder="Nova Senha" prepend-inner-icon="mdi-lock" :append-icon="passwordShow3 ? 'mdi-eye' : 'mdi-eye-off'" @click:append="passwordShow3 = !passwordShow3" />
                   </v-flex>
                 </v-layout>
               </v-card-text>
 
               <v-card-actions class="justify-center">
-                <v-btn :loading="loading" type="submit" color="blue">
+                <v-btn @click="altPass" :loading="loading" type="submit" color="blue">
                   <span class="white--text px-8">Alterar Senha</span>
                 </v-btn>
               </v-card-actions>
@@ -39,7 +39,14 @@
           </v-card>
         </v-col>
       </v-main>
-      <v-snackbar top color="green" v-model="snackbar"> Senha Alterada com sucesso </v-snackbar>
+      <v-snackbar top :color="error == true ? 'error':'green'" v-model="snackbar">
+        <span v-if="error==false">
+          Alterações realizadas com sucesso
+        </span>
+        <span v-else>
+          {{text}}
+        </span>
+    </v-snackbar>
     </v-app>
     <Footer />
   </div>
@@ -48,6 +55,7 @@
 <script>
 import Menu from "../components/Menu.vue";
 import Footer from "../components/Footer.vue";
+import clienteService from "../service/clientes";
 
 export default {
   data: (vm) => ({
@@ -56,11 +64,14 @@ export default {
     passwordShow3: false,
     loading: false,
     snackbar: false,
-
-    oldPassword: "",
-    newPassword: "",
-    confirmarNewPassword: "",
-
+    error: false,
+    text: "",
+    cliente: {},
+    password:{
+      oldPassword: "",
+      newPassword: "",
+      confirmarNewPassword: "",
+    },
     emptyRules: [(v) => !!v || "Campo Obrigatório"],
 
     rules: {
@@ -77,7 +88,38 @@ export default {
     Footer,
   },
 
+  mounted(){
+    this.cliente = JSON.parse(localStorage.getItem('cliente'))
+  },
+
   methods: {
+    altPass(){
+      this.error = false;
+      if (this.$refs.form.validate()) {
+        if(this.password.oldPassword == this.cliente.senha){
+          clienteService.update(this.cliente).then((response) => {
+            if(response.data){
+              this.error = false;
+              this.snackbar = true;
+              setTimeout(() => {
+                localStorage.setItem('cliente', JSON.stringify(response.data))
+                this.$router.push({path: "/cliente"});
+              }, 1500);
+            }
+          }).catch(() => {
+            this.text = "Ocorreu algum erro";
+            this.error = true;
+            this.snackbar = true;
+          });
+        }else{
+          this.text = "Senha antiga incorreta"
+          this.error = true;
+          this.snackbar = true;
+        }
+        
+      }
+      clienteService.update(this.cliente)
+    },
     submitHandler() {
       if (this.$refs.form.validate()) {
         this.loading = true;
