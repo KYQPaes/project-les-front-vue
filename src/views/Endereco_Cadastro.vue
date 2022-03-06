@@ -134,6 +134,7 @@ export default {
               this.error = false;
               this.snackbar = true;
               setTimeout(() => {
+                localStorage.removeItem("endereco");
                 this.$router.push({ path: "/cliente" });
               }, 1500);
             }
