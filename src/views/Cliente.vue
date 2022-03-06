@@ -8,42 +8,46 @@
             <v-card-title> Dados Cadastrais do Cliente </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <v-layout>
-                <v-flex xs12>
-                  <v-text-field v-model="cliente.nome" :rules="rules" label="Nome Completo"></v-text-field>
-                </v-flex>
-              </v-layout>
-              <v-layout>
-                <v-flex xs4>
-                  <v-autocomplete v-model="cliente.genero" :items="items" label="Gênero"></v-autocomplete>
-                </v-flex>
-                <v-flex xs6>
-                  <!-- <v-text-field :rules="rules" v-model="cliente.data_nasc" label="Data de Nascimento" prepend-icon="mdi-calendar" ></v-text-field> -->
-                </v-flex>
-              </v-layout>
-              <v-layout>
-                <v-flex xs4>
-                  <v-text-field :rules="rules" type="CPF" v-model="cliente.cpf" label="CPF" />
-                </v-flex>
-                <v-flex xs8>
-                  <v-text-field :rules="rules" type="Endereço Residencial" v-model="cliente.endereco" label="Endereço Residencial" />
-                </v-flex>
-              </v-layout>
-              <v-layout>
-                <v-flex xs4>
-                  <v-autocomplete :rules="rules" :items="TipoTelefone" v-model="cliente.tptelefone" label="Tipo de Telefone"></v-autocomplete>
-                </v-flex>
-                <v-flex xs2>
-                  <v-text-field :rules="rules" type="DDD" label="DDD" v-model="cliente.ddd" />
-                </v-flex>
-                <v-flex xs6>
-                  <v-text-field :rules="rules" type="Numero de Telefone" label="Numero de Telefone" v-model="cliente.telefone" />
-                </v-flex>
-              </v-layout>
+              <v-form ref="form">
+                <v-layout>
+                  <v-flex xs12>
+                    <v-text-field v-model="cliente.nome" :rules="rules" label="Nome Completo"></v-text-field>
+                  </v-flex>
+                </v-layout>
+                <v-layout>
+                  <v-flex xs4>
+                    <v-autocomplete v-model="cliente.genero" :items="items" label="Gênero"></v-autocomplete>
+                  </v-flex>
+                  <v-flex xs6>
+                    <!-- <v-text-field :rules="rules" v-model="cliente.data_nasc" label="Data de Nascimento" prepend-icon="mdi-calendar" ></v-text-field> -->
+                  </v-flex>
+                </v-layout>
+                <v-layout>
+                  <v-flex xs4>
+                    <!-- v-mask="'###.###.###.##'" -->
+                    <v-text-field :rules="rules" type="CPF" v-model="cliente.cpf" label="CPF" />
+                  </v-flex>
+                  <v-flex xs8>
+                    <v-text-field :rules="rules" type="Endereço Residencial" v-model="cliente.endereco" label="Endereço Residencial" />
+                  </v-flex>
+                </v-layout>
+                <v-layout>
+                  <v-flex xs4>
+                    <v-autocomplete :rules="rules" :items="TipoTelefone" v-model="cliente.tptelefone" label="Tipo de Telefone"></v-autocomplete>
+                  </v-flex>
+                  <v-flex xs2>
+                    <v-text-field :rules="rules" type="DDD" label="DDD" v-model="cliente.ddd" />
+                  </v-flex>
+                  <v-flex xs6>
+                    <!-- v-mask="cliente.tptelefone == 'Residencial' ? '####-####' : '9####-####'" -->
+                    <v-text-field :rules="rules" type="Numero de Telefone" label="Numero de Telefone" v-model="cliente.telefone" />
+                  </v-flex>
+                </v-layout>
+              </v-form>
             </v-card-text>
             <v-card-actions>
               <v-spacer> </v-spacer>
-              <v-btn color="black" dark> Salvar Alterações </v-btn>
+              <v-btn @click="update" color="black" dark> Salvar Alterações </v-btn>
               <v-row justify="center">
                 <v-dialog v-model="altSenha" persistent max-width="290">
                   <template v-slot:activator="{ on, attrs }">
@@ -174,6 +178,14 @@
       </v-card>
     </v-dialog>
 
+    <v-snackbar top :color="error == true ? 'error':'green'" v-model="snackbar">
+      <span v-if="error==false">
+        Alterações realizadas com sucesso
+      </span>
+      <span v-else>
+        Ocorreu um erro
+      </span>
+    </v-snackbar>
     <Footer />
   </div>
 </template>
@@ -181,6 +193,8 @@
 <script>
 import Menu from "../components/Menu.vue";
 import Footer from "../components/Footer.vue";
+import clienteService from '@/service/clientes';
+
 export default {
   name: "Cliente",
   data: (vm) => ({
@@ -192,6 +206,8 @@ export default {
     inativar: false,
     altSenha: false,
 
+    snackbar: false,
+    error: false,
     cliente:{},
     title: "",
     open: [],
@@ -253,6 +269,27 @@ export default {
   },
 
   methods: {
+    update(){
+      this.error = false;
+      if (this.$refs.form.validate()) {
+        this.cliente.telefone = this.cliente.telefone.replace(/[^a-zA-Z0-9]/g, '');
+        this.cliente.cpf = this.cliente.cpf.replace(/[^a-zA-Z0-9]/g, '');
+        clienteService.update(this.cliente).then((response) => {
+          if(response.data){
+            this.error = false;
+            this.snackbar = true;
+            setTimeout(() => {
+              localStorage.setItem('cliente', JSON.stringify(response.data))
+              this.$router.go();
+            }, 1500);
+          }
+        }).catch(() => {
+          this.error = true;
+          this.snackbar = true;
+        });
+      }
+      clienteService.update(this.cliente)
+    },
     openPed() {
       this.dialog = true;
       this.title = "Pedidos";
