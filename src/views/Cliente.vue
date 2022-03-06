@@ -19,7 +19,7 @@
                     <v-autocomplete v-model="cliente.genero" :items="items" label="Gênero"></v-autocomplete>
                   </v-flex>
                   <v-flex xs6>
-                    <!-- <v-text-field :rules="rules" v-model="cliente.data_nasc" label="Data de Nascimento" prepend-icon="mdi-calendar" ></v-text-field> -->
+                    <v-text-field type="date" :rules="rules" v-model="cliente.data_nasc" label="Data de Nascimento" prepend-icon="mdi-calendar" ></v-text-field>
                   </v-flex>
                 </v-layout>
                 <v-layout>
