@@ -247,7 +247,6 @@ export default {
   },
   mounted(){
     this.cliente = JSON.parse(localStorage.getItem('cliente'));
-    console.log(this.cliente)
   },
   computed: {
     selected() {
