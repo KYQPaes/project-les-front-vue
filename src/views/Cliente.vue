@@ -123,7 +123,7 @@
           {{ title }}
           <v-spacer>
           </v-spacer>
-          <v-btn fab color="white">
+          <v-btn @click="$router.push({path:'/cartao_cadastro'})" fab color="white">
             <v-icon color="black">
               add
             </v-icon>
@@ -265,9 +265,6 @@ export default {
   mounted(){
     this.cliente = JSON.parse(localStorage.getItem('cliente'));
   },
-  created(){
-    this.cartaoList();
-  },
   computed: {
     selected() {
       if (!this.active.length) return undefined;
@@ -289,7 +286,6 @@ export default {
     cartaoList(){
       cartaoService.listClienteId((JSON.parse(localStorage.getItem('cliente'))).id).then((response)=>{
         this.cartoes = response.data;
-        console.log(this.cartoes)
       })
     },
     update(){
@@ -318,6 +314,7 @@ export default {
       this.title = "Pedidos";
     },
     openCard() {
+      this.cartaoList();
       this.dialogCard = true;
       this.title = "Cartões";
     },
