@@ -438,7 +438,6 @@ export default {
     enderecoList() {
       enderecoService.listClienteId(JSON.parse(localStorage.getItem("cliente")).id).then((response) => {
         this.enderecos = response.data;
-        console.log(response.data);
       });
     },
 
