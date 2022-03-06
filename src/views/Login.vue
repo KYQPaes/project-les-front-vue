@@ -49,6 +49,19 @@
           Login ou senha incorreto
         </span>
       </v-snackbar>
+      <v-dialog v-model="dialog" persistent max-width="290">
+          <v-card>
+            <v-card-title class="text-h5"> Inativação </v-card-title>
+            <v-card-text>Sua conta está inativada. Deseja ativar sua conta? </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="dialog = false"> Cancelar </v-btn>
+              <v-btn color="green darken-1" @click="ativacao" text>
+                Ativar conta
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
     </v-card>
   </v-app>
 </template>
@@ -64,7 +77,9 @@ export default {
       email:"",
       password: "",
     },
+    clienteBD: {},
     error: false,
+    dialog: false,
     passwordRules: [(v) => !!v || "Senha Obrigatória", (v) => (v && v.length >= 8) || "Senha deve ser maior que 8 dígitos"],
     emailRules: [(v) => !!v || "E-mail", (v) => /.+@.+\..+/.test(v) || "E-mail Inválido"],
   }),
@@ -77,12 +92,17 @@ export default {
         this.loading = false;
         clienteService.login(this.cliente.email, this.cliente.password).then((response) => {
           if(response.data.length>0){
-            this.error = false;
-            this.snackbar = true;
-            setTimeout(() => {
-              localStorage.setItem('cliente', JSON.stringify(response.data[0]))
-              this.$router.push({ path: "/" });
-            }, 1500);
+            if(response.data[0].inativar == 0){
+              this.error = false;
+              this.snackbar = true;
+              setTimeout(() => {
+                localStorage.setItem('cliente', JSON.stringify(response.data[0]))
+                this.$router.push({ path: "/" });
+              }, 1500);
+            }else{
+              this.clienteBD = response.data[0];
+              this.dialog = true;
+            }
           }else{
             this.error = true;
             this.snackbar = true;
@@ -90,6 +110,14 @@ export default {
         });
       }
     },
+    ativacao(){
+      this.clienteBD.inativar = false;
+      clienteService.update(this.clienteBD).then(() => {
+        localStorage.setItem('cliente', JSON.stringify(this.clienteBD))
+        this.$router.push({ path: "/" });
+      })
+
+    }
   },
 };
 </script>

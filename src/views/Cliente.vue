@@ -104,11 +104,11 @@
               </template>
               <v-card>
                 <v-card-title class="text-h5"> Confirmação </v-card-title>
-                <v-card-text>Esteja ciente que ao confirmar com a seguinte opção, sua conta sera inativada. Você não será mais capaz de realizar pedidos e ver seu histórico de compras.</v-card-text>
+                <v-card-text>Esteja ciente que ao confirmar com a seguinte opção, sua conta sera inativada. Você não será mais capaz de entrar na sua conta.</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="green darken-1" text @click="inativar = false"> Discordo </v-btn>
-                  <v-btn color="green darken-1" text @click="inativar = false"> Concordo </v-btn>
+                  <v-btn color="green darken-1" text @click="inatCliente"> Concordo </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -264,6 +264,7 @@ export default {
   },
   mounted(){
     this.cliente = JSON.parse(localStorage.getItem('cliente'));
+    console.log(this.cliente)
   },
   computed: {
     selected() {
@@ -283,6 +284,22 @@ export default {
   },
 
   methods: {
+    inatCliente(){
+      this.cliente.inativar = true;
+      clienteService.update(this.cliente).then((response) => {
+          if(response.data){
+            this.error = false;
+            this.snackbar = true;
+            setTimeout(() => {
+              localStorage.removeItem('cliente')
+              this.$router.push({path: "/"});
+            }, 1500);
+          }
+        }).catch(() => {
+          this.error = true;
+          this.snackbar = true;
+        });
+    },
     cartaoList(){
       cartaoService.listClienteId((JSON.parse(localStorage.getItem('cliente'))).id).then((response)=>{
         this.cartoes = response.data;
@@ -307,7 +324,6 @@ export default {
           this.snackbar = true;
         });
       }
-      clienteService.update(this.cliente)
     },
     openPed() {
       this.dialogPed = true;
