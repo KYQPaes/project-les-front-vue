@@ -117,7 +117,6 @@ export default {
 
   mounted() {
     if (JSON.parse(localStorage.getItem("endereco"))) this.endereco = JSON.parse(localStorage.getItem("endereco"));
-    console.log(this.endereco);
   },
 
   methods: {
@@ -132,6 +131,7 @@ export default {
               this.error = false;
               this.snackbar = true;
               setTimeout(() => {
+                localStorage.removeItem("endereco");
                 this.$router.push({ path: "/cliente" });
               }, 1500);
             }
@@ -159,7 +159,6 @@ export default {
     enderecoList() {
       enderecoService.listClienteId(JSON.parse(localStorage.getItem("cliente")).id).then((response) => {
         this.enderecos = response.data;
-        console.log(response.data);
       });
     },
 

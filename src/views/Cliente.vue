@@ -169,7 +169,7 @@
                   <v-btn fab outlined @click="EditarCard(selectedCard)">
                     <v-icon> edit </v-icon>
                   </v-btn>
-                  <v-btn fab outlined color="error">
+                  <v-btn fab outlined @click="DeleteItemCart(selected)" color="error">
                     <v-icon> delete </v-icon>
                   </v-btn>
                 </v-card-actions>
@@ -243,7 +243,7 @@
         </v-card-title>
         <v-row class="pa-4" justify="space-between">
           <v-col cols="5">
-            <v-treeview key="id" :active.sync="active" item-text="tipo_residencia" activatable :items="enderecos" color="black" open-on-click transition>
+            <v-treeview key="id" :active.sync="activeEnd" item-text="tipo_residencia" activatable :items="enderecos" color="black" open-on-click transition>
               <template v-slot:prepend="{ item }">
                 <v-icon v-if="!item.children"> home </v-icon>
               </template>
@@ -295,10 +295,10 @@
                   </v-col>
                 </v-row>
                 <v-card-actions class="justify-center">
-                  <v-btn fab outlined @click="EditarItem(selectedEnd)">
+                  <v-btn fab outlined @click="EditarItemEnd(selectedEnd)">
                     <v-icon> edit </v-icon>
                   </v-btn>
-                  <v-btn fab outlined color="error">
+                  <v-btn fab outlined @click="DeleteItemEnd(selectedEnd)" color="error">
                     <v-icon> delete </v-icon>
                   </v-btn>
                 </v-card-actions>
@@ -335,7 +335,6 @@ export default {
   data: (vm) => ({
     items: ["Masculino", "Feminino"],
     TipoTelefone: ["Residencial", "Móvel"],
-    active: [],
     menu1: false,
     menu2: false,
     dialogCard: false,
@@ -353,6 +352,7 @@ export default {
     title: "",
     open: [],
     active: [],
+    activeEnd: [],
     select: {},
     rules: [(v) => !!v || "Campo Obrigatório"],
 
@@ -398,8 +398,8 @@ export default {
     },
 
     selectedEnd() {
-      if (!this.active.length) return undefined;
-      const id = this.active[0];
+      if (!this.activeEnd.length) return undefined;
+      const id = this.activeEnd[0];
       return this.enderecos.find((endereco) => endereco.id === id);
     },
 
@@ -420,6 +420,30 @@ export default {
   },
 
   methods: {
+    DeleteItemCart(item) {
+      cartaoService
+        .delete(item.id)
+        .then(() => {
+          let index = this.cartoes.indexOf(item);
+          this.cartoes.splice(index, 1);
+          this.error = false;
+          this.snackbar = true;
+        })
+        .catch();
+    },
+
+    DeleteItemEnd(item) {
+      enderecoService
+        .delete(item.id)
+        .then(() => {
+          let index = this.enderecos.indexOf(item);
+          this.enderecos.splice(index, 1);
+          this.error = false;
+          this.snackbar = true;
+        })
+        .catch();
+    },
+
     inatCliente() {
       this.cliente.inativar = true;
       clienteService
@@ -448,7 +472,6 @@ export default {
     enderecoList() {
       enderecoService.listClienteId(JSON.parse(localStorage.getItem("cliente")).id).then((response) => {
         this.enderecos = response.data;
-        console.log(response.data);
       });
     },
 
@@ -462,7 +485,7 @@ export default {
       this.$router.push({ path: "/cartao_cadastro" });
     },
 
-    EditarItem(item) {
+    EditarItemEnd(item) {
       localStorage.setItem("endereco", JSON.stringify(item));
       this.$router.push({ path: "/endereco_cadastro" });
     },
