@@ -119,7 +119,6 @@ export default {
 
   mounted() {
     if (JSON.parse(localStorage.getItem("endereco"))) this.endereco = JSON.parse(localStorage.getItem("endereco"));
-    console.log(this.endereco);
   },
 
   methods: {
