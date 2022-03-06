@@ -12,4 +12,8 @@ export default {
 	create: (cliente) => {
 		return http.post("api/clientes", cliente);
 	},
+
+	update: (cliente) => {
+		return http.put("api/clientes", cliente);
+	},
 };
