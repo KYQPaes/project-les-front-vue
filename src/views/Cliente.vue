@@ -415,15 +415,15 @@ export default {
       clienteService.update(this.cliente)
     },
     openPed() {
-      this.dialog = true;
+      this.dialogPed = true;
       this.title = "Pedidos";
     },
     openCard() {
-      this.dialog = true;
+      this.dialogCard = true;
       this.title = "Cartões";
     },
     openEnd() {
-      this.dialog = true;
+      this.dialogEnd = true;
       this.title = "Endereços";
     },
     fetchUsers(item) {
