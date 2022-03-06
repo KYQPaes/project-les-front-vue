@@ -10,39 +10,34 @@
             <v-card-text>
               <v-layout>
                 <v-flex xs12>
-                  <v-text-field :rules="rules" label="Nome Completo"></v-text-field>
+                  <v-text-field v-model="cliente.nome" :rules="rules" label="Nome Completo"></v-text-field>
                 </v-flex>
               </v-layout>
               <v-layout>
                 <v-flex xs4>
-                  <v-autocomplete :items="items" label="Gênero"></v-autocomplete>
+                  <v-autocomplete v-model="cliente.genero" :items="items" label="Gênero"></v-autocomplete>
                 </v-flex>
                 <v-flex xs6>
-                  <v-menu ref="menu1" v-model="menu1" :close-on-content-click="false" transition="scale-transition" offset-y max-width="290px" min-width="auto">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field :rules="rules" v-model="dateFormatted" label="Data de Nascimento" persistent-hint prepend-icon="mdi-calendar" v-bind="attrs" @blur="date = parseDate(dateFormatted)" v-on="on"></v-text-field>
-                    </template>
-                    <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
-                  </v-menu>
+                  <!-- <v-text-field :rules="rules" v-model="cliente.data_nasc" label="Data de Nascimento" prepend-icon="mdi-calendar" ></v-text-field> -->
                 </v-flex>
               </v-layout>
               <v-layout>
                 <v-flex xs4>
-                  <v-text-field :rules="rules" type="CPF" label="CPF" />
+                  <v-text-field :rules="rules" type="CPF" v-model="cliente.cpf" label="CPF" />
                 </v-flex>
                 <v-flex xs8>
-                  <v-text-field :rules="rules" type="Endereço Residencial" label="Endereço Residencial" />
+                  <v-text-field :rules="rules" type="Endereço Residencial" v-model="cliente.endereco" label="Endereço Residencial" />
                 </v-flex>
               </v-layout>
               <v-layout>
                 <v-flex xs4>
-                  <v-autocomplete :rules="rules" :items="TipoTelefone" label="Tipo de Telefone"></v-autocomplete>
+                  <v-autocomplete :rules="rules" :items="TipoTelefone" v-model="cliente.tptelefone" label="Tipo de Telefone"></v-autocomplete>
                 </v-flex>
                 <v-flex xs2>
-                  <v-text-field :rules="rules" type="DDD" label="DDD" />
+                  <v-text-field :rules="rules" type="DDD" label="DDD" v-model="cliente.ddd" />
                 </v-flex>
                 <v-flex xs6>
-                  <v-text-field :rules="rules" type="Numero de Telefone" label="Numero de Telefone" />
+                  <v-text-field :rules="rules" type="Numero de Telefone" label="Numero de Telefone" v-model="cliente.telefone" />
                 </v-flex>
               </v-layout>
             </v-card-text>
@@ -191,15 +186,13 @@ export default {
   data: (vm) => ({
     items: ["Masculino", "Feminino"],
     TipoTelefone: ["Residencial", "Móvel"],
-
-    date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
-    dateFormatted: vm.formatDate(new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)),
     menu1: false,
     menu2: false,
 
     inativar: false,
     altSenha: false,
 
+    cliente:{},
     title: "",
     open: [],
     active: [],
@@ -236,10 +229,11 @@ export default {
     Menu,
     Footer,
   },
+  mounted(){
+    this.cliente = JSON.parse(localStorage.getItem('cliente'));
+    console.log(this.cliente)
+  },
   computed: {
-    computedDateFormatted() {
-      return this.formatDate(this.date);
-    },
     selected() {
       if (!this.active.length) return undefined;
 
@@ -250,9 +244,6 @@ export default {
   },
 
   watch: {
-    date(val) {
-      this.dateFormatted = this.formatDate(this.date);
-    },
     dialog(val) {
       if (val) {
       } else {
@@ -262,19 +253,6 @@ export default {
   },
 
   methods: {
-    formatDate(date) {
-      if (!date) return null;
-
-      const [year, month, day] = date.split("-");
-      return `${month}/${day}/${year}`;
-    },
-
-    parseDate(date) {
-      if (!date) return null;
-
-      const [month, day, year] = date.split("/");
-      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-    },
     openPed() {
       this.dialog = true;
       this.title = "Pedidos";
