@@ -16,6 +16,7 @@
                     <v-flex xs6>
                       <v-select v-model="endereco.tipo_residencia" :rules="emptyRules" :items="TipoResidencia" label="Tipo de residência"></v-select>
                     </v-flex>
+
                     <v-flex xs6>
                       <v-select v-model="endereco.tipo_logradouro" :rules="emptyRules" :items="TipoLogradouro" label="Tipo de Logradouro"></v-select>
                     </v-flex>
@@ -50,13 +51,16 @@
                       <v-select v-model="endereco.pais" :rules="emptyRules" :items="countryList" label="Pais"></v-select>
                     </v-flex>
                     <v-flex xs3>
-                      <v-select v-model="endereco.estado" :rules="emptyRules" :items="Estado" label="Estado" :disabled="pais == 'Brazil' ? false : true"></v-select>
+                      <v-select v-model="endereco.estado" :rules="emptyRules" :items="Estado" label="Estado" :disabled="endereco.pais == 'Brazil' ? false : true"></v-select>
                     </v-flex>
                   </v-layout>
                 </v-card-text>
 
                 <v-card-actions class="justify-center">
-                  <v-btn :loading="loading" type="submit" color="blue">
+                  <v-btn v-if="endereco.id > 0" :loading="loading" type="submit" color="blue">
+                    <span class="white--text px-8">Editar</span>
+                  </v-btn>
+                  <v-btn v-else :loading="loading" type="submit" color="blue">
                     <span class="white--text px-8">Efetuar Cadastro</span>
                   </v-btn>
                 </v-card-actions>
@@ -90,6 +94,8 @@ export default {
     snackbar: false,
     error: false,
 
+    endereco: {},
+
     endereco: {
       tipo_residencia: "",
       tipo_logradouro: "",
@@ -100,7 +106,7 @@ export default {
       cidade: "",
       pais: "",
       estado: "",
-      cliente_id: JSON.parse(localStorage.getItem("cliente")).id,
+      clienteId: JSON.parse(localStorage.getItem("cliente")).id,
     },
 
     emptyRules: [(v) => !!v || "Campo Obrigatório"],
@@ -111,20 +117,66 @@ export default {
     Footer,
   },
 
+  mounted() {
+    if (JSON.parse(localStorage.getItem("endereco"))) this.endereco = JSON.parse(localStorage.getItem("endereco"));
+    console.log(this.endereco);
+  },
+
   methods: {
     submitHandler() {
       this.error = false;
       if (this.$refs.form.validate()) {
         this.loading = true;
         this.loading = false;
+        if (this.endereco.id > 0) {
+          enderecoService.update(this.endereco).then((response) => {
+            if (response.data) {
+              this.error = false;
+              this.snackbar = true;
+              setTimeout(() => {
+                this.$router.push({ path: "/cliente" });
+              }, 1500);
+            }
+          });
+        } else {
+          enderecoService
+            .create(this.endereco)
+            .then((response) => {
+              if (response.data) {
+                this.error = false;
+                this.snackbar = true;
+                setTimeout(() => {
+                  this.$router.push({ path: "/cliente" });
+                }, 1500);
+              }
+            })
+            .catch(() => {
+              this.error = true;
+              this.snackbar = true;
+            });
+        }
+      }
+    },
+
+    enderecoList() {
+      enderecoService.listClienteId(JSON.parse(localStorage.getItem("cliente")).id).then((response) => {
+        this.enderecos = response.data;
+        console.log(response.data);
+      });
+    },
+
+    update() {
+      this.error = false;
+      if (this.$refs.form.validate()) {
         enderecoService
-          .create(this.endereco)
+          .update(this.endereco)
           .then((response) => {
             if (response.data) {
               this.error = false;
               this.snackbar = true;
               setTimeout(() => {
-                this.$router.push({ path: "/login" });
+                localStorage.setItem("endereco", JSON.stringify(response.data));
+                this.$router.go();
               }, 1500);
             }
           })
@@ -133,6 +185,7 @@ export default {
             this.snackbar = true;
           });
       }
+      enderecoService.update(this.endereco);
     },
   },
 };

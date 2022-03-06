@@ -8,4 +8,6 @@ export default {
 	show: (id) => {
 		return http.get(`api/cartoes/${id}`);
 	},
+
 };
+
