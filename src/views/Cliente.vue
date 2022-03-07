@@ -18,8 +18,8 @@
                   <v-flex xs4>
                     <v-autocomplete v-model="cliente.genero" :items="items" label="Gênero"></v-autocomplete>
                   </v-flex>
-                  <v-flex xs6>
-                    <v-text-field type="date" :rules="rules" v-model="cliente.data_nasc" label="Data de Nascimento" prepend-icon="mdi-calendar"></v-text-field>
+                  <v-flex xs4>
+                    <v-text-field type="date" :rules="rules" v-model="cliente.data_nasc" label="Data de Nascimento"></v-text-field>
                   </v-flex>
                 </v-layout>
                 <v-layout>
@@ -38,7 +38,7 @@
                   <v-flex xs2>
                     <v-text-field :rules="rules" type="DDD" label="DDD" v-model="cliente.ddd" />
                   </v-flex>
-                  <v-flex xs6>
+                  <v-flex xs4>
                     <!-- v-mask="cliente.tptelefone == 'Residencial' ? '####-####' : '9####-####'" -->
                     <v-text-field :rules="rules" type="Numero de Telefone" label="Numero de Telefone" v-model="cliente.telefone" />
                   </v-flex>
@@ -133,9 +133,9 @@
                 <template v-slot:prepend="{ item }">
                   <v-icon v-if="!item.children"> credit_card </v-icon>
                 </template>
-                  <template v-slot:append="{ item }">
-                    <v-radio :value="item.id"></v-radio>
-                  </template>
+                <template v-slot:append="{ item }">
+                  <v-radio :value="item.id"></v-radio>
+                </template>
               </v-treeview>
             </v-radio-group>
           </v-col>
@@ -425,12 +425,12 @@ export default {
   },
 
   methods: {
-    updateCardFac(){
+    updateCardFac() {
       clienteService.update(this.cliente).then(() => {
         localStorage.setItem("cliente", JSON.stringify(this.cliente));
         this.error = false;
         this.snackbar = true;
-      })
+      });
     },
 
     DeleteItemCart(item) {

@@ -31,7 +31,7 @@
               </v-card-text>
 
               <v-card-actions class="justify-center">
-                <v-btn @click="altPass" :loading="loading" type="submit" color="blue">
+                <v-btn :loading="loading" type="submit" color="blue">
                   <span class="white--text px-8">Alterar Senha</span>
                 </v-btn>
               </v-card-actions>
@@ -39,14 +39,12 @@
           </v-card>
         </v-col>
       </v-main>
-      <v-snackbar top :color="error == true ? 'error':'green'" v-model="snackbar">
-        <span v-if="error==false">
-          Alterações realizadas com sucesso
-        </span>
+      <v-snackbar top :color="error == true ? 'error' : 'green'" v-model="snackbar">
+        <span v-if="error == false"> Alterações realizadas com sucesso </span>
         <span v-else>
-          {{text}}
+          {{ text }}
         </span>
-    </v-snackbar>
+      </v-snackbar>
     </v-app>
     <Footer />
   </div>
@@ -67,7 +65,7 @@ export default {
     error: false,
     text: "",
     cliente: {},
-    password:{
+    password: {
       oldPassword: "",
       newPassword: "",
       confirmarNewPassword: "",
@@ -88,46 +86,40 @@ export default {
     Footer,
   },
 
-  mounted(){
-    this.cliente = JSON.parse(localStorage.getItem('cliente'))
+  mounted() {
+    this.cliente = JSON.parse(localStorage.getItem("cliente"));
   },
 
   methods: {
-    altPass(){
+    submitHandler() {
       this.error = false;
       if (this.$refs.form.validate()) {
-        if(this.password.oldPassword == this.cliente.senha){
-          clienteService.update(this.cliente).then((response) => {
-            if(response.data){
-              this.error = false;
+        if (this.password.oldPassword == this.cliente.senha) {
+          this.cliente.senha = this.password.newPassword;
+          clienteService
+            .update(this.cliente)
+            .then((response) => {
+              if (response.data) {
+                this.error = false;
+                this.snackbar = true;
+                setTimeout(() => {
+                  localStorage.setItem("cliente", JSON.stringify(response.data));
+                  this.$router.push({ path: "/cliente" });
+                }, 1500);
+              }
+            })
+            .catch(() => {
+              this.text = "Ocorreu algum erro";
+              this.error = true;
               this.snackbar = true;
-              setTimeout(() => {
-                localStorage.setItem('cliente', JSON.stringify(response.data))
-                this.$router.push({path: "/cliente"});
-              }, 1500);
-            }
-          }).catch(() => {
-            this.text = "Ocorreu algum erro";
-            this.error = true;
-            this.snackbar = true;
-          });
-        }else{
-          this.text = "Senha antiga incorreta"
+            });
+        } else {
+          this.text = "Senha antiga incorreta";
           this.error = true;
           this.snackbar = true;
         }
-        
       }
-      clienteService.update(this.cliente)
-    },
-    submitHandler() {
-      if (this.$refs.form.validate()) {
-        this.loading = true;
-        setTimeout(() => {
-          this.loading = false;
-          this.snackbar = true;
-        }, 2000);
-      }
+      clienteService.update(this.cliente);
     },
   },
 };
