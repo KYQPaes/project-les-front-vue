@@ -54,7 +54,7 @@
           </v-col>
         </v-main>
         <v-snackbar top :color="error == true ? 'error' : 'green'" v-model="snackbar">
-          <span v-if="error == false"> Endereço cadastrado com sucesso </span>
+          <span v-if="error == false"> Cartão cadastrado com sucesso </span>
           <span v-else> Erro ao realizar o cadastro, verifique todos os campos </span>
         </v-snackbar>
       </v-layout>
@@ -96,7 +96,6 @@ export default {
 
   mounted() {
     if (JSON.parse(localStorage.getItem("cartao"))) this.cartao = JSON.parse(localStorage.getItem("cartao"));
-    console.log(this.cartao);
   },
 
   methods: {
@@ -141,7 +140,6 @@ export default {
     cartaoList() {
       cartaoService.listClienteId(JSON.parse(localStorage.getItem("cliente")).id).then((response) => {
         this.cartao = response.data;
-        console.log(response.data);
       });
     },
 
