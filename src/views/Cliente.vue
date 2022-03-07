@@ -128,11 +128,16 @@
         </v-card-title>
         <v-row class="pa-4" justify="space-between">
           <v-col cols="5">
-            <v-treeview key="id" :active.sync="active" item-text="nome" activatable :items="cartoes" color="black" open-on-click transition>
-              <template v-slot:prepend="{ item }">
-                <v-icon v-if="!item.children"> credit_card </v-icon>
-              </template>
-            </v-treeview>
+            <v-radio-group v-model="cliente.cartaoFavId" @change="updateCardFac">
+              <v-treeview key="id" :active.sync="active" item-text="nome" activatable :items="cartoes" color="black" open-on-click transition>
+                <template v-slot:prepend="{ item }">
+                  <v-icon v-if="!item.children"> credit_card </v-icon>
+                </template>
+                  <template v-slot:append="{ item }">
+                    <v-radio :value="item.id"></v-radio>
+                  </template>
+              </v-treeview>
+            </v-radio-group>
           </v-col>
           <v-divider vertical></v-divider>
           <v-col class="d-flex text-center">
@@ -420,6 +425,14 @@ export default {
   },
 
   methods: {
+    updateCardFac(){
+      clienteService.update(this.cliente).then(() => {
+        localStorage.setItem("cliente", JSON.stringify(this.cliente));
+        this.error = false;
+        this.snackbar = true;
+      })
+    },
+
     DeleteItemCart(item) {
       cartaoService
         .delete(item.id)
