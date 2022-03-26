@@ -434,7 +434,6 @@ export default {
 		},
 
 		DeleteItemCard(item) {
-			console.log(this.cliente);
 			if (this.cliente.cartaoFavId == item.id) {
 				this.cliente.cartaoFavId = null;
 				this.updateCardFav();
@@ -489,7 +488,6 @@ export default {
 					id: null,
 				};
 				this.cartoes.unshift(noChoice);
-				console.log(this.cartoes);
 			});
 		},
 
