@@ -8,6 +8,8 @@ import cadastro_cartao from "../views/Cartao_Cadastro.vue";
 import endereco_cadastro from "../views/Endereco_Cadastro.vue";
 import senha_editar from "../views/Senha_Editar.vue";
 import teste from "../views/teste.vue";
+import categoria from "../views/Categoria.vue";
+import modelo from "../views/Modelo.vue";
 
 
 Vue.use(VueRouter);
@@ -52,6 +54,16 @@ const routes = [
 		path: "/teste",
 		name: "teste",
 		component: teste,
+	},
+	{
+		path: "/categoria",
+		name: "categoria",
+		component: categoria,
+	},
+	{
+		path: "/modelo",
+		name: "modelo",
+		component: modelo,
 	},
 	
 	
