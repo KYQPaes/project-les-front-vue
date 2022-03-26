@@ -132,6 +132,7 @@
 							<v-treeview key="id" :active.sync="active" item-text="nome" activatable :items="cartoes" color="black" open-on-click transition>
 								<template v-slot:prepend="{ item }">
 									<v-icon v-if="!item.children && item.id != null"> credit_card </v-icon>
+									<v-icon v-else> clear </v-icon>
 								</template>
 								<template v-slot:append="{ item }">
 									<v-radio :value="item.id"></v-radio>
