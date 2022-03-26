@@ -7,7 +7,6 @@ import Cadastro from "../views/Cadastro.vue";
 import cadastro_cartao from "../views/Cartao_Cadastro.vue";
 import endereco_cadastro from "../views/Endereco_Cadastro.vue";
 import senha_editar from "../views/Senha_Editar.vue";
-import teste from "../views/teste.vue";
 import categoria from "../views/Categoria.vue";
 import modelo from "../views/Modelo.vue";
 
@@ -49,12 +48,7 @@ const routes = [
 		path: "/Senha_editar",
 		name: "Senha_editar",
 		component: senha_editar,
-	},
-	{
-		path: "/teste",
-		name: "teste",
-		component: teste,
-	},
+	},	
 	{
 		path: "/categoria",
 		name: "categoria",
