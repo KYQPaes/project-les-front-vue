@@ -7,4 +7,7 @@ export default {
         listByTipo: (tipo) => {
 		return http.get(`api/produtos/tipo/${tipo}`);
 	},
+        listById: (id) => {
+		return http.get(`api/produtos/${id}`);
+	},
 };
