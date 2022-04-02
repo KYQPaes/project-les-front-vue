@@ -3,62 +3,34 @@
     <Menu />
     <div width="100%" style="padding: 50px">
       <v-layout>
-        <v-flex xs10 style="margin-left: 8%">
+        <v-flex xs9 style="margin-left: 15%">
           <v-card elevation="10" class="justify-center">
-            <v-card-title class="d-flex justify-center"> Detalhes de Pedidos </v-card-title>
-            <v-divider></v-divider>
-
-            <v-simple-table>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left">Código de compra</th>
-                    <th class="text-left">Entrega</th>
-                    <th class="text-left">Status</th>
-                    <th class="text-left">Forma de pagamento</th>
-                    <th class="text-left">Endereço de cobrança</th>
-                    <th class="text-left">Endereço de Entrega</th>
-                    <th class="text-left">Valor</th>
-                    <th class="text-left">Detalhes</th>
-                    <th class="text-left">Detalhes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="item in pedido" :key="item.name">
-                    <td>
-                      {{ item.ID }}
-                    </td>
-                    <td>
-                      {{ item.Entrega }}
-                    </td>
-                    <td>
-                      {{ item.Status }}
-                    </td>
-                    <td>
-                      {{ item.forma_Pagamento }}
-                    </td>
-                    <td>
-                      {{ item.endereco_Cobranca }}
-                    </td>
-                    <td>
-                      {{ item.endereco_Entrega }}
-                    </td>
-                    <td>
-                      {{ item.Valor }}
-                    </td>
-                    <td>
-                      <v-icon> feed </v-icon>
-                    </td>
-                    <td>
-                      <v-select :items="items" label="Status"></v-select>
-                      <div class="d-flex justify-center" style="padding: 10px">
-                        <v-btn style="margin-botton: 5px" color="primary" small> Salvar</v-btn>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
+            <v-data-table :headers="headers" :items="desserts" sort-by="calories" class="elevation-1">
+              <template v-slot:top>
+                <v-toolbar flat class="d-flex justify-center">
+                  <v-toolbar-title>Detalhes dos pedidos</v-toolbar-title>
+                  <v-divider class="mx-4" inset></v-divider>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
               </template>
-            </v-simple-table>
+              <template v-slot:item.actions="{ item }">
+                <v-icon small class="mr-2" @click="editItem(item)"> description </v-icon>
+              </template>
+
+              <template v-slot:item.adm="{ item }">
+                <v-layout class="align-baseline">
+                  <v-select :items="items" label="Status"></v-select>
+                  <v-col cols="12" sm="3">
+                    <v-btn icon color="green">
+                      <v-icon>done</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-layout>
+              </template>
+              <template v-slot:no-data>
+                <v-btn color="primary" @click="initialize"> Reset </v-btn>
+              </template>
+            </v-data-table>
           </v-card>
         </v-flex>
         <v-spacer> </v-spacer>
@@ -78,41 +50,39 @@ import router from "@/router";
 export default {
   name: "Cliente",
   data: (vm) => ({
-    pedido: [
+    headers: [
+      { text: "Código de compra", value: "ID" },
       {
-        ID: 1,
-        Entrega: "12/04/2022",
-        Status: "EM PROCESSAMENTO",
-        forma_Pagamento: 48998465498,
-        endereco_Cobranca: "Rua beijamin 245",
-        endereco_Entrega: "Rua ricardo 578",
-        Valor: 49,
+        text: "Entrega",
+        align: "start",
+        filterable: false,
+        value: "entrega",
       },
       {
-        ID: 2,
-        Entrega: "2/04/2022",
-        Status: "ENTREGA REALIZADA",
-        forma_Pagamento: 5454654,
-        endereco_Cobranca: "Rua beijamin 245",
-        endereco_Entrega: "Rua ricardo 578",
-        Valor: 149,
+        text: "Status",
+        align: "start",
+        filterable: false,
+        value: "status",
       },
+      { text: "Forma de Pagamento", value: "forma_Pagamento" },
+      { text: "Endereço de Cobrança", value: "endereco_Cobranca" },
+      { text: "Endereco de Entrega", value: "endereco_Entrega" },
       {
-        ID: 3,
-        Entrega: "03/04/2022",
-        Status: "TROCA SOCILITADA",
-        forma_Pagamento: 48998465498,
-        endereco_Cobranca: "Rua beijamin 245",
-        endereco_Entrega: "Rua ricardo 578",
-        Valor: 200,
+        text: "Valor da Compra",
+        align: "start",
+        filterable: false,
+        value: "valor",
       },
+      { text: "Detalhes", value: "actions", sortable: false },
+      { text: "Opção", value: "adm", sortable: false },
     ],
-
     items: ["COMPRA NÃO AUTORIZADA", "COMPRA EFETUADA", "TROCA ACEITA", "TROCA RECUSADA"],
-
-    select: {},
-    rules: [(v) => !!v || "Campo Obrigatório"],
   }),
+
+  created() {
+    this.initialize();
+  },
+
   components: {
     Menu,
     Footer,
@@ -131,7 +101,39 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    initialize() {
+      this.desserts = [
+        {
+          ID: 1,
+          entrega: "12/04/2022",
+          status: "EM PROCESSAMENTO",
+          forma_Pagamento: 48998465498,
+          endereco_Cobranca: "Rua beijamin 245",
+          endereco_Entrega: "Rua ricardo 578",
+          valor: 49,
+        },
+        {
+          ID: 2,
+          entrega: "2/04/2022",
+          status: "ENTREGA REALIZADA",
+          forma_Pagamento: 5454654,
+          endereco_Cobranca: "Rua beijamin 245",
+          endereco_Entrega: "Rua ricardo 578",
+          valor: 149,
+        },
+        {
+          ID: 3,
+          entrega: "03/04/2022",
+          status: "TROCA SOCILITADA",
+          forma_Pagamento: 48998465498,
+          endereco_Cobranca: "Rua beijamin 245",
+          endereco_Entrega: "Rua ricardo 578",
+          valor: 200,
+        },
+      ];
+    },
+  },
 };
 </script>
 <style scoped>
