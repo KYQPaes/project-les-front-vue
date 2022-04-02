@@ -56,12 +56,12 @@ const routes = [
 		component: senha_editar,
 	},	
 	{
-		path: "/categoria",
+		path: "/categoria/:tipo",
 		name: "categoria",
 		component: categoria,
 	},
 	{
-		path: "/modelo",
+		path: "/modelo/:id",
 		name: "modelo",
 		component: modelo,
 	},
