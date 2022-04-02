@@ -5,7 +5,7 @@
       <div style="min-width: fit-content; background-color: white; width: 50vw; flex-direction: column; padding: 60px">
         <v-row class="d-flex flex-row" v-for="(group, i) in prodGroups" :key="i">
           <v-col v-for="produto in produtos.slice(i * itemsPerRow, (i+1)*itemsPerRow)" :key="produto.id">
-            <v-card class="mx-auto my-12 hovCard" max-width="374">
+            <v-card @click="$router.push({ path: `/modelo/${produto.id}` })" class="mx-auto my-12 hovCard" max-width="374">
               <v-img height="250" :src="produto.imagem"></v-img>
               <v-card-title>{{produto.nome}}</v-card-title>
               <v-card-text>
@@ -21,7 +21,7 @@
               </v-card-text>
 
               <v-card-actions class="justify-center">
-                <v-btn @click="$router.push({ path: `/modelo/${produto.id}` });" color="deep-purple lighten-2" text>
+                <v-btn @click="$router.push({ path: `/modelo/${produto.id}` })" color="deep-purple lighten-2" text>
                   Visualizar Produto
                 </v-btn>
               </v-card-actions>
