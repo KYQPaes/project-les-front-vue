@@ -20,8 +20,8 @@
                 R$ {{produto.preco}}
               </v-card-text>
 
-              <v-card-actions>
-                <v-btn color="deep-purple lighten-2" text>
+              <v-card-actions class="justify-center">
+                <v-btn @click="$router.push({ path: `/modelo/${produto.id}` });" color="deep-purple lighten-2" text>
                   Visualizar Produto
                 </v-btn>
               </v-card-actions>

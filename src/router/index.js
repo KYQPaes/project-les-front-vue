@@ -55,7 +55,7 @@ const routes = [
 		component: categoria,
 	},
 	{
-		path: "/modelo",
+		path: "/modelo/:id",
 		name: "modelo",
 		component: modelo,
 	},
