@@ -9,6 +9,12 @@ import endereco_cadastro from "../views/Endereco_Cadastro.vue";
 import senha_editar from "../views/Senha_Editar.vue";
 import categoria from "../views/Categoria.vue";
 import modelo from "../views/Modelo.vue";
+import cupom from "../views/Cupom.vue";
+import cupomAdm from "../views/Cupom_Adm.vue";
+import consultaCliente from "../views/Consulta_ClienteAdm.vue";
+import consultaContaAdm from "../views/Consulta_ContaAdm.vue";
+
+
 
 
 Vue.use(VueRouter);
@@ -50,15 +56,37 @@ const routes = [
 		component: senha_editar,
 	},	
 	{
-		path: "/categoria/:tpproduto",
+		path: "/categoria",
 		name: "categoria",
 		component: categoria,
 	},
 	{
-		path: "/modelo/:id",
+		path: "/modelo",
 		name: "modelo",
 		component: modelo,
 	},
+	{
+		path: "/cupom",
+		name: "cupom",
+		component: cupom,
+	},
+	{
+		path: "/cupomAdm",
+		name: "cupomAdm",
+		component: cupomAdm,
+	},
+	{
+		path: "/consultaCliente",
+		name: "consultaCliente",
+		component: consultaCliente,
+	},
+	{
+		path: "/consultaContaAdm",
+		name: "consultaContaAdm",
+		component: consultaContaAdm,
+	},
+
+
 	
 	
 ];
