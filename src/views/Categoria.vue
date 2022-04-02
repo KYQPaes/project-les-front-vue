@@ -2,9 +2,9 @@
   <div>
     <Menu />
     <v-card :style="{ backgroundImage: 'url(https://wallpaperscute.com/wp-content/uploads/2018/07/Graffiti-Wall-Desktop-Backgrounds-HD.jpg)', backgroundSize: 'cover', display: 'flex', flexDirection: 'column', alignItems: 'center' }">
-      <div style="min-width: fit-content; background-color: white; width: 50vw; flex-direction: column; padding: 60px">
+      <div style="min-width: fit-content; background-color: white; width: 50vw; flex-direction: column; padding: 20px">
         <v-row class="d-flex flex-row" v-for="(group, i) in prodGroups" :key="i">
-          <v-col v-for="produto in produtos.slice(i * itemsPerRow, (i+1)*itemsPerRow)" :key="produto.id">
+          <v-col style="padding-top:0px" v-for="produto in produtos.slice(i * itemsPerRow, (i+1)*itemsPerRow)" :key="produto.id">
             <v-card @click="$router.push({ path: `/modelo/${produto.id}` })" class="mx-auto my-12 hovCard" max-width="374">
               <v-img height="250" :src="produto.imagem"></v-img>
               <v-card-title>{{produto.nome}}</v-card-title>
@@ -77,4 +77,7 @@ export default {
   .hovCard:hover{
     box-shadow: 0px 0px 10px #949494;
   }
+  .v-application .my-12 {
+    margin-bottom: 0px !important;
+}
 </style>
