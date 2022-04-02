@@ -2,10 +2,12 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
+import Vuetify from "vuetify";
 import "material-design-icons-iconfont/dist/material-design-icons.css";
 import VCreditCard from "v-credit-card";
 import VueMask from "v-mask";
 Vue.use(VueMask);
+Vue.use(Vuetify);
 
 Vue.component("v-credit-card", VCreditCard);
 
