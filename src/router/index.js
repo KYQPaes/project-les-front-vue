@@ -50,12 +50,12 @@ const routes = [
 		component: senha_editar,
 	},	
 	{
-		path: "/categoria",
+		path: "/categoria/:tpproduto",
 		name: "categoria",
 		component: categoria,
 	},
 	{
-		path: "/modelo",
+		path: "/modelo/:id",
 		name: "modelo",
 		component: modelo,
 	},
