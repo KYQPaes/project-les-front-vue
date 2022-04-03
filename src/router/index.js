@@ -13,6 +13,8 @@ import cupom from "../views/Cupom.vue";
 import cupomAdm from "../views/Cupom_Adm.vue";
 import consultaCliente from "../views/Consulta_ClienteAdm.vue";
 import consultaContaAdm from "../views/Consulta_ContaAdm.vue";
+import carrinho from "../views/Carrinho.vue";
+
 
 
 
@@ -84,6 +86,11 @@ const routes = [
 		path: "/consultaContaAdm/:id",
 		name: "consultaContaAdm",
 		component: consultaContaAdm,
+	},
+	{
+		path: "/carrinho",
+		name: "carrinho",
+		component: carrinho,
 	},
 
 
