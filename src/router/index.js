@@ -56,7 +56,7 @@ const routes = [
 		component: senha_editar,
 	},	
 	{
-		path: "/categoria/:tipo",
+		path: "/categoria/:tpproduto",
 		name: "categoria",
 		component: categoria,
 	},
