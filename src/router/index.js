@@ -14,6 +14,10 @@ import cupomAdm from "../views/Cupom_Adm.vue";
 import consultaCliente from "../views/Consulta_ClienteAdm.vue";
 import consultaContaAdm from "../views/Consulta_ContaAdm.vue";
 import carrinho from "../views/Carrinho.vue";
+import final_compra from "../views/Finalizar_Compra.vue";
+import consulta_pedido from "../views/Consulta_Pedido.vue";
+import troca_pedido from "../views/Troca_Pedido.vue";
+
 
 
 
@@ -92,9 +96,22 @@ const routes = [
 		name: "carrinho",
 		component: carrinho,
 	},
+	{
+		path: "/final_compra",
+		name: "final_compra",
+		component: final_compra,
+	},	
+	{
+		path: "/consulta_pedido",
+		name: "consulta_pedido",
+		component: consulta_pedido,
+	},	
+	{
+		path: "/troca_pedido",
+		name: "troca_pedido",
+		component: troca_pedido,
+	},	
 
-
-	
 	
 ];
 
