@@ -30,13 +30,13 @@
 
             <v-row style="margin-top: 30px">
               <v-col style="flex-grow: 0; margin-right: 10px">
-                <v-btn color="green" class="white--text">
+                <v-btn @click="addCart(true)" color="green" class="white--text">
                   Comprar
                   <v-icon> shopping_bag </v-icon>
                 </v-btn>
               </v-col>
               <v-col>
-                <v-btn outlined color="green" class="white--text">
+                <v-btn @click="addCart(false)" outlined color="green" class="white--text">
                   Adicionar ao Carrinho
                   <v-icon> shopping_cart </v-icon>
                 </v-btn>
@@ -74,6 +74,26 @@ export default {
         this.produto = response.data;
         console.log(this.produto);
       });
+    },
+    addCart(condicao){
+      let prod = this.produto;
+      prod.quantidade = 1;
+      let cart;
+      if(localStorage.getItem('cart')){
+        cart = JSON.parse(localStorage.getItem('cart'));
+        let index = cart.findIndex(item => item.id == prod.id);
+        if(index >= 0){
+          cart[index].quantidade++;
+        }else{
+          cart.push(prod);
+        }
+      }else{
+        cart = [];
+        cart.push(prod);
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      if(condicao)
+        this.$router.push('/carrinho');
     },
   },
 };
