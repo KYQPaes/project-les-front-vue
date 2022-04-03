@@ -83,7 +83,7 @@ const routes = [
 		component: consultaCliente,
 	},
 	{
-		path: "/consultaContaAdm",
+		path: "/consultaContaAdm/:id",
 		name: "consultaContaAdm",
 		component: consultaContaAdm,
 	},
