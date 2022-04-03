@@ -10,24 +10,29 @@
     <v-layout style="margin-bottom: 10px">
       <v-spacer> </v-spacer>
       <v-flex xs2>
-        <router-link to="/" style="text-decoration: none; color: inherit">
-          <v-btn class="button" fab small text>
-            <v-icon :size="size" color="black"> mdi-percent </v-icon>
-          </v-btn>
-        </router-link>
+        <v-btn class="button" fab small text v-if="cliente && cliente.id == 0"  @click="() => { this.$router.push({ path: '/cupomAdm' }); }">
+          <v-icon :size="size" color="black"> mdi-percent </v-icon>
+        </v-btn>
+        <v-btn v-else @click="() => { this.$router.push({ path: '/' }); }" class="button" fab small text>
+          <v-icon :size="size" color="black"> mdi-percent </v-icon>
+        </v-btn>
 
-        <v-btn v-if="cliente" class="button" fab small text @click="() => { this.$router.push({ path: '/cliente' }); }">
+        <v-btn class="button" fab small text v-if="cliente && cliente.id == 0"  @click="() => { this.$router.push({ path: '/consultaCliente' }); }">
+          <v-icon :size="size" color="black"> account_circle </v-icon>
+        </v-btn>
+        <v-btn v-else-if="cliente" class="button" fab small text @click="() => { this.$router.push({ path: '/cliente' }); }">
           <v-icon :size="size" color="black"> account_circle </v-icon>
         </v-btn>
         <v-btn v-else class="button" fab small text @click="() => { this.$router.push({ path: '/login' }); }">
           <v-icon :size="size" color="black"> account_circle </v-icon>
         </v-btn>
 
-        <router-link to="/" style="text-decoration: none; color: inherit">
-          <v-btn class="button" fab small text>
-            <v-icon :size="size" color="black"> shopping_cart </v-icon>
-          </v-btn>
-        </router-link>
+        <v-btn v-if="cliente && cliente.id == 0" class="button" @click="() => { this.$router.push({ path: '/' }); }" fab small text>
+          <v-icon :size="size" color="black"> mdi-home </v-icon>
+        </v-btn>
+        <v-btn v-else class="button" @click="() => { this.$router.push({ path: '/' }); }" fab small text>
+          <v-icon :size="size" color="black"> shopping_cart </v-icon>
+        </v-btn>
         
         <v-btn class="button" v-if="cliente" @click="logout" fab small text>
             <v-icon :size="size" color="black"> logout </v-icon>
@@ -42,7 +47,24 @@
       </v-flex>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" absolute temporary>
-      <v-list nav dense>
+      <v-list v-if="cliente && cliente.id == 0" nav dense>
+        <v-list-item-group color="grey">
+          <v-subheader>Admin</v-subheader>
+
+          <v-list-item v-for="(item, i) in items_admin" :key="i">
+            <v-layout @click="$router.push({ path: item.router })">
+              <v-list-item-icon>
+                <v-icon v-text="item.img"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.name"></v-list-item-title>
+              </v-list-item-content>
+            </v-layout>
+          </v-list-item>
+          
+        </v-list-item-group>
+      </v-list>
+      <v-list v-else nav dense>
         <v-list-item-group color="grey">
           <v-subheader>Páginas</v-subheader>
 
@@ -102,12 +124,17 @@ export default {
       { name: "Carbono", img: "widgets", router: "/categoria/carbono" },
       { name: "Documento", img: "folder_special", router: "/categoria/documento" },
     ],
-    cliente: {},
+    items_admin: [
+      { name: "Clientes", img: "account_circle", router: "/consultaCliente" },
+      { name: "Cupoms", img: "mdi-percent", router: "/cupomAdm" },
+    ],
+    cliente: {
+      id: null
+    },
   }),
   mounted(){
     this.cliente = JSON.parse(localStorage.getItem('cliente'));
     if(this.cliente) this.items[1].router = '/cliente';
-    else this.items[1].router = '/login';
   },
 
   methods: {
