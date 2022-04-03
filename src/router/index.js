@@ -14,6 +14,8 @@ import cupomAdm from "../views/Cupom_Adm.vue";
 import consultaCliente from "../views/Consulta_ClienteAdm.vue";
 import consultaContaAdm from "../views/Consulta_ContaAdm.vue";
 import carrinho from "../views/Carrinho.vue";
+import final_compra from "../views/Finalizar_Compra.vue";
+
 
 
 
@@ -92,9 +94,12 @@ const routes = [
 		name: "carrinho",
 		component: carrinho,
 	},
+	{
+		path: "/final_compra",
+		name: "final_compra",
+		component: final_compra,
+	},	
 
-
-	
 	
 ];
 

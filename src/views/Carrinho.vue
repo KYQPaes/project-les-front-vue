@@ -11,8 +11,8 @@
         </v-layout>
         <v-layout class="d-flex align-center" style="width: 100%; margin-top: 15px">
           <v-flex xs6>
-            <v-row justify="center" style="margin-top: 5px; margin-left: 10px; height: 80%; width:80% max-height: 500px; max-width: 500px">
-              <v-img :src="produto.imagem"></v-img>
+            <v-row justify="center" style="margin-left: 10px; height: 80%; width:80% max-height: 500px; max-width: 500px">
+              <v-img max-height="300" max-width="300" src="https://picsum.photos/id/11/500/300"></v-img>
             </v-row>
           </v-flex>
 
