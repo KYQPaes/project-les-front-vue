@@ -5,7 +5,7 @@
       <v-layout>
         <v-flex xs9 style="margin-left: 15%">
           <v-card elevation="10" class="justify-center">
-            <v-data-table :headers="headers" :items="desserts" sort-by="calories" class="elevation-1">
+            <v-data-table :headers="headers" :items="compras" sort-by="calories" class="elevation-1">
               <template v-slot:top>
                 <v-toolbar flat class="d-flex justify-center">
                   <v-toolbar-title>Detalhes dos pedidos</v-toolbar-title>
@@ -19,16 +19,16 @@
 
               <template v-slot:item.adm="{ item }">
                 <v-layout class="align-baseline">
-                  <v-select :items="items" label="Status"></v-select>
+                  <v-select :items="items" v-model="item.statusNew" label="Status"></v-select>
                   <v-col cols="12" sm="3">
-                    <v-btn icon color="green">
+                    <v-btn @click="update(item)" icon color="green">
                       <v-icon>done</v-icon>
                     </v-btn>
                   </v-col>
                 </v-layout>
               </template>
               <template v-slot:no-data>
-                <v-btn color="primary" @click="initialize"> Reset </v-btn>
+                Nenhuma Informação Encontrada
               </template>
             </v-data-table>
           </v-card>
@@ -44,51 +44,36 @@
 <script>
 import Menu from "../components/Menu.vue";
 import Footer from "../components/Footer.vue";
-import clienteService from "@/service/clientes";
+import CompraService from "@/service/compra";
 import router from "@/router";
 
 export default {
   name: "Cliente",
   data: (vm) => ({
     headers: [
-      { text: "Código de compra", value: "ID" },
-      {
-        text: "Entrega",
-        align: "start",
-        filterable: false,
-        value: "entrega",
-      },
-      {
-        text: "Status",
-        align: "start",
-        filterable: false,
-        value: "status",
-      },
-      { text: "Forma de Pagamento", value: "forma_Pagamento" },
-      { text: "Endereço de Cobrança", value: "endereco_Cobranca" },
-      { text: "Endereco de Entrega", value: "endereco_Entrega" },
-      {
-        text: "Valor da Compra",
-        align: "start",
-        filterable: false,
-        value: "valor",
-      },
+      { text: "Código de compra", value: "id" },
+      {text: "Data da Compra",align: "start", value: "data_comp"},
+      { text: "Status", align: "start", value: "status"},
+      { text: "Forma de Pagamento", value: "metodo" },
+      { text: "Endereço de Cobrança", value: "endereco" },
+      { text: "Frete", align: "start", value: "frete"},
+      { text: "Valor da Compra", align: "start", value: "valor"},
       { text: "Detalhes", value: "actions", sortable: false },
       { text: "Opção", value: "adm", sortable: false },
     ],
     items: ["COMPRA NÃO AUTORIZADA", "COMPRA EFETUADA", "TROCA ACEITA", "TROCA RECUSADA"],
+    compras:[],
   }),
-
-  created() {
-    this.initialize();
-  },
 
   components: {
     Menu,
     Footer,
   },
   mounted() {
-    this.cliente = JSON.parse(localStorage.getItem("cliente"));
+    if(this.$route.params.id)
+      this.list(this.$route.params.id);
+    else
+      this.$router.push('/consultaCliente');
   },
   computed: {},
 
@@ -102,36 +87,16 @@ export default {
   },
 
   methods: {
-    initialize() {
-      this.desserts = [
-        {
-          ID: 1,
-          entrega: "12/04/2022",
-          status: "EM PROCESSAMENTO",
-          forma_Pagamento: 48998465498,
-          endereco_Cobranca: "Rua beijamin 245",
-          endereco_Entrega: "Rua ricardo 578",
-          valor: 49,
-        },
-        {
-          ID: 2,
-          entrega: "2/04/2022",
-          status: "ENTREGA REALIZADA",
-          forma_Pagamento: 5454654,
-          endereco_Cobranca: "Rua beijamin 245",
-          endereco_Entrega: "Rua ricardo 578",
-          valor: 149,
-        },
-        {
-          ID: 3,
-          entrega: "03/04/2022",
-          status: "TROCA SOCILITADA",
-          forma_Pagamento: 48998465498,
-          endereco_Cobranca: "Rua beijamin 245",
-          endereco_Entrega: "Rua ricardo 578",
-          valor: 200,
-        },
-      ];
+    list(id) {
+      CompraService.listByClienteId(id).then((response) => {
+        this.compras = response.data;
+      });
+    },
+    update(compra) {
+      compra.status = compra.statusNew;
+      CompraService.update(compra).then(() => {
+        this.list(this.$route.params.id);
+      });
     },
   },
 };
