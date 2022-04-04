@@ -85,7 +85,6 @@ export default {
   },
   mounted(){
     this.carrinho = JSON.parse(localStorage.getItem('cart'));
-    console.log(this.carrinho);
     if(!this.carrinho){
       this.carrinho = [];
     }

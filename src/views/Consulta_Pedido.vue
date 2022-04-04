@@ -142,7 +142,6 @@ export default {
     list(id) {
       produtosService.listById(id).then((response) => {
         this.produto = response.data;
-        console.log(this.produto);
       });
     },
   },

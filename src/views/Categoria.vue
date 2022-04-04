@@ -66,7 +66,6 @@ export default {
 	    list(){
 			produtosService.listByTipo(this.cat).then(response => {
 				this.produtos = response.data;
-				console.log(this.produtos);
     	  	});
     	},
   },
