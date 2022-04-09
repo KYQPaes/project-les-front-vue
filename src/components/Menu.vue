@@ -13,14 +13,17 @@
         <v-btn class="button" fab small text v-if="cliente && cliente.id == 0"  @click="() => { this.$router.push({ path: '/cupomAdm' }); }">
           <v-icon :size="size" color="black"> mdi-percent </v-icon>
         </v-btn>
-        <v-btn v-else @click="() => { this.$router.push({ path: '/' }); }" class="button" fab small text>
+        <v-btn class="button" fab small text v-else-if=" (typeof cliente != 'undefined')"  @click="() => { this.$router.push({ path: '/cupom' }); }">
+          <v-icon :size="size" color="black"> mdi-percent </v-icon>
+        </v-btn>
+        <v-btn v-else @click="() => { this.$router.push({ path: '/cupom' }); }" class="button" fab small text>
           <v-icon :size="size" color="black"> mdi-percent </v-icon>
         </v-btn>
 
         <v-btn class="button" fab small text v-if="cliente && cliente.id == 0"  @click="() => { this.$router.push({ path: '/consultaCliente' }); }">
           <v-icon :size="size" color="black"> account_circle </v-icon>
         </v-btn>
-        <v-btn v-else-if="cliente" class="button" fab small text @click="() => { this.$router.push({ path: '/cliente' }); }">
+        <v-btn v-else-if="(typeof cliente != 'undefined')" class="button" fab small text @click="() => { this.$router.push({ path: '/cliente' }); }">
           <v-icon :size="size" color="black"> account_circle </v-icon>
         </v-btn>
         <v-btn v-else class="button" fab small text @click="() => { this.$router.push({ path: '/login' }); }">
@@ -113,9 +116,9 @@ export default {
     drawer: false,
     items: [
       { name: "Tela Inicial", img: "mdi-home", router: "/" },
-      { name: "Conta", img: "account_circle", router: "/login" },
-      { name: "Cupons", img: "mdi-percent", router: "/" },
-      { name: "Carrinho", img: "shopping_cart", router: "/" },
+      { name: "Conta", img: "account_circle", router: "/cliente" },
+      { name: "Cupons", img: "mdi-percent", router: "/cupom" },
+      { name: "Carrinho", img: "shopping_cart", router: "/carrinho" },
     ],
     items_cat: [
       { name: "Masculino", img: "man", router: "/categoria/masculino" },
@@ -134,7 +137,11 @@ export default {
   }),
   mounted(){
     this.cliente = JSON.parse(localStorage.getItem('cliente'));
-    if(this.cliente) this.items[1].router = '/cliente';
+    if(typeof this.cliente == 'undefined' || this.cliente == null){
+      this.items[1].router = '/login';
+      this.items[2].router = '/login';
+      this.items[3].router = '/login';
+    }
   },
 
   methods: {
