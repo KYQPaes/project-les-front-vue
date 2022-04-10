@@ -13,10 +13,10 @@
         <v-btn class="button" fab small text v-if="cliente && cliente.id == 0"  @click="() => { this.$router.push({ path: '/cupomAdm' }); }">
           <v-icon :size="size" color="black"> mdi-percent </v-icon>
         </v-btn>
-        <v-btn class="button" fab small text v-else-if=" (typeof cliente != 'undefined')"  @click="() => { this.$router.push({ path: '/cupom' }); }">
+        <v-btn class="button" fab small text v-else-if=" (typeof cliente != 'undefined') && cliente && cliente.id > 0"  @click="() => { this.$router.push({ path: '/cupom' }); }">
           <v-icon :size="size" color="black"> mdi-percent </v-icon>
         </v-btn>
-        <v-btn v-else @click="() => { this.$router.push({ path: '/cupom' }); }" class="button" fab small text>
+        <v-btn v-else @click="() => { this.$router.push({ path: '/login' }); }" class="button" fab small text>
           <v-icon :size="size" color="black"> mdi-percent </v-icon>
         </v-btn>
 
@@ -33,7 +33,10 @@
         <v-btn v-if="cliente && cliente.id == 0" class="button" @click="() => { this.$router.push({ path: '/' }); }" fab small text>
           <v-icon :size="size" color="black"> mdi-home </v-icon>
         </v-btn>
-        <v-btn v-else class="button" @click="() => { this.$router.push({ path: '/' }); }" fab small text>
+        <v-btn v-else-if="(typeof cliente != 'undefined') && cliente && cliente.id > 0" class="button" @click="() => { this.$router.push({ path: '/carrinho' }); }" fab small text>
+          <v-icon :size="size" color="black"> shopping_cart </v-icon>
+        </v-btn>
+        <v-btn v-else class="button" @click="() => { this.$router.push({ path: '/login' }); }" fab small text>
           <v-icon :size="size" color="black"> shopping_cart </v-icon>
         </v-btn>
         
