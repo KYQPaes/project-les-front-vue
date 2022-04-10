@@ -23,7 +23,7 @@
         <v-btn class="button" fab small text v-if="cliente && cliente.id == 0"  @click="() => { this.$router.push({ path: '/consultaCliente' }); }">
           <v-icon :size="size" color="black"> account_circle </v-icon>
         </v-btn>
-        <v-btn v-else-if="(typeof cliente != 'undefined')" class="button" fab small text @click="() => { this.$router.push({ path: '/cliente' }); }">
+        <v-btn v-else-if="(typeof cliente != 'undefined') && cliente && cliente.id > 0" class="button" fab small text @click="() => { this.$router.push({ path: '/cliente' }); }">
           <v-icon :size="size" color="black"> account_circle </v-icon>
         </v-btn>
         <v-btn v-else class="button" fab small text @click="() => { this.$router.push({ path: '/login' }); }">
