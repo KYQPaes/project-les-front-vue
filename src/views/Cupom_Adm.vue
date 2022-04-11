@@ -3,50 +3,17 @@
     <Menu />
     <div width="100%" style="padding: 50px">
       <v-layout>
-        <v-flex xs6 style="margin-left: 23%">
+        <v-flex xs9 style="margin-left: 15%">
           <v-card elevation="10" class="justify-center">
-            <v-card-title> Cupons Cadastrados </v-card-title>
-            <v-divider></v-divider>
-
-            <v-simple-table>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-left">Cupom</th>
-                    <th class="text-left">Valor</th>
-                    <th class="text-left">Código</th>
-                    <th class="text-left">Status</th>
-                    <th class="text-left">Validade</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="item in cupons" :key="item.name">
-                    <td>
-                      <v-icon> receipt </v-icon>
-                      {{ item.Cupom }}
-                    </td>
-                    <td>
-                      <v-icon> attach_money </v-icon>
-                      {{ item.Valor }}
-                    </td>
-                    <td>
-                      <v-icon> vpn_key </v-icon>
-                      {{ item.Código }}
-                    </td>
-                    <td>
-                      {{ item.Status }}
-                    </td>
-                    <td>
-                      <v-icon> schedule </v-icon>
-                      {{ item.Validade }}
-                    </td>
-                    <td>
-                      <v-icon> delete </v-icon>
-                    </td>
-                  </tr>
-                </tbody>
+            <v-data-table :headers="headers" :items="cupons" sort-by="calories" class="elevation-1">
+              <template v-slot:top>
+                <v-toolbar flat class="d-flex justify-center">
+                  <v-toolbar-title>Cupons cadastrados</v-toolbar-title>
+                  <v-divider class="mx-4" inset></v-divider>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
               </template>
-            </v-simple-table>
+            </v-data-table>
           </v-card>
         </v-flex>
         <v-spacer> </v-spacer>
@@ -60,85 +27,37 @@
 <script>
 import Menu from "../components/Menu.vue";
 import Footer from "../components/Footer.vue";
+import CupomService from "@/service/cupom";
 import clienteService from "@/service/clientes";
 import router from "@/router";
 
 export default {
-  name: "Cliente",
+  name: "Cupom",
   data: (vm) => ({
-    cupons: [
-      {
-        Cupom: "Troca",
-        Valor: 159,
-        Status: "Ativo",
-        Código: "D875-A657",
-        Validade: "15/04/2022",
-      },
-      {
-        Cupom: "Troca",
-        Valor: 159,
-        Status: "Ativo",
-        Código: "D875-A657",
-        Validade: "15/04/2022",
-      },
-      {
-        Cupom: "Troca",
-        Valor: 159,
-        Status: "Ativo",
-        Código: "D875-A657",
-        Validade: "15/04/2022",
-      },
-      {
-        Cupom: "Troca",
-        Valor: 159,
-        Status: "Usado",
-        Código: "D875-A657",
-        Validade: "15/04/2022",
-      },
-      {
-        Cupom: "Troca",
-        Valor: 159,
-        Status: "Usado",
-        Código: "D875-A657",
-        Validade: "15/04/2022",
-      },
-      {
-        Cupom: "Troca",
-        Valor: 159,
-        Status: "Usado",
-        Código: "D875-A657",
-        Validade: "15/04/2022",
-      },
-      {
-        Cupom: "Troca",
-        Valor: 159,
-        Status: "Usado",
-        Código: "D875-A657",
-        Validade: "15/04/2022",
-      },
-      {
-        Cupom: "Troca",
-        Valor: 159,
-        Status: "Usado",
-        Código: "D875-A657",
-        Validade: "15/04/2022",
-      },
-      {
-        Cupom: "Troca",
-        Valor: 159,
-        Status: "Usado",
-        Código: "D875-A657",
-        Validade: "15/04/2022",
-      },
+    headers: [
+      { text: "Descricao", align: "start", value: "descricao" },
+      { text: "Valor", align: "start", value: "valor" },
+      { text: "Codigo", value: "codigo" },
+      { text: "Status", align: "start", value: "status" },
+      { text: "Validade", align: "start", value: "validade" },
     ],
+    cupons: [],
+    cliente: {},
+    search: "",
 
     select: {},
     rules: [(v) => !!v || "Campo Obrigatório"],
   }),
+
   components: {
     Menu,
     Footer,
   },
+
+  created() {
+    this.list();
+  },
+
   mounted() {
     this.cliente = JSON.parse(localStorage.getItem("cliente"));
   },
@@ -153,7 +72,13 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    list(id) {
+      CupomService.list().then((response) => {
+        this.cupons = response.data;
+      });
+    },
+  },
 };
 </script>
 <style scoped>
