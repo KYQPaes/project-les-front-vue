@@ -40,7 +40,7 @@
         </v-row>
         <v-row>
           <v-col style="flex-grow: 0; margin-right: 10px">
-            <v-btn :disabled="carrinho.length > 0 ? false : true" color="green" class="white--text">
+            <v-btn :disabled="carrinho.length > 0 ? false : true" @click="() => {this.$router.push({path:'/final_compra'})}" color="green" class="white--text">
               Finalizar pedido
               <v-icon> shopping_bag </v-icon>
             </v-btn>

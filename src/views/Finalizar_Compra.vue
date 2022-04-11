@@ -15,19 +15,23 @@
                     <div class="text-xs-center">
                       <v-layout>
                         <p>Deseja pagar a compra com quantos cartões?</p>
+                        <v-spacer></v-spacer>
                         <v-flex xs3>
-                          <v-select :items="quantiCartao" label="Quantidade" :rules="emptyRules"></v-select>
+                          <v-select v-model="quantiCartao" :items="[1,2]" label="Quant. de Cartões"></v-select>
                         </v-flex>
                       </v-layout>
                       <v-layout style="margin-bottom: 20px">
                         <v-layout style="padding: 7px">
                           <div>
+                            <span v-if="cardSelect">
+                            {{cardSelect.descricao}}
+                            </span>
                             <v-btn @click="openCard" outlined>
                               Cartão 1
                               <v-icon> credit_card </v-icon>
                             </v-btn>
                           </div>
-                          <div style="margin-left: 80px">
+                          <div v-if="quantiCartao == 2" style="margin-left: 80px">
                             <v-btn @click="openCard" outlined>
                               Cartão 2
                               <v-icon> credit_card </v-icon>
@@ -77,24 +81,24 @@
         <v-spacer> </v-spacer>
         <v-flex xs4>
           <v-card-text>
-            <v-divider></v-divider>
-            <div style="padding: 20px">
-              <v-layout>
+            <div v-for="(produto, index) in carrinho" :key="index">
+              <v-layout style="padding: 20px">
                 <v-flex xs12>
                   <div class="text-xs-center">
-                    <v-layout>
-                      <v-img max-height="150" max-width="150" src="https://picsum.photos/id/11/500/300"></v-img>
-                      <h2 style="margin-left: 10px">Carteira Personalizada - Modelo X</h2>
+                    <v-layout class="d-flex flex-row">
+                      <h2>Carteira {{produto.tipo}} - Modelo {{produto.nome}}</h2>
+                      <v-spacer>
+                      </v-spacer>
+                      <h2 class="green--text">R$ {{produto.preco}}</h2>
                     </v-layout>
                     <v-layout>
-                      <p style="margin-left: 30px">Quantidade : 1</p>
-                      <h2 class="green--text" style="margin-left: 280px">R$ 49,99</h2>
+                      Quantidade : {{produto.quantidade}}
                     </v-layout>
                   </div>
                 </v-flex>
               </v-layout>
+              <v-divider></v-divider>
             </div>
-            <v-divider></v-divider>
             <v-layout style="padding: 20px" class="justify-center">
               <v-btn class="white--text" color="blue" text-color="white" @click="openEnd"> Finalizar Pedido </v-btn>
             </v-layout>
@@ -114,17 +118,22 @@
         </v-card-title>
         <v-row class="pa-4" justify="space-between">
           <v-col cols="5">
-            <v-radio-group v-model="cliente.cartaoFavId" @change="updateCardFav">
               <v-treeview key="id" :active.sync="active" item-text="nome" activatable :items="cartoes" color="black" open-on-click transition>
                 <template v-slot:prepend="{ item }">
                   <v-icon v-if="!item.children && item.id != null"> credit_card </v-icon>
                   <v-icon v-else> clear </v-icon>
                 </template>
                 <template v-slot:append="{ item }">
-                  <v-radio :value="item.id"></v-radio>
+                  <v-tooltip bottom v-if="item.id == cliente.cartaoFavId">
+                    <template v-slot:activator="{ on }">
+                    <v-icon v-on="on"> star </v-icon>
+                    </template>
+                    <span>
+                      Seu cartão favorito
+                    </span>
+                  </v-tooltip>
                 </template>
               </v-treeview>
-            </v-radio-group>
           </v-col>
           <v-divider vertical></v-divider>
           <v-col class="d-flex text-center">
@@ -157,14 +166,6 @@
                     {{ selectedCard.bandeira }}
                   </v-col>
                 </v-row>
-                <v-card-actions class="justify-center">
-                  <v-btn fab outlined @click="EditarCard(selectedCard)">
-                    <v-icon> edit </v-icon>
-                  </v-btn>
-                  <v-btn fab outlined @click="DeleteItemCard(selected)" color="error">
-                    <v-icon> delete </v-icon>
-                  </v-btn>
-                </v-card-actions>
               </v-card>
             </v-scroll-y-transition>
           </v-col>
@@ -173,53 +174,7 @@
         <v-card-actions>
           <v-spacer> </v-spacer>
           <v-btn @click="dialogCard = false" text color="error"> Fechar </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog width="1000" v-model="dialogPed">
-      <v-card>
-        <v-card-title class="black white--text text-h5">
-          Pedidos
-          <v-spacer> </v-spacer>
-        </v-card-title>
-        <v-row class="pa-4" justify="space-between">
-          <v-col cols="5">
-            <v-treeview :items="itemsPed"></v-treeview>
-          </v-col>
-          <v-divider vertical></v-divider>
-          <v-col class="d-flex text-center">
-            <v-scroll-y-transition mode="out-in">
-              <div v-if="!selected" class="text-h6 grey--text text--lighten-1 font-weight-light" style="align-self: center">Escolha um Pedido</div>
-              <v-card v-else :key="selected.id" class="pt-6 mx-auto" flat max-width="400">
-                <v-card-text>
-                  <h3 class="text-h5 mb-2"></h3>
-                  <div class="blue--text mb-2"></div>
-                  <div class="blue--text subheading font-weight-bold"></div>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-row class="text-left" tag="v-card-text">
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> </v-col>
-                  <v-col> </v-col>
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> </v-col>
-                  <v-col> </v-col>
-                </v-row>
-                <v-card-actions class="justify-center">
-                  <v-btn fab outlined>
-                    <v-icon> edit </v-icon>
-                  </v-btn>
-                  <v-btn fab outlined color="error">
-                    <v-icon> delete </v-icon>
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-scroll-y-transition>
-          </v-col>
-        </v-row>
-
-        <v-card-actions>
-          <v-spacer> </v-spacer>
-          <v-btn @click="dialogPed = false" text color="error"> Fechar </v-btn>
+          <v-btn @click="selectCard" :disabled="!selectedCard || selectedCard.id == null ? true : false" text color="primary"> Escolher Cartão</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -286,14 +241,6 @@
                     {{ selectedEnd.estado }}
                   </v-col>
                 </v-row>
-                <v-card-actions class="justify-center">
-                  <v-btn fab outlined @click="EditarItemEnd(selectedEnd)">
-                    <v-icon> edit </v-icon>
-                  </v-btn>
-                  <v-btn fab outlined @click="DeleteItemEnd(selectedEnd)" color="error">
-                    <v-icon> delete </v-icon>
-                  </v-btn>
-                </v-card-actions>
               </v-card>
             </v-scroll-y-transition>
           </v-col>
@@ -323,17 +270,16 @@ import enderecoService from "@/service/enderecos";
 import router from "@/router";
 
 export default {
-  name: "Cliente",
+  name: "fin_compra",
   data: (vm) => ({
     items: ["Masculino", "Feminino"],
     TipoTelefone: ["Residencial", "Móvel"],
     menu1: false,
     menu2: false,
     dialogCard: false,
-    dialogPed: false,
     dialogEnd: false,
 
-    quantiCartao: [1, 2],
+    quantiCartao: 1,
 
     inativar: false,
     altSenha: false,
@@ -349,33 +295,10 @@ export default {
     activeEnd: [],
     select: {},
     rules: [(v) => !!v || "Campo Obrigatório"],
-
-    itemsPed: [
-      {
-        id: 1,
-        name: "Pedido 1",
-      },
-      {
-        id: 2,
-        name: "Pedido 2",
-      },
-      {
-        id: 3,
-        name: "Pedido 3",
-      },
-      {
-        id: 4,
-        name: "Pedido 4",
-      },
-      {
-        id: 5,
-        name: "Pedido 5",
-      },
-      {
-        id: 6,
-        name: "Pedido 6",
-      },
-    ],
+    carrinho: [],
+    cardSelect: {},
+    cardSelect2: {},
+    compra: {},
   }),
   components: {
     Menu,
@@ -383,6 +306,7 @@ export default {
   },
   mounted() {
     this.cliente = JSON.parse(localStorage.getItem("cliente"));
+    this.carrinho = JSON.parse(localStorage.getItem('cart'));
   },
   computed: {
     selected() {
@@ -414,69 +338,14 @@ export default {
   },
 
   methods: {
-    updateCardFav() {
-      clienteService.update(this.cliente).then(() => {
-        localStorage.setItem("cliente", JSON.stringify(this.cliente));
-        this.error = false;
-        this.snackbar = true;
-      });
+    selectCard(){
+      this.cardSelect = this.selectedCard;
+      this.dialogCard = false;
     },
 
-    DeleteItemCard(item) {
-      if (this.cliente.cartaoFavId == item.id) {
-        this.cliente.cartaoFavId = null;
-        this.updateCardFav();
-      }
-      cartaoService
-        .delete(item.id)
-        .then(() => {
-          let index = this.cartoes.indexOf(item);
-          this.cartoes.splice(index, 1);
-          this.error = false;
-          this.snackbar = true;
-        })
-        .catch();
-    },
-
-    DeleteItemEnd(item) {
-      enderecoService
-        .delete(item.id)
-        .then(() => {
-          let index = this.enderecos.indexOf(item);
-          this.enderecos.splice(index, 1);
-          this.error = false;
-          this.snackbar = true;
-        })
-        .catch();
-    },
-
-    inatCliente() {
-      this.cliente.inativar = true;
-      clienteService
-        .update(this.cliente)
-        .then((response) => {
-          if (response.data) {
-            this.error = false;
-            this.snackbar = true;
-            setTimeout(() => {
-              localStorage.removeItem("cliente");
-              this.$router.push({ path: "/" });
-            }, 1500);
-          }
-        })
-        .catch(() => {
-          this.error = true;
-          this.snackbar = true;
-        });
-    },
     cartaoList() {
       cartaoService.listClienteId(JSON.parse(localStorage.getItem("cliente")).id).then((response) => {
         this.cartoes = response.data;
-        let noChoice = {
-          nome: "Sem Cartão Favorito",
-          id: null,
-        };
-        this.cartoes.unshift(noChoice);
       });
     },
 
@@ -507,33 +376,6 @@ export default {
       this.$router.push({ path: "/cartao_cadastro" });
     },
 
-    update() {
-      this.error = false;
-      if (this.$refs.form.validate()) {
-        this.cliente.telefone = this.cliente.telefone.replace(/[^a-zA-Z0-9]/g, "");
-        this.cliente.cpf = this.cliente.cpf.replace(/[^a-zA-Z0-9]/g, "");
-        clienteService
-          .update(this.cliente)
-          .then((response) => {
-            if (response.data) {
-              this.error = false;
-              this.snackbar = true;
-              setTimeout(() => {
-                localStorage.setItem("cliente", JSON.stringify(response.data));
-                this.$router.go();
-              }, 1500);
-            }
-          })
-          .catch(() => {
-            this.error = true;
-            this.snackbar = true;
-          });
-      }
-    },
-    openPed() {
-      this.dialogPed = true;
-      this.title = "Pedidos";
-    },
     openCard() {
       this.cartaoList();
       this.dialogCard = true;
