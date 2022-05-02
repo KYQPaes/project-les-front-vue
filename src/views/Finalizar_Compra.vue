@@ -530,7 +530,15 @@ export default {
 			this.carrinho.forEach((item) => {
 				valor += item.preco * parseInt(item.quantidade);
 			});
-
+			
+			var newCart = [];
+			this.carrinho.forEach((item) => {
+				newCart.push({
+					produtoid: item.id,
+					quantidade: item.quantidade,
+				})
+			});
+			
 			this.compra = {
 				clienteId: this.cliente.id,
 				status: 'EM PROCESSAMENTO',
@@ -540,6 +548,7 @@ export default {
 				endereco: this.endSelect.id,
 				cupomId: -1,
 				valor: valor,
+				// compraProduto: newCart,
 			}
 			compraService.save(this.compra).then(() => {
 				this.error = false;
