@@ -7,4 +7,7 @@ export default {
         update: (item) => {
 		return http.put("api/compras", item);
 	},
+        save: (item) => {
+		return http.post("api/compras", item);
+	},
 };
