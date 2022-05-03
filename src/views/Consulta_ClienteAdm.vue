@@ -28,7 +28,7 @@
                 <v-icon small class="mr-2" @click="$router.push({ path: `/consultaContaAdm/${item.id}` })"> description </v-icon>
               </template>
               <template v-slot:no-data>
-                <v-btn color="primary" @click="initialize"> Reset </v-btn>
+                Não há contas cadastradas
               </template>
             </v-data-table>
           </v-card>
