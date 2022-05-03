@@ -199,16 +199,17 @@
         </v-card-title>
         <v-row class="pa-4" justify="space-between">
           <v-col cols="5">
-            <v-treeview key="id" :active.sync="activePed" item-text="data_comp" activatable :items="compras" color="black" open-on-click transition>
+            <v-treeview key="id" :active.sync="activePed" item-text="data_comp" activatable :items="compra" color="black" open-on-click transition>
               <template v-slot:prepend="{ item }">
-                <v-icon v-if="!item.children"> shopping_cart </v-icon>
+                <v-icon v-if="!item.children && item.id != null"> shopping_cart </v-icon>
+                <v-icon v-else> clear </v-icon>
               </template>
             </v-treeview>
           </v-col>
           <v-divider vertical></v-divider>
           <v-col class="d-flex text-center">
             <v-scroll-y-transition mode="out-in">
-              <div v-if="!selectedPed" class="text-h6 grey--text text--lighten-1 font-weight-light" style="align-self: center">Escolha um Pedido</div>
+              <div v-if="!selectedPed || selectedPed.id == null" class="text-h6 grey--text text--lighten-1 font-weight-light" style="align-self: center">Escolha um Pedido</div>
               <v-card v-else :key="selectedPed.id" class="pt-6 mx-auto" flat max-width="400">
                 <v-card-text>
                   <h3 class="text-h5 mb-2">
@@ -217,29 +218,28 @@
                   <div class="blue--text mb-2">
                     {{ selectedPed.status }}
                   </div>
+                  <div class="blue--text subheading font-weight-bold">
+                    {{ selectedPed.valor }}
+                  </div>
                 </v-card-text>
                 <v-divider></v-divider>
                 <v-row class="text-left" tag="v-card-text">
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Método de pagamento 1: </v-col>
+                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> cartão 1: </v-col>
                   <v-col>
                     {{ selectedPed.metodo }}
                   </v-col>
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Método de pagamento 2: </v-col>
+                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> cartão 2: </v-col>
                   <v-col>
                     {{ selectedPed.metodo2 }}
                   </v-col>
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Endereço: </v-col>
+                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> endereço: </v-col>
                   <v-col>
                     {{ selectedPed.endereco }}
                   </v-col>
-                  <v-col class="text-right mr-4 mb-2" tag="strong" cols="5"> Valor: </v-col>
-                  <v-col>
-                    {{ selectedPed.valor }}
-                  </v-col>
                 </v-row>
                 <v-card-actions class="justify-center">
-                  <v-btn fab outlined>
-                    <v-icon> menu </v-icon>
+                  <v-btn fab outlined @click="$router.push({ path: `/consulta_pedido/${selectedPed.id}` })">
+                    <v-icon> description </v-icon>
                   </v-btn>
                 </v-card-actions>
               </v-card>
@@ -360,6 +360,7 @@ export default {
     TipoTelefone: ["Residencial", "Móvel"],
     menu1: false,
     menu2: false,
+
     dialogCard: false,
     dialogPed: false,
     dialogEnd: false,
@@ -367,17 +368,20 @@ export default {
     inativar: false,
     altSenha: false,
 
+    compra: [],
     enderecos: [],
     cartoes: [],
-    compras: [],
+
     snackbar: false,
     error: false,
     cliente: {},
     title: "",
     open: [],
+
     active: [],
     activeEnd: [],
     activePed: [],
+
     select: {},
     rules: [(v) => !!v || "Campo Obrigatório"],
   }),
@@ -408,9 +412,9 @@ export default {
     },
 
     selectedPed() {
-      if (!this.active.length) return undefined;
-      const id = this.active[0];
-      return this.compras.find((item) => item.id === id);
+      if (!this.activePed.length) return undefined;
+      const id = this.activePed[0];
+      return this.compra.find((compra) => compra.id === id);
     },
   },
 
@@ -499,7 +503,7 @@ export default {
 
     compraList() {
       compraService.listByClienteId(JSON.parse(localStorage.getItem("cliente")).id).then((response) => {
-        this.compras = response.data;
+        this.compra = response.data;
       });
     },
 
@@ -516,6 +520,11 @@ export default {
     EditarItemEnd(item) {
       localStorage.setItem("endereco", JSON.stringify(item));
       this.$router.push({ path: "/endereco_cadastro" });
+    },
+
+    EditarItemPed(item) {
+      localStorage.setItem("compra", JSON.stringify(item));
+      this.$router.push({ path: "/consulta_pedido/${.id}" });
     },
 
     EditarCard(item) {
@@ -547,11 +556,7 @@ export default {
           });
       }
     },
-    openPed() {
-      this.compraList();
-      this.dialogPed = true;
-      this.title = "Pedidos";
-    },
+
     openCard() {
       this.cartaoList();
       this.dialogCard = true;
@@ -561,6 +566,11 @@ export default {
       this.enderecoList();
       this.dialogEnd = true;
       this.title = "Endereços";
+    },
+    openPed() {
+      this.compraList();
+      this.dialogPed = true;
+      this.title = "Pedidos";
     },
   },
 };

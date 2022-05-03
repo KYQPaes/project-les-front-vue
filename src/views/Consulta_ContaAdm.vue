@@ -27,9 +27,7 @@
                   </v-col>
                 </v-layout>
               </template>
-              <template v-slot:no-data>
-                Nenhuma Informação Encontrada
-              </template>
+              <template v-slot:no-data> Nenhuma Informação Encontrada </template>
             </v-data-table>
           </v-card>
         </v-flex>
@@ -52,17 +50,17 @@ export default {
   data: (vm) => ({
     headers: [
       { text: "Código de compra", value: "id" },
-      {text: "Data da Compra",align: "start", value: "data_comp"},
-      { text: "Status", align: "start", value: "status"},
+      { text: "Data da Compra", align: "start", value: "data_comp" },
+      { text: "Status", align: "start", value: "status" },
       { text: "Forma de Pagamento", value: "metodo" },
       { text: "Endereço de Cobrança", value: "endereco" },
-      { text: "Frete", align: "start", value: "frete"},
-      { text: "Valor da Compra", align: "start", value: "valor"},
+      { text: "Frete", align: "start", value: "frete" },
+      { text: "Valor da Compra", align: "start", value: "valor" },
       { text: "Detalhes", value: "actions", sortable: false },
       { text: "Opção", value: "adm", sortable: false },
     ],
-    items: ["COMPRA NÃO AUTORIZADA", "COMPRA EFETUADA", "TROCA ACEITA", "TROCA RECUSADA"],
-    compras:[],
+    items: ["COMPRA NÃO AUTORIZADA", "COMPRA EFETUADA", "TROCA ACEITA", "TROCA RECUSADA", "EM PROCESSAMENTO", "EM TRANSITO"],
+    compras: [],
   }),
 
   components: {
@@ -70,10 +68,8 @@ export default {
     Footer,
   },
   mounted() {
-    if(this.$route.params.id)
-      this.list(this.$route.params.id);
-    else
-      this.$router.push('/consultaCliente');
+    if (this.$route.params.id) this.list(this.$route.params.id);
+    else this.$router.push("/consultaCliente");
   },
   computed: {},
 
