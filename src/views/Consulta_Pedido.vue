@@ -77,15 +77,15 @@
 					 <template v-slot:default>
 						<thead>
 						  <tr>
-							 <th class="text-left"></th>
+							 <th class="text-left">Imagem</th>
 							 <th class="text-left">Produto</th>
 							 <th class="text-left">Quantidade</th>
 						  </tr>
 						</thead>
 						<tbody>
-						  <tr v-for="item in pedidos" :key="item.name">
-							 <td>{{ item.imagem }}</td>
-							 <td>{{ item.produto }}</td>
+						  <tr v-for="item in pedidos" :key="item.produtoid">
+							 <td :key="item.imagem"><img :src="item.imagem"></td>
+							 <td>{{ item.nome }}</td>
 							 <td>{{ item.quantidade }}</td>
 						  </tr>
 						</tbody>
@@ -122,17 +122,11 @@ import Menu from "../components/Menu.vue";
 import Footer from "../components/Footer.vue";
 import CompraService from "../service/compra";
 import CompraProdutoService from "../service/compra_produtos";
+import ProdutoService from "../service/produtos";
 export default {
   data: () => ({
 	 compra: {},
-
-	 pedidos: [
-		{
-		  imagem: "IMAGEM DO PRODUTO",
-		  produto: "Carteira Personalizada - Modelo x",
-		  quantidade: 1,
-		},
-	 ],
+	 pedidos: [],
   }),
   components: {
 	 Menu,
@@ -158,8 +152,19 @@ export default {
 		listCompraProdutos(compraid){
 			CompraProdutoService.ListByCompraid(compraid).then((response) => {
 				this.pedidos = response.data;
+				this.pedidos.forEach((element, index) => {
+					// this.listProdutos(element.produtoid, index);
+					ProdutoService.listById(element.produtoid).then((response) => {
+						let produto = response.data;
+						this.pedidos[index].imagem = produto.imagem;
+						this.pedidos[index].nome = produto.nome;
+					});
+				});
+			}).then(()=>{
+				console.log(this.pedidos)
 			});
-		}
+			this.$forceUpdate();
+		},
   },
 };
 </script>
