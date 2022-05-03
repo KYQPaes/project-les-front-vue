@@ -536,7 +536,7 @@ export default {
 			this.compra = {
 				clienteId: this.cliente.id,
 				status: 'EM PROCESSAMENTO',
-				data_comp: data.getFullYear() + '-' + data.getMonth() + '-' + data.getDay(),
+				data_comp: data.getFullYear() + '-' + data.getMonth() + '-' + data.getDate(),
 				metodo: this.cardSelect.numero,
 				metodo2: this.quantiCartao == 2 ? this.cardSelect2.numero : null,
 				endereco: this.endSelect.id,
