@@ -553,7 +553,6 @@ export default {
                         quantidade: item.quantidade,
                     })
                 });
-                console.log(newCart);
                 compraProdutoService.save(newCart).then((r) => {
                     localStorage.removeItem('cart');
                     this.error = false;
