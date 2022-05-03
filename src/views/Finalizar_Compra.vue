@@ -431,6 +431,7 @@ import clienteService from "@/service/clientes";
 import cartaoService from "@/service/cartoes";
 import enderecoService from "@/service/enderecos";
 import compraService from "@/service/compra";
+import compraProdutoService from "@/service/compra_produtos";
 import router from "@/router";
 
 export default {
@@ -526,18 +527,11 @@ export default {
 			var data = new Date();
 
 			var valor = 0
-			console.log(this.carrinho)
 			this.carrinho.forEach((item) => {
 				valor += item.preco * parseInt(item.quantidade);
 			});
 			
-			var newCart = [];
-			this.carrinho.forEach((item) => {
-				newCart.push({
-					produtoid: item.id,
-					quantidade: item.quantidade,
-				})
-			});
+			
 			
 			this.compra = {
 				clienteId: this.cliente.id,
@@ -550,13 +544,30 @@ export default {
 				valor: valor,
 				// compraProduto: newCart,
 			}
-			compraService.save(this.compra).then(() => {
-				this.error = false;
-				this.snackbar = true;
-				setTimeout(() => {
-					localStorage.removeItem('cart');
-					this.$router.push({ path: '/cliente' });
-				}, 1500);
+			compraService.save(this.compra).then((r) => {
+                var newCart = [];
+                this.carrinho.forEach((item) => {
+                    newCart.push({
+                        compraid: r.data.id,
+                        produtoid: item.id,
+                        quantidade: item.quantidade,
+                    })
+                });
+                console.log(newCart);
+                compraProdutoService.save(newCart).then((r) => {
+                    localStorage.removeItem('cart');
+                    this.error = false;
+                    this.snackbar = true;
+
+                    setTimeout(() => {
+                        localStorage.removeItem('cart');
+                        this.$router.push({ path: '/cliente' });
+                    }, 1500);
+                }).catch(() => {
+                    this.error = true;
+                    this.snackbar = true;
+                });
+				
 			})
 		},
 		selectEnd(){
