@@ -10,4 +10,7 @@ export default {
         save: (item) => {
 		return http.post("api/compras", item);
 	},
+	findById: (id) => {
+		return http.get(`api/compras/${id}`);
+	}
 };

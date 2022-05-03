@@ -102,7 +102,7 @@ const routes = [
 		component: final_compra,
 	},	
 	{
-		path: "/consulta_pedido",
+		path: "/consulta_pedido/:id",
 		name: "consulta_pedido",
 		component: consulta_pedido,
 	},	
