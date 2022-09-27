@@ -417,7 +417,7 @@
 		</v-dialog>
 
 		<v-snackbar top :color="error == true ? 'error' : 'green'" v-model="snackbar">
-			<span v-if="error == false"> Alterações realizadas com sucesso </span>
+			<span v-if="error == false"> Pedido finalizado com sucesso </span>
 			<span v-else> Ocorreu um erro </span>
 		</v-snackbar>
 		<Footer />
@@ -466,8 +466,7 @@ export default {
 		rules: [(v) => !!v || "Campo Obrigatório"],
 		carrinho: [],
 		endSelect: {},
-		endSelect2: {},
-		endSelect2: {},
+		endSelect2: {},	
 		cardSelect: {},
 		cardSelect2: {},
 		compra: {},
@@ -535,11 +534,12 @@ export default {
 			
 			this.compra = {
 				clienteId: this.cliente.id,
-				status: 'EM PROCESSAMENTO',
+				status: 'EM ANÁLISE',
 				data_comp: data.getFullYear() + '-' + data.getMonth() + '-' + data.getDate(),
 				metodo: this.cardSelect.numero,
 				metodo2: this.quantiCartao == 2 ? this.cardSelect2.numero : null,
 				endereco: this.endSelect.id,
+				enderecoCobranca: this.endSelect2.id,
 				cupomId: -1,
 				valor: valor,
 				// compraProduto: newCart,

@@ -45,7 +45,7 @@
 								<h4 style="margin-left: 40px">Cobrança</h4>
 							</v-layout>
 							<v-layout class="justify-center" style="padding: 7px">
-								<p style="margin-left: 40px">Trabalho</p>
+								<p style="margin-left: 40px">{{compra.enderecoCobranca}}</p>
 							</v-layout>
 						 </v-flex>
 					 </v-layout>
@@ -56,10 +56,10 @@
 						<h2 style="margin-left: 40px">Pagamento</h2>
 					 </v-layout>
 					 <v-layout class="justify-center" style="padding: 7px">
-						<p style="margin-left: 40px">{{compra.metodo}}</p>
+						<p style="margin-left: 40px; "><span style="font-weight: bold;">cartão 1: </span>{{compra.metodo}}</p>
 					 </v-layout>
 					 <v-layout v-if="compra.metodo2 != null" class="justify-center" style="padding: 7px">
-						<p style="margin-left: 40px">{{compra.metodo2}}</p>
+						<p style="margin-left: 40px; "><span style="font-weight: bold;">cartão 2: </span>{{compra.metodo2}}</p>
 					 </v-layout>
 					 <v-layout class="justify-center" style="padding: 7px">
 						<h2 style="margin-left: 40px">Valor da Compra</h2>
@@ -123,6 +123,7 @@ import Footer from "../components/Footer.vue";
 import CompraService from "../service/compra";
 import CompraProdutoService from "../service/compra_produtos";
 import ProdutoService from "../service/produtos";
+import EnderecoService from "../service/enderecos"
 export default {
   data: () => ({
 	 compra: {},
@@ -147,6 +148,8 @@ export default {
 				let formated_data = this.compra.data_comp.split('-');
 				this.compra.formated_data = formated_data[2].padStart(2, '0') + '/' + formated_data[1].padStart(2, '0') + '/' + formated_data[0];
 				this.listCompraProdutos(this.compra.id);
+				console.log(this.compra)
+				this.listEnderecos(this.compra.clienteId)
 			});
 		},
 		listCompraProdutos(compraid){
@@ -165,6 +168,13 @@ export default {
 			});
 			this.$forceUpdate();
 		},
+		listEnderecos(clienteId){
+			EnderecoService.listClienteId(clienteId).then((r)=> {
+				console.log(r)
+				this.compra.endereco=r.data.find((e)=>e.id==this.compra.endereco).tipo_residencia
+				this.compra.enderecoCobranca=r.data.find((e)=>e.id==this.compra.enderecoCobranca).tipo_residencia
+			})
+		}
   },
 };
 </script>

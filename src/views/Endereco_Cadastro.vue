@@ -132,7 +132,7 @@ export default {
               this.snackbar = true;
               setTimeout(() => {
                 localStorage.removeItem("endereco");
-                this.$router.push({ path: "/cliente" });
+                this.$router.go(-1)
               }, 1500);
             }
           });
@@ -144,7 +144,7 @@ export default {
                 this.error = false;
                 this.snackbar = true;
                 setTimeout(() => {
-                  this.$router.push({ path: "/cliente" });
+                  this.$router.go(-1)
                 }, 1500);
               }
             })

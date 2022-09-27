@@ -59,7 +59,7 @@ export default {
       { text: "Detalhes", value: "actions", sortable: false },
       { text: "Opção", value: "adm", sortable: false },
     ],
-    items: ["COMPRA NÃO AUTORIZADA", "COMPRA EFETUADA", "TROCA ACEITA", "TROCA RECUSADA", "EM PROCESSAMENTO", "EM TRANSITO"],
+    items: ["PAGAMENTO REALIZADO", "EM TRANSPORTE", "ENTREGA REALIZADA", "FINALIZADO"],
     compras: [],
   }),
 

@@ -99,7 +99,7 @@ export default {
   },
 
   methods: {
-    submitHandler() {
+    submitHandler() {   
       this.error = false;
       if (this.$refs.form.validate()) {
         this.loading = true;
@@ -112,7 +112,7 @@ export default {
 
               setTimeout(() => {
                 localStorage.removeItem("cartao");
-                this.$router.push({ path: "/cliente" });
+               this.$router.go(-1)
               }, 1500);
             }
           });
@@ -125,7 +125,7 @@ export default {
                 this.snackbar = true;
 
                 setTimeout(() => {
-                  this.$router.push({ path: "/cliente" });
+                 this.$router.go(-1)
                 }, 1500);
               }
             })
