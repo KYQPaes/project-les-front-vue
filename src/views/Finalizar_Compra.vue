@@ -83,11 +83,7 @@
 							<h3 style="padding: 15px">Desconto</h3>
 							<v-layout class="justify-center" style="padding: 7px">
 								<div style="padding: 15px">
-									<!-- não esta funcionando -->
-									<v-btn color="green">
-										Ver meus Cupons
-										<v-icon> percent </v-icon>
-									</v-btn>
+									<v-autocomplete v-model="cupom" :items="cupons"	label="Cupons Disponíveis" ></v-autocomplete>
 								</div>
 							</v-layout>
 						</v-card-text>
@@ -438,6 +434,8 @@ export default {
 	name: "fin_compra",
 	data: (vm) => ({
 		items: ["Masculino", "Feminino"],
+		cupons: ["Desconto R$10,00", "Desconto R$20,00", "Desconto R$30,00"],
+		cupom:"",
 		TipoTelefone: ["Residencial", "Móvel"],
 		menu1: false,
 		menu2: false,
