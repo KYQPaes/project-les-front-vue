@@ -9,7 +9,7 @@
         <v-layout class="justify-center" style="width: 100%; padding-top: 20px">
           <h2 class="blue--text">Carrinho</h2>
         </v-layout>
-        <v-layout v-for="prod in carrinho.length" :key="prod" class="d-flex align-center" style="width: 100%; padding-top:40px; border-bottom: 1px solid #ccc; border-top: 1px solid #ccc">
+        <v-layout v-for="(prod,index) in carrinho.length" :key="prod" class="d-flex align-center" style="width: 100%; padding-top:40px; border-bottom: 1px solid #ccc; border-top: 1px solid #ccc">
           <v-flex xs5>
             <v-row justify="center" style="margin-left: 10px; height: 80%; width:80% max-height: 500px; max-width: 500px">
               <v-img :src="carrinho[prod-1].imagem"></v-img>
@@ -20,7 +20,13 @@
             <h2 style="margin-top=10px">Carteira {{carrinho[prod-1].tipo}} - Modelo {{carrinho[prod-1].nome}}</h2>
 
             <v-flex xs3>
-              <v-text-field @change="changeCart(prod)" v-model="carrinho[prod-1].quantidade" type="number" label="Quantidade" />
+              <v-text-field @change="changeCart(prod)" v-model="carrinho[prod-1].quantidade" type="number" label="Quantidade" />                            
+            </v-flex>
+
+            <v-flex xs3>             
+            <v-btn icon color="red" @click="removeProdCartButton(index)">
+              <v-icon>close</v-icon>              
+            </v-btn>              
             </v-flex>
 
             <v-layout style="margin-bottom: 40px" class="align-center">
@@ -32,12 +38,13 @@
         </v-layout>
         <v-row v-if="carrinho.length > 0">
           <v-col class="d-flex flex-nowrap align-end">
-            <v-text-field hide-details v-mask="'#####-###'" type="cep" label="CEP" placeholder="CEP" />
+            <v-text-field v-model="Cep" hide-details v-mask="'#####-###'" type="cep" label="CEP" placeholder="CEP" />
             <v-btn icon color="blue">
-              <v-icon>travel_explore</v-icon>
+              <v-icon @click="calcFrete">travel_explore</v-icon>
             </v-btn>
           </v-col>
         </v-row>
+        <v-icon @click="teste">travel_explore</v-icon>
         <v-row>
           <v-col style="flex-grow: 0; margin-right: 10px">
             <v-btn :disabled="carrinho.length > 0 ? false : true" @click="() => {this.$router.push({path:'/final_compra'})}" color="green" class="white--text">
@@ -67,6 +74,25 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="freteDialog" persistent max-width="290"    >
+      <v-card>
+        <v-card-title class="text-h5">
+          Frete
+        </v-card-title>
+        <v-card-text>
+          O valor do Frete para este endereço é:
+          654654
+        </v-card-text>
+        <v-card-actions>
+					<v-spacer> </v-spacer>
+					<v-btn @click="freteDialog = false" text color="error"> Fechar </v-btn>
+					
+				</v-card-actions>
+        
+      </v-card>
+    </v-dialog>
+
+
     <Footer />
   </div>
 </template>
@@ -78,6 +104,10 @@ export default {
   data: () => ({
     carrinho: [],
     dialog: false,
+    freteDialog: false,
+    Cep:"",
+    freteSP:"",
+    freteOutro:"",           
   }),
   components: {
     Menu,
@@ -113,8 +143,31 @@ export default {
       })
       localStorage.setItem('cart', JSON.stringify(this.carrinho));
     },
-  },
+    removeProdCartButton(index){ 
+      this.carrinho.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(this.carrinho));
+    },
+    openFrete() {	
+			this.freteDialog = true;		
+		},
+  
+
+  calcFrete() {       
+    let valorFrete;
+   
+       if (this.Cep >= 5) {
+        valorFrete = JSON.parse(localStorage.setItem(5));
+        }
+                 
+      },
+
+      teste() {       
+      localStorage.getItem('valorFrete');               
+      },
+    
+    }
 };
+
 </script>
 
 <style scoped>

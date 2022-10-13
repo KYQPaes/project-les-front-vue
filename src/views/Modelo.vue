@@ -40,6 +40,12 @@
                   Adicionar ao Carrinho
                   <v-icon> shopping_cart </v-icon>
                 </v-btn>
+                <v-flex xs3>                                   
+                  <v-text-field v-model="produto.quantidade" type="number" label="Quantidade" />                            
+                </v-flex>
+
+           
+
               </v-col>
             </v-row>
           </v-flex>
@@ -72,17 +78,18 @@ export default {
     list(id){
       produtosService.listById(id).then(response => {
         this.produto = response.data;
+        this.produto.quantidadeEstoque = this.produto.quantidade;
+        this.produto.quantidade = 0;
       });
     },
     addCart(condicao){
-      let prod = this.produto;
-      prod.quantidade = 1;
+      let prod = this.produto;    
       let cart;
       if(localStorage.getItem('cart')){
         cart = JSON.parse(localStorage.getItem('cart'));
         let index = cart.findIndex(item => item.id == prod.id);
         if(index >= 0){
-          cart[index].quantidade++;
+          cart[index].quantidade = prod.quantidade;
         }else{
           cart.push(prod);
         }
