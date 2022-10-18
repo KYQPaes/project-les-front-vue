@@ -19,7 +19,8 @@
 
               <template v-slot:item.adm="{ item }">
                 <v-layout class="align-baseline">
-                  <v-select :items="items" v-model="item.statusNew" label="Status"></v-select>
+                  <v-select v-if="item.status != 'EM TROCA'" :items="items" v-model="item.statusNew" label="Status"></v-select>
+                  <v-select v-else :items="itemsTroca" v-model="item.statusNew" label="Status"></v-select>
                   <v-col cols="12" sm="3">
                     <v-btn @click="update(item)" icon color="green">
                       <v-icon>done</v-icon>
@@ -60,6 +61,7 @@ export default {
       { text: "Opção", value: "adm", sortable: false },
     ],
     items: ["PAGAMENTO REALIZADO", "EM TRANSPORTE", "ENTREGA REALIZADA", "FINALIZADO"],
+    itemsTroca: ["TROCA AUTORIZADA", "TROCA RECUSADA"],
     compras: [],
   }),
 

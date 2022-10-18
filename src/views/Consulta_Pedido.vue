@@ -83,9 +83,9 @@
 						  </tr>
 						</thead>
 						<tbody>
-						  <tr v-for="item in pedidos" :key="item.produtoid">
-							 <td :key="item.imagem"><img :src="item.imagem"></td>
-							 <td>{{ item.nome }}</td>
+						  <tr v-for="(item, index) in pedidos" :key="item.produtoid">
+							 <td :key="item.imagem"><img :src="produtos[index].imagem" style="width: 50px; height: 50px"></td>
+							 <td>{{ produtos[index].nome }}</td>
 							 <td>{{ item.quantidade }}</td>
 						  </tr>
 						</tbody>
@@ -129,6 +129,7 @@ export default {
   data: () => ({
 	 compra: {},
 	 pedidos: [],
+	 produtos: [],
   }),
   components: {
 	 Menu,
@@ -149,7 +150,6 @@ export default {
 				let formated_data = this.compra.data_comp.split('-');
 				this.compra.formated_data = formated_data[2].padStart(2, '0') + '/' + formated_data[1].padStart(2, '0') + '/' + formated_data[0];
 				this.listCompraProdutos(this.compra.id);
-				console.log(this.compra)
 				this.listEnderecos(this.compra.clienteId)
 			});
 		},
@@ -157,21 +157,17 @@ export default {
 			CompraProdutoService.ListByCompraid(compraid).then((response) => {
 				this.pedidos = response.data;
 				this.pedidos.forEach((element, index) => {
-					// this.listProdutos(element.produtoid, index);
 					ProdutoService.listById(element.produtoid).then((response) => {
 						let produto = response.data;
-						this.pedidos[index].imagem = produto.imagem;
-						this.pedidos[index].nome = produto.nome;
+						console.log(produto)
+						this.produtos.push(produto);
 					});
+					this.$forceUpdate();
 				});
-			}).then(()=>{
-				console.log(this.pedidos)
-			});
-			this.$forceUpdate();
+			})
 		},
 		listEnderecos(clienteId){
 			EnderecoService.listClienteId(clienteId).then((r)=> {
-				console.log(r)
 				this.compra.endereco=r.data.find((e)=>e.id==this.compra.endereco).tipo_residencia
 				this.compra.enderecoCobranca=r.data.find((e)=>e.id==this.compra.enderecoCobranca).tipo_residencia
 			})

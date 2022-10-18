@@ -12,49 +12,45 @@
         <v-layout class="d-flex align-center" style="width: 100%; margin-top: 15px">
           <v-flex>
             <v-layout class="justify-center">
-				  <v-simple-table>
-					 <template v-slot:default>
-						<thead>
-						  <tr>
-							 <th class="text-left">Imagem</th>
-							 <th class="text-left">Produto</th>
-							 <th class="text-left">Quantidade</th>
-						  </tr>
-						</thead>
-						<tbody>
-						  <tr v-for="item in pedidos" :key="item.produtoid">
-							 <td :key="item.imagem"><img :src="item.imagem"></td>
-							 <td>{{ item.nome }}</td>
-							 <td>{{ item.quantidade }}</td>
-						  </tr>
-						</tbody>
-					 </template>
-				  </v-simple-table>
-				</v-layout>
+		<v-simple-table>
+			<template v-slot:default>
+			<thead>
+				<tr>
+					<th class="text-left">Imagem</th>
+					<th class="text-left">Produto</th>
+					<th class="text-left">Quantidade</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(item, i) in pedidos" :key="item.produtoid">
+					<td :key="item.imagem"><img style="width: 50px; height: 50px" :src="produtos[i].imagem"></td>
+					<td>{{ produtos[i].nome }}</td>
+					<td>{{ item.quantidade }}</td>
+				</tr>
+			</tbody>
+			</template>
+		</v-simple-table>
+	</v-layout>
             <v-divider></v-divider>
 
-            <v-layout class="justify-center">
+            <!-- <v-layout class="justify-center">
               <p style="margin-top: 20px">Quantidade a ser trocada:</p>
               <v-flex xs1>
                 <v-text-field style="margin-left: 10px" type="number" />
               </v-flex>
-            </v-layout>
+            </v-layout> -->
 
             <v-layout class="justify-center">
               <v-flex xs8>
                 <h4>Motivo da troca:</h4>
                 <v-col cols="12">
-                  <v-textarea color="teal">
-                    <template>
-                      <div>Bio <small>(optional)</small></div>
-                    </template>
-                  </v-textarea>
+                  <v-textarea v-model="motivo" color="teal"></v-textarea>
                 </v-col>
               </v-flex>
             </v-layout>
             <v-layout class="justify-center">
               <v-col style="flex-grow: 0; margin-right: 10px">
-                <v-btn color="yellow" class="black--text"> Confirmar Troca </v-btn>
+                <v-btn @click="update()" color="yellow" class="black--text"> Confirmar Troca </v-btn>
               </v-col>
             </v-layout>
             <v-divider></v-divider>
@@ -72,15 +68,16 @@ import Footer from "../components/Footer.vue";
 import CompraService from "../service/compra";
 import CompraProdutoService from "../service/compra_produtos";
 import ProdutoService from "../service/produtos";
-import EnderecoService from "../service/enderecos"
 export default {
   data: () => ({
 	 compra: {},
 	 pedidos: [],
+	 produtos: [],
+	 motivo: ''
   }),
   components: {
-	 Menu,
-	 Footer,
+	Menu,
+	Footer,
   },
   
   mounted() {
@@ -108,8 +105,8 @@ export default {
 					// this.listProdutos(element.produtoid, index);
 					ProdutoService.listById(element.produtoid).then((response) => {
 						let produto = response.data;
-						this.pedidos[index].imagem = produto.imagem;
-						this.pedidos[index].nome = produto.nome;
+						this.produtos.push(produto);
+						this.$forceUpdate();
 					});
 				});
 			}).then(()=>{
@@ -117,6 +114,16 @@ export default {
 			});
 			this.$forceUpdate();
 		},
+		update(){
+			const pedido = {
+				...this.compra,
+				status: 'EM TROCA',
+				motivoTroca: this.motivo,
+			}
+			CompraService.update(pedido).then(() => {
+				this.$router.push('/cliente');
+			});
+		}
   },
 };
 </script>
