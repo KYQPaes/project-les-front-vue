@@ -96,10 +96,11 @@
 
 				<v-layout class="justify-center">
 				  <v-col style="flex-grow: 0; margin-right: 10px">
-					 <v-btn color="yellow" class="black--text">
-						Requisitar Troca
+					 <v-btn color="yellow" class="black--text" @click="() => {this.$router.push({ path: '/troca_Pedido/' + this.$route.params.id});}"
+						>Requisitar Troca
 						<v-icon> sync_alt </v-icon>
 					 </v-btn>
+
 				  </v-col>
 				  <v-col style="flex-grow: 0; margin-right: 10px">
 					 <v-btn outlined color="red" class="white--text">

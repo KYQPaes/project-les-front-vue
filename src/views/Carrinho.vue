@@ -43,8 +43,7 @@
               <v-icon @click="calcFrete">travel_explore</v-icon>
             </v-btn>
           </v-col>
-        </v-row>
-        <v-icon @click="teste">travel_explore</v-icon>
+        </v-row>        
         <v-row>
           <v-col style="flex-grow: 0; margin-right: 10px">
             <v-btn :disabled="carrinho.length > 0 ? false : true" @click="() => {this.$router.push({path:'/final_compra'})}" color="green" class="white--text">

@@ -12,25 +12,25 @@
         <v-layout class="d-flex align-center" style="width: 100%; margin-top: 15px">
           <v-flex>
             <v-layout class="justify-center">
-              <v-simple-table>
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left"></th>
-                      <th class="text-left">Produto</th>
-                      <th class="text-left">Quantidade</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="item in pedido" :key="item.name">
-                      <td>{{ item.imagem }}</td>
-                      <td>{{ item.produto }}</td>
-                      <td>{{ item.quantidade }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-layout>
+				  <v-simple-table>
+					 <template v-slot:default>
+						<thead>
+						  <tr>
+							 <th class="text-left">Imagem</th>
+							 <th class="text-left">Produto</th>
+							 <th class="text-left">Quantidade</th>
+						  </tr>
+						</thead>
+						<tbody>
+						  <tr v-for="item in pedidos" :key="item.produtoid">
+							 <td :key="item.imagem"><img :src="item.imagem"></td>
+							 <td>{{ item.nome }}</td>
+							 <td>{{ item.quantidade }}</td>
+						  </tr>
+						</tbody>
+					 </template>
+				  </v-simple-table>
+				</v-layout>
             <v-divider></v-divider>
 
             <v-layout class="justify-center">
@@ -69,36 +69,54 @@
 <script>
 import Menu from "../components/Menu.vue";
 import Footer from "../components/Footer.vue";
-import produtosService from "../service/produtos";
+import CompraService from "../service/compra";
+import CompraProdutoService from "../service/compra_produtos";
+import ProdutoService from "../service/produtos";
+import EnderecoService from "../service/enderecos"
 export default {
   data: () => ({
-    produto: {},
-
-    pedido: [
-      {
-        imagem: "IMAGEM DO PRODUTO",
-        produto: "Carteira Personalizada - Modelo x",
-        quantidade: 1,
-      },
-    ],
-    first: "",
-    last: "",
-    bio: "",
-    favoriteAnimal: "",
-    age: null,
-    terms: false,
+	 compra: {},
+	 pedidos: [],
   }),
   components: {
-    Menu,
-    Footer,
+	 Menu,
+	 Footer,
+  },
+  
+  mounted() {
+		if(this.$route.params.id)
+			this.list(this.$route.params.id);
+		else{}
+			// this.$router.push('/consultaCliente'); retorna se ñ tiver id
   },
 
   methods: {
-    list(id) {
-      produtosService.listById(id).then((response) => {
-        this.produto = response.data;
-      });
-    },
+		list(id) {
+			CompraService.findById(id).then((response) => {
+				this.compra = response.data;
+				let formated_data = this.compra.data_comp.split('-');
+				this.compra.formated_data = formated_data[2].padStart(2, '0') + '/' + formated_data[1].padStart(2, '0') + '/' + formated_data[0];
+				this.listCompraProdutos(this.compra.id);
+				console.log(this.compra)
+				this.listEnderecos(this.compra.clienteId)
+			});
+		},
+		listCompraProdutos(compraid){
+			CompraProdutoService.ListByCompraid(compraid).then((response) => {
+				this.pedidos = response.data;
+				this.pedidos.forEach((element, index) => {
+					// this.listProdutos(element.produtoid, index);
+					ProdutoService.listById(element.produtoid).then((response) => {
+						let produto = response.data;
+						this.pedidos[index].imagem = produto.imagem;
+						this.pedidos[index].nome = produto.nome;
+					});
+				});
+			}).then(()=>{
+				console.log(this.pedidos)
+			});
+			this.$forceUpdate();
+		},
   },
 };
 </script>

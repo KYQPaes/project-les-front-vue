@@ -107,11 +107,10 @@ const routes = [
 		component: consulta_pedido,
 	},	
 	{
-		path: "/troca_pedido",
+		path: "/troca_pedido/:id",
 		name: "troca_pedido",
 		component: troca_pedido,
-	},	
-
+	},
 	
 ];
 
