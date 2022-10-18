@@ -44,6 +44,7 @@
 import Menu from "../components/Menu.vue";
 import Footer from "../components/Footer.vue";
 import CompraService from "@/service/compra";
+import CupomService from "@/service/cupom";
 import router from "@/router";
 
 export default {
@@ -91,10 +92,26 @@ export default {
       });
     },
     update(compra) {
+      
       compra.status = compra.statusNew;
       CompraService.update(compra).then(() => {
-        this.list(this.$route.params.id);
+        if(compra.status == "TROCA AUTORIZADA"){
+          const cupom = {
+            id: null,
+            valor: compra.valor,
+            clienteId: this.$route.params.id,
+            descricao: "TROCA",
+            status: 'ATIVO',
+          };
+          console.log(this.$route.params.id)
+          console.log(cupom)
+          CupomService.save(cupom).then(() => {
+            this.$router.push("/consultaCliente");
+          })
+        }else
+          this.$router.push("/consultaCliente");
       });
+
     },
   },
 };

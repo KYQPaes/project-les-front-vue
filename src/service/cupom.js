@@ -9,5 +9,8 @@ export default {
 		return http.get("api/cupom");
 	},
 
-
+	save: (item) => {
+		// console.log('save')
+		return http.post("api/cupom", item);
+	},
 };
