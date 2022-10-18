@@ -13,4 +13,8 @@ export default {
 		// console.log('save')
 		return http.post("api/cupom", item);
 	},
+
+	update: (item) => {
+		return http.put("api/cupom", item);
+	}
 };

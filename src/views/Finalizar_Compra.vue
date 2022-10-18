@@ -83,7 +83,7 @@
 							<h3 style="padding: 15px">Desconto</h3>
 							<v-layout class="justify-center" style="padding: 7px">
 								<div style="padding: 15px">
-									<v-autocomplete v-model="cupom" :items="cupons"	label="Cupons Disponíveis" ></v-autocomplete>
+									<v-autocomplete return-object v-model="cupom" item-text="descricao" value="id" :items="cupons" label="Cupons Disponíveis" ></v-autocomplete>
 								</div>
 							</v-layout>
 						</v-card-text>
@@ -445,6 +445,7 @@ import clienteService from "@/service/clientes";
 import cartaoService from "@/service/cartoes";
 import enderecoService from "@/service/enderecos";
 import compraService from "@/service/compra";
+import cupomService from "@/service/cupom";
 import compraProdutoService from "@/service/compra_produtos";
 import router from "@/router";
 
@@ -452,8 +453,8 @@ export default {
 	name: "fin_compra",
 	data: (vm) => ({
 		items: ["Masculino", "Feminino"],
-		cupons: ["Desconto R$10,00", "Desconto R$20,00", "Desconto R$30,00"],
-		cupom:"",
+		cupons: [],
+		cupom:{},
 		TipoTelefone: ["Residencial", "Móvel"],
 		menu1: false,
 		menu2: false,
@@ -500,6 +501,7 @@ export default {
 	mounted() {
 		this.cliente = JSON.parse(localStorage.getItem("cliente"));
 		this.carrinho = JSON.parse(localStorage.getItem('cart'));
+		this.listCupons();
 	},
 	computed: {
 		selected() {
@@ -544,6 +546,17 @@ export default {
 	},
 
 	methods: {
+		listCupons() {
+			cupomService.listByClienteId(this.cliente.id).then((response) => {
+				response.data.forEach((element) => {
+					if(element.status == "ATIVO"){
+						element.descricao = element.descricao + " - " + element.valor;
+						this.cupons.push(element);
+					}
+				});
+			});
+		},
+
 		saveCompra(){
 			var data = new Date();
 
@@ -557,6 +570,8 @@ export default {
 				this.snackbarPreco = true;
 				return;
 			}
+
+			console.log(this.cupom);
 			
 			this.compra = {
 				clienteId: this.cliente.id,
@@ -566,7 +581,7 @@ export default {
 				metodo2: this.quantiCartao == 2 ? this.cardSelect2.numero : null,
 				endereco: this.endSelect.id,
 				enderecoCobranca: this.endSelect2.id,
-				cupomId: -1,
+				cupomId: this.cupom != null ? this.cupom.id : '-1',
 				valor: valor,
 				metodoPreco: this.priceCard1,
 				metodo2Preco: this.priceCard2,
@@ -575,25 +590,29 @@ export default {
 			compraService.save(this.compra).then((r) => {
 				var newCart = [];
 				this.carrinho.forEach((item) => {
-				newCart.push({
-					compraid: r.data.id,
-					produtoid: item.id,
-					quantidade: item.quantidade,
-				})
+					newCart.push({
+						compraid: r.data.id,
+						produtoid: item.id,
+						quantidade: item.quantidade,
+					})
 				});
 				compraProdutoService.save(newCart).then((r) => {
-				localStorage.removeItem('cart');
-				this.error = false;
-				this.snackbar = true;
-
-				setTimeout(() => {
 					localStorage.removeItem('cart');
-					this.$router.push({ path: '/cliente' });
-				}, 1500);
+					this.error = false;
+					this.snackbar = true;
+
+					setTimeout(() => {
+						localStorage.removeItem('cart');
+						this.$router.push({ path: '/cliente' });
+					}, 1500);
 				}).catch(() => {
-				this.error = true;
-				this.snackbar = true;
+					this.error = true;
+					this.snackbar = true;
 				});
+
+				console.log(this.cupom)
+				this.cupom.status = 'INATIVO'
+				cupomService.update(this.cupom)
 				
 			})
 		},
