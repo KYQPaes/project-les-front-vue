@@ -552,9 +552,7 @@ export default {
 				valor += item.preco * parseInt(item.quantidade);
 			});
 
-			console.log(valor, this.priceCard1, this.priceCard2)
-			
-			if(valor != (parseFloat(this.priceCard1) + parseFloat(this.priceCard2))){
+			if(valor != (parseFloat(this.priceCard1) + parseFloat(this.priceCard2)).toFixed(2)){
 				this.error = true;
 				this.snackbarPreco = true;
 				return;
@@ -575,27 +573,27 @@ export default {
 				// compraProduto: newCart,
 			}
 			compraService.save(this.compra).then((r) => {
-                var newCart = [];
-                this.carrinho.forEach((item) => {
-                    newCart.push({
-                        compraid: r.data.id,
-                        produtoid: item.id,
-                        quantidade: item.quantidade,
-                    })
-                });
-                compraProdutoService.save(newCart).then((r) => {
-                    localStorage.removeItem('cart');
-                    this.error = false;
-                    this.snackbar = true;
+				var newCart = [];
+				this.carrinho.forEach((item) => {
+				newCart.push({
+					compraid: r.data.id,
+					produtoid: item.id,
+					quantidade: item.quantidade,
+				})
+				});
+				compraProdutoService.save(newCart).then((r) => {
+				localStorage.removeItem('cart');
+				this.error = false;
+				this.snackbar = true;
 
-                    setTimeout(() => {
-                        localStorage.removeItem('cart');
-                        this.$router.push({ path: '/cliente' });
-                    }, 1500);
-                }).catch(() => {
-                    this.error = true;
-                    this.snackbar = true;
-                });
+				setTimeout(() => {
+					localStorage.removeItem('cart');
+					this.$router.push({ path: '/cliente' });
+				}, 1500);
+				}).catch(() => {
+				this.error = true;
+				this.snackbar = true;
+				});
 				
 			})
 		},
