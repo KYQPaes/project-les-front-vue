@@ -430,6 +430,10 @@
 			<span v-if="error == false"> Pedido finalizado com sucesso </span>
 			<span v-else> Ocorreu um erro </span>
 		</v-snackbar>
+
+		<v-snackbar top :color="error == true ? 'error' : 'green'" v-model="snackbarPreco">
+			<span> Configurar cartões para pagar o valor total </span>
+		</v-snackbar>
 		<Footer />
 	</div>
 </template>
@@ -469,6 +473,7 @@ export default {
 		enderecos: [],
 		cartoes: [],
 		snackbar: false,
+		snackbarPreco: false,
 		error: false,
 		cliente: {},
 		title: "",
@@ -546,8 +551,14 @@ export default {
 			this.carrinho.forEach((item) => {
 				valor += item.preco * parseInt(item.quantidade);
 			});
+
+			console.log(valor, this.priceCard1, this.priceCard2)
 			
-			
+			if(valor != (parseFloat(this.priceCard1) + parseFloat(this.priceCard2))){
+				this.error = true;
+				this.snackbarPreco = true;
+				return;
+			}
 			
 			this.compra = {
 				clienteId: this.cliente.id,
