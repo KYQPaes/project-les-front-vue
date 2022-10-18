@@ -103,8 +103,6 @@ export default {
             descricao: "TROCA",
             status: 'ATIVO',
           };
-          console.log(this.$route.params.id)
-          console.log(cupom)
           CupomService.save(cupom).then(() => {
             this.$router.push("/consultaCliente");
           })
