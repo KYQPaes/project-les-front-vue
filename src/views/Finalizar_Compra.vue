@@ -184,6 +184,13 @@
 
 				<v-card-actions>
 					<v-spacer> </v-spacer>
+					<v-scroll-y-transition mode="out-in">
+						<v-flex xs2>
+							<v-form ref="form">
+								<v-text-field v-model="priceCard1" :rules="emptyRules.concat(cardPriceRules)" label="Preço a Pagar"/>
+							</v-form>
+						</v-flex>
+					</v-scroll-y-transition>
 					<v-btn @click="dialogCard = false" text color="error"> Fechar </v-btn>
 					<v-btn @click="selectCard" :disabled="!selectedCard || selectedCard.id == null ? true : false" text color="primary"> Escolher Cartão</v-btn>
 				</v-card-actions>
@@ -256,6 +263,13 @@
 
 				<v-card-actions>
 					<v-spacer> </v-spacer>
+					<v-scroll-y-transition mode="out-in">
+						<v-flex xs2>
+							<v-form ref="form">
+								<v-text-field v-model="priceCard2" :rules="emptyRules.concat(cardPriceRules)" label="Preço a Pagar"/>
+							</v-form>
+						</v-flex>
+					</v-scroll-y-transition>
 					<v-btn @click="dialogCard2 = false" text color="error"> Fechar </v-btn>
 					<v-btn @click="selectCard2" :disabled="!selectedCard2 || selectedCard2.id == null ? true : false" text color="primary"> Escolher Cartão</v-btn>
 				</v-card-actions>
@@ -416,6 +430,10 @@
 			<span v-if="error == false"> Pedido finalizado com sucesso </span>
 			<span v-else> Ocorreu um erro </span>
 		</v-snackbar>
+
+		<v-snackbar top :color="error == true ? 'error' : 'green'" v-model="snackbarPreco">
+			<span> Configurar cartões para pagar o valor total </span>
+		</v-snackbar>
 		<Footer />
 	</div>
 </template>
@@ -444,6 +462,9 @@ export default {
 		dialogEnd: false,
 		dialogEnd2: false,
 
+		emptyRules: [(v) => !!v || "Campo Obrigatório"],
+		cardPriceRules: [(v) => v >= 10 || "Valor mínimo de R$10,00"],
+
 		quantiCartao: 1,
 
 		inativar: false,
@@ -452,6 +473,7 @@ export default {
 		enderecos: [],
 		cartoes: [],
 		snackbar: false,
+		snackbarPreco: false,
 		error: false,
 		cliente: {},
 		title: "",
@@ -467,6 +489,8 @@ export default {
 		endSelect2: {},	
 		cardSelect: {},
 		cardSelect2: {},
+		priceCard1: 0,
+		priceCard2: 0,
 		compra: {},
 	}),
 	components: {
@@ -527,8 +551,14 @@ export default {
 			this.carrinho.forEach((item) => {
 				valor += item.preco * parseInt(item.quantidade);
 			});
+
+			console.log(valor, this.priceCard1, this.priceCard2)
 			
-			
+			if(valor != (parseFloat(this.priceCard1) + parseFloat(this.priceCard2))){
+				this.error = true;
+				this.snackbarPreco = true;
+				return;
+			}
 			
 			this.compra = {
 				clienteId: this.cliente.id,
@@ -540,6 +570,8 @@ export default {
 				enderecoCobranca: this.endSelect2.id,
 				cupomId: -1,
 				valor: valor,
+				metodoPreco: this.priceCard1,
+				metodo2Preco: this.priceCard2,
 				// compraProduto: newCart,
 			}
 			compraService.save(this.compra).then((r) => {
@@ -576,16 +608,20 @@ export default {
 			this.dialogEnd2 = false;
 		},
 		selectCard(){
-			this.cardSelect = this.selectedCard;
-			this.dialogCard = false;
+			if(this.$refs.form.validate()){
+				this.cardSelect = this.selectedCard;
+				this.dialogCard = false;
+			}
 		},
 
 		selectCard2(){
-			this.cardSelect2 = this.selectedCard2;
-			this.dialogCard2 = false;
+			if(this.$refs.form.validate()){
+				this.cardSelect2 = this.selectedCard2;
+				this.dialogCard2 = false;
+			}
 		},
 
-		cartaoList() {
+		cartaoList(){
 			cartaoService.listClienteId(JSON.parse(localStorage.getItem("cliente")).id).then((response) => {
 				this.cartoes = response.data;
 			});
