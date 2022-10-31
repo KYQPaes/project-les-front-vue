@@ -17,6 +17,7 @@ import carrinho from "../views/Carrinho.vue";
 import final_compra from "../views/Finalizar_Compra.vue";
 import consulta_pedido from "../views/Consulta_Pedido.vue";
 import troca_pedido from "../views/Troca_Pedido.vue";
+import consulta_troca_adm from "../views/Consulta_Troca_Admin"
 
 
 
@@ -110,6 +111,11 @@ const routes = [
 		path: "/troca_pedido/:id",
 		name: "troca_pedido",
 		component: troca_pedido,
+	},
+	{
+		path: "/consulta_troca_adm/:id",
+		name: "consulta_troca_adm",
+		component: consulta_troca_adm,
 	},
 	
 ];

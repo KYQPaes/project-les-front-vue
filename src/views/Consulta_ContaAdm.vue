@@ -14,7 +14,7 @@
                 </v-toolbar>
               </template>
               <template v-slot:item.actions="{ item }">
-                <v-icon small class="mr-2" @click="editItem(item)"> description </v-icon>
+                <v-icon small class="mr-2" @click="$router.push({ path: `/consulta_troca_adm/${item.id}` })"> description </v-icon>
               </template>
 
               <template v-slot:item.adm="{ item }">
@@ -71,8 +71,10 @@ export default {
     Footer,
   },
   mounted() {
-    if (this.$route.params.id) this.list(this.$route.params.id);
-    else this.$router.push("/consultaCliente");
+    if(this.$route.params.id)
+			this.list(this.$route.params.id);
+		else{}
+			// this.$router.push('/consultaCliente'); retorna se ñ tiver id
   },
   computed: {},
 
