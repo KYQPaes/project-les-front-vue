@@ -110,6 +110,14 @@
 							</v-layout>
 							<v-divider></v-divider>
 						</div>
+						<v-layout>
+							<v-flex xs12 style="padding-left: 20px">
+								<div class="text-xs-center">
+									<h2 class="green--text">Total: R$ {{total}}
+									</h2>
+								</div>
+							</v-flex>
+						</v-layout>
 						<v-layout style="padding: 20px" class="justify-center">
 							<v-btn class="white--text" color="blue" text-color="white" @click="saveCompra"> Finalizar Pedido </v-btn>
 						</v-layout>
@@ -492,6 +500,7 @@ export default {
 		cardSelect2: {},
 		priceCard1: 0,
 		priceCard2: 0,
+		total: 0,
 		compra: {},
 	}),
 	components: {
@@ -502,6 +511,9 @@ export default {
 		this.cliente = JSON.parse(localStorage.getItem("cliente"));
 		this.carrinho = JSON.parse(localStorage.getItem('cart'));
 		this.listCupons();
+		this.carrinho.forEach((item) => {
+			this.total += item.preco * parseInt(item.quantidade);
+		});
 	},
 	computed: {
 		selected() {
