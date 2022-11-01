@@ -8,6 +8,23 @@
 						<v-card-title class="justify-center"> Finalização de Compra </v-card-title>
 						<v-divider></v-divider>
 						<v-card-text>
+							<h3 style="padding: 15px">Cupons</h3>
+							<v-layout class="justify-center" style="padding: 7px">
+								<!-- <div style="padding: 15px">
+									<v-autocomplete return-object v-model="cupom" item-text="descricao" value="id" :items="cupons" label="Cupons Disponíveis" ></v-autocomplete>
+								</div> -->
+								<v-flex xs12 style="height: 250px; overflow-y: scroll;">
+									<v-data-table :headers="headers" :hide-default-footer="true" :items="cupons">
+										<template v-slot:no-data>
+											Não há cupons cadastrados
+										</template>
+										<template v-slot:item.checkbox="{ item, index }">
+											<v-checkbox :disabled="!item.luso && totcupom>total" @click="checkCupons(index)"></v-checkbox>
+										</template>
+									</v-data-table>
+								</v-flex>
+							</v-layout>
+							<v-divider></v-divider>
 							<h3>Pagamento</h3>
 							<div style="padding: 5px">
 								<v-layout>
@@ -79,13 +96,6 @@
 									</v-flex>
 								</v-layout>
 							</div>
-							<v-divider></v-divider>
-							<h3 style="padding: 15px">Desconto</h3>
-							<v-layout class="justify-center" style="padding: 7px">
-								<div style="padding: 15px">
-									<v-autocomplete return-object v-model="cupom" item-text="descricao" value="id" :items="cupons" label="Cupons Disponíveis" ></v-autocomplete>
-								</div>
-							</v-layout>
 						</v-card-text>
 					</v-card>
 				</v-flex>
@@ -195,7 +205,7 @@
 					<v-scroll-y-transition mode="out-in">
 						<v-flex xs2>
 							<v-form ref="form">
-								<v-text-field v-model="priceCard1" :rules="emptyRules.concat(cardPriceRules)" label="Preço a Pagar"/>
+								<v-text-field v-model="priceCard1" :rules="emptyRules.concat([(v) => (v >= 10 || this.cupons.find((c) => c.luso == true) != undefined) || 'Valor mínimo de R$10,00'])" label="Preço a Pagar"/>
 							</v-form>
 						</v-flex>
 					</v-scroll-y-transition>
@@ -274,7 +284,7 @@
 					<v-scroll-y-transition mode="out-in">
 						<v-flex xs2>
 							<v-form ref="form">
-								<v-text-field v-model="priceCard2" :rules="emptyRules.concat(cardPriceRules)" label="Preço a Pagar"/>
+								<v-text-field v-model="priceCard2" :rules="emptyRules.concat([(v) => (v >= 10 || this.cupons.find((c) => c.luso == true) != undefined) || 'Valor mínimo de R$10,00'])" label="Preço a Pagar"/>
 							</v-form>
 						</v-flex>
 					</v-scroll-y-transition>
@@ -472,7 +482,6 @@ export default {
 		dialogEnd2: false,
 
 		emptyRules: [(v) => !!v || "Campo Obrigatório"],
-		cardPriceRules: [(v) => v >= 10 || "Valor mínimo de R$10,00"],
 
 		quantiCartao: 1,
 
@@ -501,7 +510,14 @@ export default {
 		priceCard1: 0,
 		priceCard2: 0,
 		total: 0,
+		totcupom: 0,
 		compra: {},
+
+		headers: [
+			{ text: "Descrição", value: "descricao" },
+			{text: "Valor",value: "valor"},
+			{text: "",value: "checkbox", sortable: false},
+		],
 	}),
 	components: {
 		Menu,
@@ -512,7 +528,7 @@ export default {
 		this.carrinho = JSON.parse(localStorage.getItem('cart'));
 		this.listCupons();
 		this.carrinho.forEach((item) => {
-			this.total += item.preco * parseInt(item.quantidade);
+			this.total += parseFloat((parseFloat(item.preco) * parseInt(item.quantidade)).toFixed(2));
 		});
 	},
 	computed: {
@@ -558,6 +574,26 @@ export default {
 	},
 
 	methods: {
+		checkCupons(index){
+			if(this.cupons[index]?.luso != undefined)
+				this.cupons[index].luso = !this.cupons[index].luso;
+			else
+				this.cupons[index].luso = true;
+
+			const array1 = this.cupons.map((item) => item.valor);
+			const initialValue = 0;
+			const sumWithInitial = array1.reduce(
+				(previousValue, currentValue, index) => {
+					if(this.cupons[index].luso)
+						return (parseFloat(previousValue) + parseFloat(currentValue)).toFixed(2)
+					else
+						return parseFloat(previousValue)
+				},
+				initialValue
+			);
+			this.totcupom = sumWithInitial;
+		},
+
 		listCupons() {
 			cupomService.listByClienteId(this.cliente.id).then((response) => {
 				response.data.forEach((element) => {
@@ -572,19 +608,12 @@ export default {
 		saveCompra(){
 			var data = new Date();
 
-			var valor = 0
-			this.carrinho.forEach((item) => {
-				valor += item.preco * parseInt(item.quantidade);
-			});
-
-			if(valor != (parseFloat(this.priceCard1) + parseFloat(this.priceCard2)).toFixed(2)){
+			if(this.total > (parseFloat(this.priceCard1) + parseFloat(this.priceCard2) + parseFloat(this.totcupom)).toFixed(2)){
 				this.error = true;
 				this.snackbarPreco = true;
 				return;
 			}
 
-			console.log(this.cupom);
-			
 			this.compra = {
 				clienteId: this.cliente.id,
 				status: 'EM ANÁLISE',
@@ -594,7 +623,7 @@ export default {
 				endereco: this.endSelect.id,
 				enderecoCobranca: this.endSelect2.id,
 				cupomId: this.cupom != null ? this.cupom.id : '-1',
-				valor: valor,
+				valor: this.total,
 				metodoPreco: this.priceCard1,
 				metodo2Preco: this.priceCard2,
 				// compraProduto: newCart,
@@ -623,9 +652,24 @@ export default {
 				});
 
 				console.log(this.cupom)
-				this.cupom.status = 'INATIVO'
+				this.cupons.forEach((item) => {
+					if(item.luso){
+						item.status = "INATIVO";
+						cupomService.update(item)
+					}
+				});
+
+				if(this.total < (parseFloat(this.priceCard1) + parseFloat(this.priceCard2) + parseFloat(this.totcupom)).toFixed(2)){
+					const cupom = {
+						id: null,
+						valor: ((parseFloat(this.priceCard1) + parseFloat(this.priceCard2) + parseFloat(this.totcupom)).toFixed(2) -  parseFloat(this.total)),
+						clienteId: JSON.parse(localStorage.getItem("cliente")).id,
+						descricao: "TROCA",
+						status: 'ATIVO',
+					};
+					cupomService.save(cupom)
+				}
 				cupomService.update(this.cupom)
-				
 			})
 		},
 		selectEnd(){
