@@ -73,23 +73,23 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="freteDialog" persistent max-width="290"    >
+
+    <v-dialog v-model="frete" persistent max-width="290"    >
       <v-card>
         <v-card-title class="text-h5">
           Frete
         </v-card-title>
-        <v-card-text>
-          O valor do Frete para este endereço é:
-          654654
-        </v-card-text>
+        <v-card-text>O valor do frete é de R$ {{FreteValor}},00</v-card-text>       
         <v-card-actions>
-					<v-spacer> </v-spacer>
-					<v-btn @click="freteDialog = false" text color="error"> Fechar </v-btn>
-					
-				</v-card-actions>
-        
+          <v-spacer></v-spacer>          
+          <v-btn color="green darken-1" @click="frete = false">
+            Confirmar
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
+
+    
 
 
     <Footer />
@@ -105,8 +105,8 @@ export default {
     dialog: false,
     freteDialog: false,
     Cep:"",
-    freteSP:"",
-    freteOutro:"",           
+    FreteValor: 0,
+    frete:0,          
   }),
   components: {
     Menu,
@@ -151,19 +151,17 @@ export default {
 		},
   
 
-  calcFrete() {       
-    let valorFrete;
-   
-       if (this.Cep >= 5) {
-        valorFrete = JSON.parse(localStorage.setItem(5));
-        }
-                 
+  calcFrete() {      
+    if(this.Cep.charAt(0)== "0"){
+      this.FreteValor=5
+      localStorage.setItem("frete",5)
+      this.frete = true;
+    }else{
+      this.FreteValor=10
+      localStorage.setItem("frete",10)
+      this.frete = true;
+    }
       },
-
-      teste() {       
-      localStorage.getItem('valorFrete');               
-      },
-    
     }
 };
 
