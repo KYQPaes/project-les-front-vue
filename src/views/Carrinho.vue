@@ -80,7 +80,7 @@
         </v-card-title>
         <v-card-text>
           O valor do Frete para este endereço é:
-          654654
+          R${{valorFrete}},00
         </v-card-text>
         <v-card-actions>
 					<v-spacer> </v-spacer>
@@ -106,7 +106,8 @@ export default {
     freteDialog: false,
     Cep:"",
     freteSP:"",
-    freteOutro:"",           
+    freteOutro:"",
+    valorFrete: 0,           
   }),
   components: {
     Menu,
@@ -146,19 +147,17 @@ export default {
       this.carrinho.splice(index, 1);
       localStorage.setItem('cart', JSON.stringify(this.carrinho));
     },
-    openFrete() {	
+    calcFrete() {       
 			this.freteDialog = true;		
-		},
-  
-
-  calcFrete() {       
-    let valorFrete;
-   
-       if (this.Cep >= 5) {
-        valorFrete = JSON.parse(localStorage.setItem(5));
-        }
-                 
-      },
+      
+      if (this.Cep.charAt(0) == '0' || this.Cep.charAt(0) == '1') {
+        this.valorFrete = 5;
+      }else{
+        this.valorFrete = 10;
+      }
+      localStorage.setItem('frete', this.valorFrete);
+      this.$forceUpdate();
+    },
 
       teste() {       
       localStorage.getItem('valorFrete');               

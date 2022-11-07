@@ -512,6 +512,7 @@ export default {
 		total: 0,
 		totcupom: 0,
 		compra: {},
+		frete: 0,
 
 		headers: [
 			{ text: "Descrição", value: "descricao" },
@@ -526,10 +527,12 @@ export default {
 	mounted() {
 		this.cliente = JSON.parse(localStorage.getItem("cliente"));
 		this.carrinho = JSON.parse(localStorage.getItem('cart'));
+		this.frete = JSON.parse(localStorage.getItem('frete'));
 		this.listCupons();
 		this.carrinho.forEach((item) => {
 			this.total += parseFloat((parseFloat(item.preco) * parseInt(item.quantidade)).toFixed(2));
 		});
+		this.total += this.frete;
 	},
 	computed: {
 		selected() {
