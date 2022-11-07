@@ -123,7 +123,11 @@
 						<v-layout>
 							<v-flex xs12 style="padding-left: 20px">
 								<div class="text-xs-center">
-									<h2 class="green--text">Total: R$ {{total}}
+									<h2 class="green--text">Subtotal: R$ {{total}}
+									</h2>
+									<h2 class="green--text">Frete: R$ {{frete}}.00
+									</h2>
+									<h2 class="green--text">Total: R$ {{total + frete}} 
 									</h2>
 								</div>
 							</v-flex>
@@ -512,7 +516,7 @@ export default {
 		total: 0,
 		totcupom: 0,
 		compra: {},
-		frete: 0,
+		frete:0,
 
 		headers: [
 			{ text: "Descrição", value: "descricao" },
@@ -525,6 +529,7 @@ export default {
 		Footer,
 	},
 	mounted() {
+		this.frete = JSON.parse(localStorage.getItem("frete"));
 		this.cliente = JSON.parse(localStorage.getItem("cliente"));
 		this.carrinho = JSON.parse(localStorage.getItem('cart'));
 		this.frete = JSON.parse(localStorage.getItem('frete'));
@@ -611,7 +616,7 @@ export default {
 		saveCompra(){
 			var data = new Date();
 
-			if(this.total > (parseFloat(this.priceCard1) + parseFloat(this.priceCard2) + parseFloat(this.totcupom)).toFixed(2)){
+			if(this.total+this.frete > (parseFloat(this.priceCard1) + parseFloat(this.priceCard2) + parseFloat(this.totcupom)).toFixed(2)){
 				this.error = true;
 				this.snackbarPreco = true;
 				return;
@@ -626,7 +631,7 @@ export default {
 				endereco: this.endSelect.id,
 				enderecoCobranca: this.endSelect2.id,
 				cupomId: this.cupom != null ? this.cupom.id : '-1',
-				valor: this.total,
+				valor: this.total + this.frete,
 				metodoPreco: this.priceCard1,
 				metodo2Preco: this.priceCard2,
 				// compraProduto: newCart,
@@ -662,10 +667,10 @@ export default {
 					}
 				});
 
-				if(this.total < (parseFloat(this.priceCard1) + parseFloat(this.priceCard2) + parseFloat(this.totcupom)).toFixed(2)){
+				if(this.total + this.frete < (parseFloat(this.priceCard1) + parseFloat(this.priceCard2) + parseFloat(this.totcupom)).toFixed(2)){
 					const cupom = {
 						id: null,
-						valor: ((parseFloat(this.priceCard1) + parseFloat(this.priceCard2) + parseFloat(this.totcupom)).toFixed(2) -  parseFloat(this.total)),
+						valor: ((parseFloat(this.priceCard1) + parseFloat(this.priceCard2) + parseFloat(this.totcupom)).toFixed(2) -  parseFloat(this.total+this.frete)),
 						clienteId: JSON.parse(localStorage.getItem("cliente")).id,
 						descricao: "TROCA",
 						status: 'ATIVO',
