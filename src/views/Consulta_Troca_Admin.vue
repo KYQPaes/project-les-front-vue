@@ -18,7 +18,7 @@
                   <tr>
                       <th class="text-left">Imagem</th>
                       <th class="text-left">Produto</th>
-                      <th class="text-left">Quantidade</th>
+                      <!-- <th class="text-left">Quantidade</th> -->
                  
                   </tr>
               </thead>
@@ -26,12 +26,18 @@
                   <tr v-for="(item, i) in pedidos" :key="item.produtoid">
                       <td :key="item.imagem"><img style="width: 50px; height: 50px" :src="produtos[i].imagem"></td>
                       <td>{{ produtos[i].nome }}</td>
-                      <td>{{ item.quantidade }}</td>
+                      <!-- <td>{{ item.quantidade }}</td> -->
           
                   </tr>
               </tbody>
               </template>
           </v-simple-table>
+      </v-layout>
+      <v-layout>
+        <v-flex xs12 style="display: flex; justify-content: center; margin-top: 5px">
+          Total da Troca:
+          <span style="color: green"> {{compra.valorTroca}} </span>
+        </v-flex>
       </v-layout>
               <v-divider></v-divider>
   
@@ -77,6 +83,8 @@
   import CompraService from "../service/compra";
   import CompraProdutoService from "../service/compra_produtos";
   import ProdutoService from "../service/produtos";
+import CupomService from "@/service/cupom";
+
   export default {
     data: () => ({
        compra: {},
@@ -129,10 +137,19 @@
                   status: 'TROCA AUTORIZADA',
                   
               }
+              console.log(pedido)
               CompraService.update(pedido).then(() => {
                 this.$router.go(-1)
-
-                  
+                const cupom = {
+                  id: null,
+                  valor: this.compra.valorTroca,
+                  clienteId: pedido.clienteId,
+                  descricao: "TROCA",
+                  status: 'ATIVO',
+                };
+                CupomService.save(cupom).then(() => {
+                  this.$router.go(-1)
+                })
               });
           },
           updateRecusado(){

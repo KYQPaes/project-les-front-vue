@@ -100,7 +100,7 @@ export default {
         if(compra.status == "TROCA AUTORIZADA"){
           const cupom = {
             id: null,
-            valor: compra.valor,
+            valor: compra.valorTroca,
             clienteId: this.$route.params.id,
             descricao: "TROCA",
             status: 'ATIVO',

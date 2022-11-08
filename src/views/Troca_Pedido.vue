@@ -25,21 +25,23 @@
 				<tr v-for="(item, i) in pedidos" :key="item.produtoid">
 					<td :key="item.imagem"><img style="width: 50px; height: 50px" :src="produtos[i].imagem"></td>
 					<td>{{ produtos[i].nome }}</td>
-					<td>{{ item.quantidade }}</td>
+					<td>
+						<div style="display: flex; align-items: center; width: 80px">
+							<v-text-field style="width: 30px" v-model="item.quantTroca" :rules="[(value) => value <= item.quantidade]" type="number"/>
+							{{ (item.preco * item.quantTroca).toFixed(2) }}
+						</div>
+					</td>
 				</tr>
 			</tbody>
 			</template>
 		</v-simple-table>
 	</v-layout>
+	<v-layout>
+		<v-flex xs12 style="display: flex; justify-content: center; color: green">
+			{{this.pedidos.reduce((ant, nov, i) => (parseFloat(ant) + parseFloat(nov.preco * nov.quantTroca)).toFixed(2), 0)}}
+		</v-flex>
+	</v-layout>
             <v-divider></v-divider>
-
-            <!-- <v-layout class="justify-center">
-              <p style="margin-top: 20px">Quantidade a ser trocada:</p>
-              <v-flex xs1>
-                <v-text-field style="margin-left: 10px" type="number" />
-              </v-flex>
-            </v-layout> -->
-
             <v-layout class="justify-center">
               <v-flex xs8>
                 <h4>Motivo da troca:</h4>
@@ -83,8 +85,6 @@ export default {
   mounted() {
 		if(this.$route.params.id)
 			this.list(this.$route.params.id);
-		else{}
-			// this.$router.push('/consultaCliente'); retorna se ñ tiver id
   },
 
   methods: {
@@ -94,31 +94,29 @@ export default {
 				let formated_data = this.compra.data_comp.split('-');
 				this.compra.formated_data = formated_data[2].padStart(2, '0') + '/' + formated_data[1].padStart(2, '0') + '/' + formated_data[0];
 				this.listCompraProdutos(this.compra.id);
-				console.log(this.compra)
-				this.listEnderecos(this.compra.clienteId)
 			});
 		},
 		listCompraProdutos(compraid){
 			CompraProdutoService.ListByCompraid(compraid).then((response) => {
-				this.pedidos = response.data;
+				this.pedidos = response.data.map((value) => ({...value, quantTroca: value.quantidade}));
 				this.pedidos.forEach((element, index) => {
-					// this.listProdutos(element.produtoid, index);
 					ProdutoService.listById(element.produtoid).then((response) => {
 						let produto = response.data;
 						this.produtos.push(produto);
+						element.preco = produto.preco;
 						this.$forceUpdate();
 					});
 				});
-			}).then(()=>{
-				console.log(this.pedidos)
 			});
 			this.$forceUpdate();
 		},
 		update(){
+			const valorTroca = this.pedidos.reduce((ant, nov, i) => parseFloat(ant) + parseFloat(nov.preco * nov.quantTroca), 0);
 			const pedido = {
 				...this.compra,
 				status: 'EM TROCA',
 				motivoTroca: this.motivo,
+				valorTroca: valorTroca,
 			}
 			CompraService.update(pedido).then(() => {
 				this.$router.push('/cliente');
