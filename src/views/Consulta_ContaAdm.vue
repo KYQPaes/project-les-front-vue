@@ -5,7 +5,7 @@
       <v-layout>
         <v-flex xs9 style="margin-left: 15%">
           <v-card elevation="10" class="justify-center">
-            <v-data-table :headers="headers" :items="compras" sort-by="calories" class="elevation-1">
+            <v-data-table :headers="headers" :items="compras" sort-by="id" :sort-desc="true" class="elevation-1">
               <template v-slot:top>
                 <v-toolbar flat class="d-flex justify-center">
                   <v-toolbar-title>Detalhes dos pedidos</v-toolbar-title>

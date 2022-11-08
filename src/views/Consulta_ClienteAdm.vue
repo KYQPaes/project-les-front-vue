@@ -5,7 +5,7 @@
       <v-layout>
         <v-flex xs8 style="margin-left: 17%">
           <v-card elevation="10" class="justify-center">
-            <v-data-table :search="search" :headers="headers" :items="clientes" sort-by="calories" class="elevation-1">
+            <v-data-table :search="search" :headers="headers" :sort-desc="true" :items="clientes" sort-by="id" class="elevation-1">
               <template v-slot:top>
                 <v-toolbar flat class="d-flex justify-center">
                   <v-toolbar-title>Contas Cadastradas</v-toolbar-title>
