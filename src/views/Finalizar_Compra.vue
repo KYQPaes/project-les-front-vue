@@ -621,11 +621,10 @@ export default {
 				this.snackbarPreco = true;
 				return;
 			}
-
 			this.compra = {
 				clienteId: this.cliente.id,
 				status: 'EM ANÁLISE',
-				data_comp: data.getFullYear() + '-' + data.getMonth() + '-' + data.getDate(),
+				data_comp: data.getFullYear() + '-' + (data.getMonth()+1) + '-' + data.getDate(),
 				metodo: this.cardSelect.numero,
 				metodo2: this.quantiCartao == 2 ? this.cardSelect2.numero : null,
 				endereco: this.endSelect.id,
