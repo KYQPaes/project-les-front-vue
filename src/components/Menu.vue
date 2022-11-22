@@ -133,6 +133,7 @@ export default {
     items_admin: [
       { name: "Clientes", img: "account_circle", router: "/consultaCliente" },
       { name: "Cupoms", img: "mdi-percent", router: "/cupomAdm" },
+      { name: "Gráficos", img: "bar_chart", router: "/grafico_adm" },
     ],
     cliente: {
       id: null

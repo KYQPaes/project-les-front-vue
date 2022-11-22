@@ -18,14 +18,9 @@ import final_compra from "../views/Finalizar_Compra.vue";
 import consulta_pedido from "../views/Consulta_Pedido.vue";
 import troca_pedido from "../views/Troca_Pedido.vue";
 import consulta_troca_adm from "../views/Consulta_Troca_Admin"
-
-
-
-
-
+import grafico_adm from "../views/Grafico"
 
 Vue.use(VueRouter);
-
 const routes = [
 	{
 		path: "/",
@@ -117,7 +112,11 @@ const routes = [
 		name: "consulta_troca_adm",
 		component: consulta_troca_adm,
 	},
-	
+	{
+		path: "/grafico_adm",
+		name: "grafico_adm",
+		component: grafico_adm,
+	},
 ];
 
 const router = new VueRouter({
