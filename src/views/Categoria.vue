@@ -65,7 +65,7 @@ export default {
   methods: {
 	    list(){
 			produtosService.listByTipo(this.cat).then(response => {
-				this.produtos = response.data;
+				this.produtos = response.data.filter((p) => p.quantidade > 0);
     	  	});
     	},
   },
