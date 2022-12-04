@@ -452,9 +452,13 @@
 			<span v-if="error == false"> Pedido finalizado com sucesso </span>
 			<span v-else> Ocorreu um erro </span>
 		</v-snackbar>
-
+		
 		<v-snackbar top :color="error == true ? 'error' : 'green'" v-model="snackbarPreco">
 			<span> Configurar cartões para pagar o valor total </span>
+		</v-snackbar>
+
+		<v-snackbar top :color="error == true ? 'error' : 'green'" v-model="snackbarEstoque">
+			<span> Não é possível comprar {{produtoEstoque.nome}} por problemas de estoque </span>
 		</v-snackbar>
 		<Footer />
 	</div>
@@ -469,6 +473,7 @@ import enderecoService from "@/service/enderecos";
 import compraService from "@/service/compra";
 import cupomService from "@/service/cupom";
 import compraProdutoService from "@/service/compra_produtos";
+import produtoService from "../service/produtos";
 import router from "@/router";
 
 export default {
@@ -523,6 +528,8 @@ export default {
 			{text: "Valor",value: "valor"},
 			{text: "",value: "checkbox", sortable: false},
 		],
+		snackbarEstoque: false,
+		produtoEstoque: {},
 	}),
 	components: {
 		Menu,
@@ -613,7 +620,7 @@ export default {
 			});
 		},
 
-		saveCompra(){
+		async saveCompra(){
 			var data = new Date();
 
 			if(this.total+this.frete > (parseFloat(this.priceCard1) + parseFloat(this.priceCard2) + parseFloat(this.totcupom)).toFixed(2)){
@@ -634,10 +641,34 @@ export default {
 				metodoPreco: this.priceCard1,
 				metodo2Preco: this.priceCard2,
 				// compraProduto: newCart,
+			};
+
+			var lEstoque = true;
+			var oldProdutos = [];
+			for(const c of this.carrinho){
+				await produtoService.listById(c.id).then((response) => {
+					console.log(response.data);
+					console.log(c);
+					if((response.data.quantidade <= 0 || c.quantidade > response.data.quantidade) && lEstoque){
+						lEstoque = false;
+						this.error = true;
+						this.snackbarEstoque = true;
+						this.produtoEstoque = response.data;
+					}else
+						oldProdutos.push(response.data);
+				})
 			}
+
+			if(!lEstoque)
+				return;
+
 			compraService.save(this.compra).then((r) => {
 				var newCart = [];
 				this.carrinho.forEach((item) => {
+					const produto = oldProdutos.find((p) => p.id == item.id);
+					produtoService.update({...produto, quantidade: produto.quantidade - Number(item.quantidade)}).catch((e) => {
+						console.log(e);
+					});
 					newCart.push({
 						compraid: r.data.id,
 						produtoid: item.id,
@@ -658,7 +689,8 @@ export default {
 					this.snackbar = true;
 				});
 
-				console.log(this.cupom)
+				
+
 				this.cupons.forEach((item) => {
 					if(item.luso){
 						item.status = "INATIVO";

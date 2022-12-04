@@ -10,4 +10,7 @@ export default {
         listById: (id) => {
 		return http.get(`api/produtos/${id}`);
 	},
+	update: (item) => {
+		return http.put("api/produtos", item);
+	},
 };
