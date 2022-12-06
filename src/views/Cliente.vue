@@ -97,6 +97,9 @@
               <v-icon> home </v-icon>
             </v-btn>
           </v-layout>
+          <v-layout style="padding: 7px">
+            Sua Pontuação: {{ cliente.ranking }} Pontos
+          </v-layout>
           <v-layout style="margin-top: 200px">
             <v-dialog v-model="inativar" persistent max-width="350">
               <template v-slot:activator="{ on, attrs }">

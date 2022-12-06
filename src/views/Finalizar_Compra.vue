@@ -647,8 +647,6 @@ export default {
 			var oldProdutos = [];
 			for(const c of this.carrinho){
 				await produtoService.listById(c.id).then((response) => {
-					console.log(response.data);
-					console.log(c);
 					if((response.data.quantidade <= 0 || c.quantidade > response.data.quantidade) && lEstoque){
 						lEstoque = false;
 						this.error = true;
@@ -689,7 +687,11 @@ export default {
 					this.snackbar = true;
 				});
 
-				
+				console.log(this.cliente.ranking)
+				console.log(this.cliente.ranking + parseInt(this.total))
+				clienteService.update({...this.cliente, ranking: this.cliente.ranking + parseInt(this.total)}).then(() => {
+					localStorage.setItem("cliente", JSON.stringify({...this.cliente, ranking: this.cliente.ranking + parseInt(this.total)}));
+				});
 
 				this.cupons.forEach((item) => {
 					if(item.luso){

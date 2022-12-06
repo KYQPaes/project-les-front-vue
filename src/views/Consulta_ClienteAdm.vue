@@ -55,6 +55,7 @@ export default {
       {text: "Email",align: "start",value: "email"},
       {text: "Nome",align: "start",value: "nome"},
       { text: "Telefone", value: "telefone" },
+      { text: "Pontuação", value: "ranking" },
       {text: "Status da conta",align: "start",value: "inativar"},
       { text: "Pedidos", value: "actions", sortable: false },
     ],
