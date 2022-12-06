@@ -85,6 +85,7 @@ export default {
     addCart(condicao){
       let prod = this.produto;    
       let cart;
+      let data = new Date();
       if(localStorage.getItem('cart')){
         cart = JSON.parse(localStorage.getItem('cart'));
         let index = cart.findIndex(item => item.id == prod.id);
@@ -94,6 +95,7 @@ export default {
           cart.push(prod);
         }
       }else{
+        localStorage.setItem('cartValidade', data.getFullYear() + '-' + (data.getMonth()+1) + '-' + data.getDate());
         cart = [];
         cart.push(prod);
       }

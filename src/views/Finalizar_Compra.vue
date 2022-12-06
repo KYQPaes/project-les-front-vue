@@ -457,6 +457,10 @@
 			<span> Configurar cartões para pagar o valor total </span>
 		</v-snackbar>
 
+		<v-snackbar top :color="error == true ? 'error' : 'green'" v-model="snackbarValidade">
+			<span> Demorou mais de uma semana para a finalização da compra, por favor adicione novamente os produtos ao carrinho </span>
+		</v-snackbar>
+
 		<v-snackbar top :color="error == true ? 'error' : 'green'" v-model="snackbarEstoque">
 			<span> Não é possível comprar {{produtoEstoque.nome}} por problemas de estoque </span>
 		</v-snackbar>
@@ -501,6 +505,7 @@ export default {
 		cartoes: [],
 		snackbar: false,
 		snackbarPreco: false,
+		snackbarValidade: false,
 		error: false,
 		cliente: {},
 		title: "",
@@ -628,6 +633,19 @@ export default {
 				this.snackbarPreco = true;
 				return;
 			}
+
+			if(localStorage.getItem('cartValidade')){
+				const diff = new Date().getTime() - new Date(localStorage.getItem('cartValidade')).getTime();
+				const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+				console.log(days)
+				if(days >= 7){
+					localStorage.removeItem('cart');
+					localStorage.removeItem('cartValidade');
+					this.error = true;
+					this.snackbarValidade = true;
+					return;
+				}
+			}
 			this.compra = {
 				clienteId: this.cliente.id,
 				status: 'EM ANÁLISE',
@@ -675,11 +693,13 @@ export default {
 				});
 				compraProdutoService.save(newCart).then((r) => {
 					localStorage.removeItem('cart');
+					localStorage.removeItem('cartValidade');
 					this.error = false;
 					this.snackbar = true;
 
 					setTimeout(() => {
 						localStorage.removeItem('cart');
+						localStorage.removeItem('cartValidade');
 						this.$router.push({ path: '/cliente' });
 					}, 1500);
 				}).catch(() => {
