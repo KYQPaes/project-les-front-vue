@@ -15,5 +15,7 @@ npm run serve
 npm run build
 ```
 
+MODIFICAR CONFIG.JS PARA CONEXÃO COM O BACK
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
